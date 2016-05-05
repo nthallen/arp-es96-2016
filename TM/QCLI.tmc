@@ -1,0 +1,37 @@
+TM "Receive" QCLI 1;
+
+TM 1 Hz QCLI_Wave_t QCLI_Wave;
+TM 1 Hz UINT QCLI_s;
+TM 1 Hz UINT QCLI_Stale;
+
+Group QCLI_grp ( QCLI_Wave, QCLI_s ) {
+  QCLI_Wave = QCLI.qcli_wave;
+  QCLI_s = QCLI.status;
+  QCLI_Stale = QCLI_obj->stale();
+  QCLI_obj->synch();
+}
+TM 1 HZ QCLI_CS_t QCLI_CS; Address QCLI_CS 0x1000;
+
+TM "Receive" SSP 1;
+
+TM 1 Hz QCLI_WORD SSP_Num;
+TM 1 Hz QCLI_WORD SSP_SN;
+TM 1 Hz QCLI_WORD SSP_TS;
+TM 1 Hz XLONG SSP_Flags;
+TM 1 Hz SSP_Status_t SSP_Status;
+TM 1 Hz UINT SSP_Stale;
+TM 1 Hz T_FPGA_t SSP_T_FPGA;
+TM 1 Hz T_HtSink_t SSP_T_HtSink;
+
+Group SSP_grp ( SSP_Num, SSP_SN, SSP_TS, SSP_Flags,
+		 SSP_T_FPGA, SSP_T_HtSink ) {
+  SSP_Num = SSP.index;
+  SSP_SN = SSP.ScanNum;
+  SSP_TS = SSP.Total_Skip;
+  SSP_Flags = SSP.Flags;
+  SSP_Status = SSP.Status;
+  SSP_T_FPGA = SSP.T_FPGA & 0xFFF8;
+  SSP_T_HtSink = SSP.T_HtSink & 0xFFE0;
+  SSP_Stale = SSP_obj->stale();
+  SSP_obj->synch();
+}

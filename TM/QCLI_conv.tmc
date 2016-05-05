@@ -1,0 +1,59 @@
+no_yes_t QCLI_busy; invalidate QCLI_busy;
+  { QCLI_busy = (QCLI_s & 0x8000) ? 1 : 0;
+    validate QCLI_busy; }
+onebit_t QCLI_cksum; invalidate QCLI_cksum;
+  { QCLI_cksum = (QCLI_s & 0x4000) ? 1 : 0;
+    validate QCLI_cksum; }
+ok_fail_t QCLI_cmderr; invalidate QCLI_cmderr;
+  { QCLI_cmderr = (QCLI_s & 0x2000) ? 1 : 0;
+    validate QCLI_cmderr; }
+qcli_off_on_t QCLI_laser; invalidate QCLI_laser;
+  { QCLI_laser = (QCLI_s & 0x1000) ? 0 : 1;
+    validate QCLI_laser; }
+ok_fail_t QCLI_cordte; invalidate QCLI_cordte;
+  { QCLI_cordte = (QCLI_s & 0x0800) ? 1 : 0;
+    validate QCLI_cordte; }
+no_yes_t QCLI_ready; invalidate QCLI_ready;
+  { QCLI_ready = (QCLI_s & 0x0200) ? 1 : 0;
+    validate QCLI_ready; }
+ok_fail_t QCLI_waveerr; invalidate QCLI_waveerr;
+  { QCLI_waveerr = (QCLI_s & 0x0100) ? 1 : 0;
+    validate QCLI_waveerr; }
+twobits_t QCLI_flash; invalidate QCLI_flash;
+  { QCLI_flash = (QCLI_s & 0x00C0) >> 6;
+    validate QCLI_flash; }
+ok_fail_t QCLI_dot; invalidate QCLI_dot;
+  { QCLI_dot = (QCLI_s & 0x0020) ? 1 : 0;
+    validate QCLI_dot; }
+ok_fail_t QCLI_lot; invalidate QCLI_lot;
+  { QCLI_lot = (QCLI_s & 0x0010) ? 1 : 0;
+    validate QCLI_lot; }
+ok_fail_t QCLI_loc; invalidate QCLI_loc;
+  { QCLI_loc = (QCLI_s & 0x0008) ? 1 : 0;
+    validate QCLI_loc; }
+qclimode_t QCLI_mode; invalidate QCLI_mode;
+  { QCLI_mode = QCLI_s & 0x7; validate QCLI_mode; }
+rw_t QCLI_rw; invalidate QCLI_rw;
+  { QCLI_rw = ((QCLI_CS & 0x4000) ? 2 : 0) +
+                ((QCLI_CS & 0x400) ? 1 : 0);
+    validate QCLI_rw;
+  }
+ok_fail_t QCLI_present; invalidate QCLI_present;
+  { QCLI_present = (QCLI_CS & 0x800) ? 0 : 1;
+    validate QCLI_present;
+  }
+fifodep_t QCLI_fifodep; invalidate QCLI_fifodep;
+  { QCLI_fifodep = QCLI_CS & 0xFF;
+    validate QCLI_fifodep;
+  }
+qclierr_t QCLI_err; invalidate QCLI_err;
+  { QCLI_err = ((QCLI_CS >> 8) & 0xBB) ^ 0x8;
+    validate QCLI_err;
+  }
+
+SSP_OVF SSP_CA; Invalidate SSP_CA;
+SSP_OVF SSP_PA; Invalidate SSP_PA;
+SSP_OVF SSP_AD; Invalidate SSP_AD;
+{ SSP_CA = SSP_CAOVF(SSP_Flags); Validate SSP_CA; }
+{ SSP_PA = SSP_PAOVF(SSP_Flags); Validate SSP_PA; }
+{ SSP_AD = SSP_ADOOR(SSP_Flags); Validate SSP_AD; }

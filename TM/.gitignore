@@ -1,3 +1,14 @@
+waves.cmd
+waves.out
+waves.tmc
+waves.m
+waves.log
+HClcol.cc
+HCl.pcm
+tm.dac
+HClcoloui.c
+HClcoloui.o
+HClcol.o
 HCltbl.tmc
 HCldisp.cc
 HCldispoui.c
@@ -25,12 +36,6 @@ HClcltncoui.o
 HClsrvr.o
 HClsrvroui.c
 HClsrvroui.o
-HClcol.cc
-HCl.pcm
-tm.dac
-HClcoloui.c
-HClcoloui.o
-HClcol.o
 HClengext.cdf
 HClengextcdf.oui
 HClengextcdf.tmc
@@ -41,6 +46,7 @@ HClengext.o
 HCltbl.tmc.dep
 HCltblnc.tmc.dep
 *.err
+HClcol
 HCldisp
 HCldispnc
 HClalgo
@@ -48,5 +54,4 @@ doit
 HClclt
 HClcltnc
 HClsrvr
-HClcol
 HClengext

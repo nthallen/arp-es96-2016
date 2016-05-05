@@ -1,0 +1,63 @@
+QCLI {
+  HBox { +-; Title: "QCLI"; -+ };
+  Wave: HBox { (QCLI_Wave,10); HGlue 0+1 };
+  Mode: { (QCLI_mode,7) (QCLI_laser,3)
+          Stale: (QCLI_Stale,5) };
+  SSP { (SSP_Num,8) (SSP_Status,7); }
+}
+
+SSP {
+  HBox { +-; Title: "SSP"; -+ };
+  HBox {
+    { File: (SSP_Num,8);
+      Scan: (SSP_SN,8);
+      Skip: (SSP_TS,8);
+      Stale: (SSP_Stale,5);
+    }; +|; {
+      ""  >"1|2|3 ";
+      AD: (SSP_AD,5);
+      PA: (SSP_PA,5);
+      CA: (SSP_CA,5);
+    }
+  }
+}
+
+SSP_T {
+  { HBox { +-; Title: "SSP Temps"; -+ };
+    { FPGA: (SSP_T_FPGA,6) C HtSink: (SSP_T_HtSink,6) C };
+    # BrdT: (ISSPT,7) C
+  }
+}
+
+QCLI_S {
+  HBox { +-; Title: "QCLI Status"; -+ };
+  HBox {
+    {
+      Rdy:     (QCLI_ready,3);
+      Busy:    (QCLI_busy,3);
+      Sel:     (QCLI_waveerr,4);
+      Flsh:    (QCLI_flash,2);
+      Cksm:    (QCLI_cksum,1);
+    }; |; {
+      "DOT:"   (QCLI_dot,4);
+      "LOT:"   (QCLI_lot,4);
+      "LOC:"   (QCLI_loc,4);
+      "COR:"   (QCLI_cordte,4);
+      "CErr:"  (QCLI_cmderr,4);
+    }; |; {
+      Com:  (QCLI_present,4);
+      Act:  (QCLI_rw,2);
+      FIFO: (QCLI_fifodep,3);
+      Err:  (QCLI_err,2);
+#     Rst:  (QCLI_Reset,3);
+    }
+  }
+}
+
+QCLISSP {
+  [QCLI];
+  [SSP];
+  [SSP_T];
+  [QCLI_S]
+}
+

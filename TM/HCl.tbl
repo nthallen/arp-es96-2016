@@ -1,3 +1,6 @@
 Input "TMbase.tbl";
+Input "QCLI.tbl";
 
-{ [TMbaseB] }
+{ HBox { |+; [QCLISSP]; |+; [TMbaseB]; |+ };
+  -
+}
