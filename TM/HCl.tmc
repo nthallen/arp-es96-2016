@@ -1,0 +1,40 @@
+%{
+  #include "nortlib.h"
+  #include "tma.h"
+  char ci_version[] = "$CGID: HClcmd.cc: Wed May  4 15:43:48 2016 $";
+%}
+state (Init);
+Validate Init;
+state (part_0_idle_);
+Validate part_0_idle_;
+%{
+  tma_state Init_cmds_[] = {
+    {       0, ">Telemetry Start\n" },
+    {      -1, NULL }
+  };
+%}
+depending on (Init once) {
+  tma_init_state( 0, Init_cmds_, "Init" );
+  Validate part_0_idle_;
+}
+%{
+  const int tma_n_partitions = 1;
+%}
+depending on ( 1 Hz ) {
+  long int it;
+  int subcase;
+
+  it = itime();
+  ci_settime( it );
+  while ( (subcase = tma_process( it )) ) {
+	switch (subcase) {
+	  case -1:
+	  case 0: break;
+	  case 1: validate Init; break;
+	  case 2: validate part_0_idle_; break;
+	  default:
+		nl_error( 1, "Unexpected return value from tma_process" );
+		break;
+	}
+  }
+}
