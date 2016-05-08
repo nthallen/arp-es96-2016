@@ -1,6 +1,10 @@
 Input "TMbase.tbl";
 Input "QCLI.tbl";
 
-{ HBox { |+; [QCLISSP]; |+; [TMbaseB]; |+ };
+Data {
+  CellP: (CellP,7) V;
+}
+
+{ HBox { |+; [QCLISSP]; |+; { [Data]; [TMbaseB]} |+ };
   -
 }

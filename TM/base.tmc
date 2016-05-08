@@ -1,2 +1,10 @@
 TM typedef unsigned short UINT { text "%5d"; }
 TM 1 Hz UINT MFCtr, Synch;
+
+TM typedef signed short AI16 {
+  text "%7.4lf";
+  convert VOLTS;
+  collect x = sbrwa(x.address);
+}
+  Calibration (AI16,VOLTS) { 0, 0, 32768, 4.096 }
+TM 1 Hz AI16 CellP; Address CellP 0xC0C; /* Cell Pressure (5 PSI) */
