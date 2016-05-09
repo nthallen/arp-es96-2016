@@ -7,41 +7,37 @@ QCLIConfig Standard;
 Digitizer SSP;
 Prefix QCLI;
 
-ICOS Waveform QCLI_slow {
-  SampleRate = 1 MHz;
+ICOS Waveform JPL57_3 {
+  SampleRate = 100 MHz/100;
   Ncoadd = 900;
   Tz = 10%;
-  Ramp from 60 mA to 90 mA in 1 msec;
+  Ramp from 330 mA to 360 mA in 1 msec;
 }
 
-ICOS Waveform QCLI {
-  # Nsample = 900;
-  Ncoadd = 799;
-  SampleRate = 50 MHz/50;
-  Tz = 5%;
-#  Ramp from 45 mA to 75 mA in 1 msec;
-  Ramp from 300 mA to 500 mA in 1 msec;
+ICOS Waveform JPL57_4 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 250 mA to 360 mA in 1 msec;
 }
 
-ICOS Waveform QCLI_full {
-  # Nsample = 900;
-  Ncoadd = 429;
-  SampleRate = 50 MHz/50;
-  Tz = 5%;
-  Ramp from 60 mA to 120 mA in 2 msec;
+ICOS Waveform JPL57_4a {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 150 mA to 350 mA in 2 msec;
 }
 
-ICOS Waveform QCLI_10MHz {
-  # Nsample = 900;
-  Ncoadd = 450;
-  SampleRate = 10 MHz/10;
-  Tz = 5%;
-  Ramp from 10 mA to 90 mA in 2 msec;
+ICOS Waveform JPL57_5 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+ Ramp from 300 mA to 500 mA in 1 msec;
 }
 
-ICOS Waveform QCLI_ConstantI {
+ICOS Waveform JPL57_C {
+  SampleRate = 100 MHz/100;
   Tz = 10 msec;
-  Iz = 70 mA;
-  SampleRate = 10 MHz;
+  Iz = 350 mA;
   dI/dt = 0 A/sec;
 }
