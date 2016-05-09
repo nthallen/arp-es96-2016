@@ -15,4 +15,4 @@
   Launch - sspdrv -H 10.0.0.200 -hSSP -N `mlf_find SSP`
   Launch - qclidacsd -h QCLI -d 0
   Launch - tmdf
-# Launch - HClalgo -v
+  Launch - HClalgo -v
