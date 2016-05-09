@@ -12,6 +12,6 @@ Module QCLI
 SCRIPT = interact
 
 HClcol : -lsubbus
-HCldisp : QCLI_conv.tmc HCl.tbl rtg.tmc
+HCldisp : QCLI_conv.tmc HCl.tbl rtg.tmc /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma
 doit : HCl.doit
