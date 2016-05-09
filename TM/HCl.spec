@@ -1,4 +1,5 @@
 TGTDIR = $(TGTNODE)/home/hcl16
+Module TMbase
 
 tmcbase = base.tmc
 
@@ -6,7 +7,6 @@ cmdbase = /usr/local/share/huarp/phrtg.cmd
 
 genuibase = HCl.genui
 
-Module TMbase
 Module QCLI
 
 SCRIPT = interact

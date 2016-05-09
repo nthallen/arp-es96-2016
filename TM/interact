@@ -5,9 +5,14 @@
   memo=/dev/huarp/$Experiment/memo
   echo "Running script interact" >$memo
 
+# Verify and/or Program QCLI
+  qclidprog -h QCLI -d0 -cwcwc $TMBINDIR/waves.out
+
 # Launch dccc dccc -f $TMBINDIR/dccc.dccc
   Launch DG/cmd HClcol
   Launch cmd/server HClsrvr
   Launch - lgr -N `mlf_find LOG`
+  Launch - sspdrv -H 10.0.0.200 -hSSP -N `mlf_find SSP`
+  Launch - qclidacsd -h QCLI -d 0
   Launch - tmdf
-  Launch - HClalgo -v
+# Launch - HClalgo -v
