@@ -1,0 +1,10 @@
+PTRH {
+  HBox { +-; Title: "PTRH"; -+ };
+  ""  DACS  Laser  Detector;
+  T1: (DACS_T1C,7)   (ILPV_T1C,7)   (IDPV_T1C,7) C;
+  T2: (DACS_T2C,7)   (ILPV_T2C,7)   (IDPV_T2C,7) C;
+  RH: (DACS_RHC,7)   (ILPV_RHC,7)   (IDPV_RHC,7) %;
+  P:  (DACS_P,7)     (ILPV_P,7)     (IDPV_P,7) Torr;
+  S:  (DACS_PTRHS,7) (ILPV_PTRHS,7) (IDPV_PTRHS,7) ;
+}
+

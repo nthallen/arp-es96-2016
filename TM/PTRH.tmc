@@ -1,0 +1,70 @@
+%{
+  #include "ptrhm.h"
+  ptrhm DACS = ptrhm("DACS",0x200,0xBDC6,0x9F96,0x757D,0x6B0D,0x7D1D,0x6AE3);
+  ptrhm IDPV = ptrhm("IDPV",0x2C0,0xAF27,0x958D,0x6E7B,0x6206,0x799F,0x6E76);
+  ptrhm ILPV = ptrhm("ILPV",0x2E0,0xB177,0x9A58,0x6DBF,0x62BA,0x81BF,0x6C80);
+%}
+TM typedef unsigned char MS5607Db { text "%3d"; }
+TM typedef UINT PTRH_S { text " %04x"; }
+TM typedef double PTRHT_t { text "%5.1lf"; }
+TM typedef double SHT21RH_t { text "%4.1lf"; }
+TM typedef double PTRHP_t { text "%7.2lf"; }
+
+TM 1 Hz UINT DACS_T1;
+TM 1 Hz UINT DACS_RH;
+TM 1 Hz UINT DACS_T2a;
+TM 1 Hz MS5607Db DACS_T2b;
+TM 1 Hz UINT DACS_Pa;
+TM 1 Hz MS5607Db DACS_Pb;
+TM 1 Hz PTRH_S DACS_PTRHS;
+
+Group DACS ( DACS_T1, DACS_RH, DACS_T2a,
+    DACS_T2b, DACS_Pa, DACS_Pb, DACS_PTRHS ) {
+  DACS.acquire();
+  DACS_T1 = DACS.SHT21T();
+  DACS_RH = DACS.SHT21RH();
+  DACS_T2a = DACS.MS5607Ta();
+  DACS_T2b = DACS.MS5607Tb(); 
+  DACS_Pa = DACS.MS5607Pa();
+  DACS_Pb = DACS.MS5607Pb(); 
+  DACS_PTRHS = DACS.Status();
+}
+
+TM 1 Hz UINT IDPV_T1;
+TM 1 Hz UINT IDPV_RH;
+TM 1 Hz UINT IDPV_T2a;
+TM 1 Hz MS5607Db IDPV_T2b;
+TM 1 Hz UINT IDPV_Pa;
+TM 1 Hz MS5607Db IDPV_Pb;
+TM 1 Hz PTRH_S IDPV_PTRHS;
+
+Group IDPV ( IDPV_T1, IDPV_RH, IDPV_T2a,
+    IDPV_T2b, IDPV_Pa, IDPV_Pb, IDPV_PTRHS ) {
+  IDPV.acquire();
+  IDPV_T1 = IDPV.SHT21T();
+  IDPV_RH = IDPV.SHT21RH();
+  IDPV_T2a = IDPV.MS5607Ta();
+  IDPV_T2b = IDPV.MS5607Tb(); 
+  IDPV_Pa = IDPV.MS5607Pa();
+  IDPV_Pb = IDPV.MS5607Pb(); 
+  IDPV_PTRHS = IDPV.Status();
+}
+TM 1 Hz UINT ILPV_T1;
+TM 1 Hz UINT ILPV_RH;
+TM 1 Hz UINT ILPV_T2a;
+TM 1 Hz MS5607Db ILPV_T2b;
+TM 1 Hz UINT ILPV_Pa;
+TM 1 Hz MS5607Db ILPV_Pb;
+TM 1 Hz PTRH_S ILPV_PTRHS;
+
+Group ILPV ( ILPV_T1, ILPV_RH, ILPV_T2a,
+    ILPV_T2b, ILPV_Pa, ILPV_Pb, ILPV_PTRHS ) {
+  ILPV.acquire();
+  ILPV_T1 = ILPV.SHT21T();
+  ILPV_RH = ILPV.SHT21RH();
+  ILPV_T2a = ILPV.MS5607Ta();
+  ILPV_T2b = ILPV.MS5607Tb(); 
+  ILPV_Pa = ILPV.MS5607Pa();
+  ILPV_Pb = ILPV.MS5607Pb(); 
+  ILPV_PTRHS = ILPV.Status();
+}

@@ -1,11 +1,14 @@
 Input "TMbase.tbl";
 Input "QCLI.tbl";
+Input "PTRH.tbl";
 
 Data {
   HBox { +-; Title: "Data"; -+ };
   ICelLP: (ICelLP,7) V;
 }
 
-{ HBox { |+; [QCLISSP]; |+; { [Data]; [TMbaseB] }; |+ };
+{ HBox { |+; [QCLISSP]; |+; {
+    [PTRH];
+    HBox { [Data]; |; [TMbaseB] } }; |+ };
   -
 }

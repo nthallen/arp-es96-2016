@@ -9,6 +9,8 @@ tm.dac
 HClcoloui.c
 HClcoloui.o
 HClcol.o
+ptrhm.o
+ptrhm_col.o
 HCltbl.tmc
 HCldisp.cc
 HCldispoui.c
