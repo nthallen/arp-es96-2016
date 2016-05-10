@@ -2,23 +2,27 @@ TM typedef unsigned short UINT { text "%5d"; }
 TM 1 Hz UINT MFCtr, Synch;
 
 TM typedef double VOLTS;
+TM typedef double CELCIUS;
 TM typedef signed short AI16 {
   text "%7.4lf";
   convert VOLTS;
   collect x = sbrwa(x.address);
 }
   Calibration (AI16,VOLTS) { 0, 0, 32768, 4.096 }
+
+TM typedef AI16 AI_T30K { text "%7.2lf"; convert CELCIUS; }
+
 TM 1 Hz AI16 Cell_P; Address Cell_P 0xC0C; /* Cell Pressure (5 PSI) */
 TM 1 Hz AI16 Laser_I; Address Laser_I 0xC58;
 TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;
-TM 1 Hz AI16 IRv1T; Address IRv1T 0xC04;
-TM 1 Hz AI16 IRv2T; Address IRv2T 0xC84;
-TM 1 Hz AI16 IRv3T; Address IRv3T 0xC06;
-TM 1 Hz AI16 IRv4T; Address IRv4T 0xC86;
-TM 1 Hz AI16 IRv5T; Address IRv5T 0xC08;
-TM 1 Hz AI16 ISk1T; Address ISk1T 0xC46;
-TM 1 Hz AI16 ISk2T; Address ISk2T 0xCC2;
-TM 1 Hz AI16 ISk3T; Address ISk3T 0xC82;
+TM 1 Hz AI_T30K IRv1T; Address IRv1T 0xC04;
+TM 1 Hz AI_T30K IRv2T; Address IRv2T 0xC84;
+TM 1 Hz AI_T30K IRv3T; Address IRv3T 0xC06;
+TM 1 Hz AI_T30K IRv4T; Address IRv4T 0xC86;
+/* TM 1 Hz AI_T30K IRv5T; Address IRv5T 0xC08; */
+TM 1 Hz AI_T30K ISk1T; Address ISk1T 0xC46;
+TM 1 Hz AI_T30K ISk2T; Address ISk2T 0xCC2;
+TM 1 Hz AI_T30K ISk3T; Address ISk3T 0xC82;
 TM 1 Hz AI16 Pump1_Cnt_T ; Address Pump1_Cnt_T 0xC1C;
 TM 1 Hz AI16 Pump1_mot_T ; Address Pump1_mot_T 0xC5C;
 TM 1 Hz AI16 Pump2_Cnt_T ; Address Pump2_Cnt_T 0xC9A;

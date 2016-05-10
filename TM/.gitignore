@@ -12,11 +12,13 @@ HClcol.o
 ptrhm.o
 ptrhm_col.o
 HCltbl.tmc
+TStbl.tmc
 HCldisp.cc
 HCldispoui.c
 HCldispoui.o
 HCldisp.o
 HCltblnc.tmc
+TStblnc.tmc
 HCldispnc.cc
 HCldispncoui.c
 HCldispncoui.o
@@ -46,7 +48,9 @@ HClengextoui.c
 HClengextoui.o
 HClengext.o
 HCltbl.tmc.dep
+TStbl.tmc.dep
 HCltblnc.tmc.dep
+TStblnc.tmc.dep
 *.err
 HClcol
 HCldisp

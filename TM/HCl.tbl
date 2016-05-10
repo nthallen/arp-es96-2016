@@ -22,7 +22,7 @@ Rover {
   "2:" (IRv2T,7) V;
   "3:" (IRv3T,7) V;
   "4:" (IRv4T,7) V;
-  "5:" (IRv5T,7) V;
+ #"5:" (IRv5T,7) V;
 }
 
 Pump {
