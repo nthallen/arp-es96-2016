@@ -2,13 +2,36 @@ Input "TMbase.tbl";
 Input "QCLI.tbl";
 Input "PTRH.tbl";
 
-Data {
-  HBox { +-; Title: "Data"; -+ };
-  ICelLP: (ICelLP,7) V;
+Cell {
+  HBox { +-; Title: "Cell"; -+ };
+  Cell_P: (Cell_P,7) V;
+}
+
+Laser {
+  HBox { +-; Title: Laser; -+ };
+  ILTE3R3T: (ILTE3R3T,7) V;
+  Laser_I:   (Laser_I,7) V;
+}
+
+Skin_Rvr {
+  +-+;
+  ""   >Skin      >Rover;
+  "1:" (ISk1T,7)  (IRv1T,7) V;
+  "2:" (ISk2T,7)  (IRv2T,7) V;
+  "3:" (ISk3T,7)  (IRv3T,7) V;
+  "4:" ""         (IRv4T,7) V;
+  "5:" ""         (IRv5T,7) V;
+}
+
+Pump {
+  HBox { +-; Title: "Scroll Pump"; -+ };
+  ""       "1"            "2";
+  CntT: (Pump1_Cnt_T,7)  (Pump2_Cnt_T,7) V;
+  MotT: (Pump1_mot_T,7)  (Pump2_mot_T,7) V;
 }
 
 { HBox { |+; [QCLISSP]; |+; {
     [PTRH];
-    HBox { [Data]; |; [TMbaseB] } }; |+ };
+    HBox { [Cell]; |; [TMbaseB] } }; |+ };
   -
 }

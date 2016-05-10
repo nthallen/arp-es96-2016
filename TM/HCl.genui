@@ -1,3 +1,26 @@
 HEADER HCL Instrument
 MNEMONIC hcl16
 HOMEDIR HCl16_DATA_DIR
+### Cell
+1 IRv1T Temps Rovers
+1 IRv2T Temps Rovers
+1 IRv3T Temps Rovers
+1 IRv4T Temps Rovers
+1 IRv5T Temps Rovers
+
+1 ISk1T Temps Skin
+1 ISk2T Temps Skin
+1 ISk3T Temps Skin
+
+1 IHeatBlkT Temps HeaterBlock
+1 IHeatBlkTSt Temps HeaterBlock
+
+### Pump
+1 Pump1_Cnt_T Pumps T
+1 Pump2_Cnt_T Pumps T
+1 Pump1_mot_T Pumps T
+1 Pump2_mot_T Pumps T
+
+1 Cell_P  Cell P
+1 Laser_I LPV LaserI
+1 ILTE3R3T LPV LaserT
