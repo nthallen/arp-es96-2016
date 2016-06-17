@@ -1,58 +1,70 @@
 # Invoking: appgen_module TMbase X 
 # Invoking: appgen_module QCLI X 
-# Makefile Generated Mon May 09 21:51:29 EDT 2016
+# Makefile Generated Fri Jun 17 12:19:05 EDT 2016
 MNC=HCl
 SPECFILE=HCl.spec
 PCMFILE=HCl.pcm
-SRC=freemem.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc
-SRC+=TS_T_t_cal.tmc QCLI.tmc waves.tmc AI_col.tmc PTRH_col.tmc
-SRC+=temps_col.tmc QCLI_col.tmc QCLI_conv.tmc PTRH_conv.tmc
-SRC+=temps_conv.tmc HCl.tbl rtg.tmc TS.tbl HCl.tma HCl.doit QCLI.cmd
-SRC+=waves.cmd TMbase.genui HCl.genui QCLI.genui
+SRC=base.tmc PTRH.tmc /usr/local/share/huarp/ptrhm.cc T30K75KU.tmc
+SRC+=temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc
+SRC+=/usr/local/share/huarp/cpu_usage.tmc
+SRC+=/usr/local/share/huarp/tmdf.tmc freemem.tmc
+SRC+=/usr/local/share/huarp/flttime.tmc
+SRC+=/usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc
+SRC+=AI_col.tmc PTRH_col.tmc /usr/local/share/huarp/ptrhm_col.cc
+SRC+=temps_col.tmc /usr/local/share/huarp/tdrift_col.tmc
+SRC+=/usr/local/share/huarp/cpu_usage_col.tmc
+SRC+=/usr/local/share/huarp/tmdf_col.tmc
+SRC+=/usr/local/share/huarp/freemem_col.tmc QCLI_col.tmc -lsubbus
+SRC+=/usr/local/share/huarp/root.cmd /usr/local/share/huarp/phrtg.cmd
+SRC+=ao.cmd address.h /usr/local/share/huarp/getcon.cmd
+SRC+=/usr/local/share/huarp/qclia.cmd QCLI.cmd waves.cmd
+SRC+=QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCl.tbl rtg.tmc
+SRC+=/usr/local/share/oui/cic.oui TS.tbl HCl.tma HCl.doit HCl.genui
+SRC+=TMbase.genui QCLI.genui HCl.pcm
 TOOL=HCl.spec Makefile
 SCRIPT=interact
-OBJ=waves.cmd waves.out waves.tmc waves.m waves.log HClcol.cc
-OBJ+=HCl.pcm tm.dac HClcoloui.c HClcoloui.o HClcol.o ptrhm.o
-OBJ+=ptrhm_col.o HCltbl.tmc TStbl.tmc HCldisp.cc HCldispoui.c
-OBJ+=HCldispoui.o HCldisp.o HCltblnc.tmc TStblnc.tmc HCldispnc.cc
-OBJ+=HCldispncoui.c HCldispncoui.o HCldispnc.o HClalgoa.tmc
-OBJ+=HClalgo.cc HClalgooui.c HClalgooui.o HClalgo.o doit.dep
-OBJ+=HClcmd.cc HClcmd.dat HClclt.o HClcltoui.c HClcltoui.o HClcltnc.o
-OBJ+=HClcltncoui.c HClcltncoui.o HClsrvr.o HClsrvroui.c HClsrvroui.o
-OBJ+=HClengext.cdf HClengextcdf.oui HClengextcdf.tmc HClengext.cc
-OBJ+=HClengextoui.c HClengextoui.o HClengext.o HCltbl.tmc.dep
-OBJ+=TStbl.tmc.dep HCltblnc.tmc.dep TStblnc.tmc.dep
-TGT=HClcol HCldisp HCldispnc HClalgo doit HClclt HClcltnc HClsrvr
+OBJ=waves.cmd waves.out waves.tmc waves.m waves.log HClcol.cc tm.dac
+OBJ+=HClcoloui.c HClcoloui.o HClcol.o ptrhm.o ptrhm_col.o HClcmd.cc
+OBJ+=HClcmd.dat HClsrvr.o HClsrvroui.c HClsrvroui.o HCltbl.tmc
+OBJ+=TStbl.tmc HCldisp.cc HCldispoui.c HCldispoui.o HCldisp.o
+OBJ+=HCltblnc.tmc TStblnc.tmc HCldispnc.cc HCldispncoui.c
+OBJ+=HCldispncoui.o HCldispnc.o HClalgoa.tmc HClalgo.cc HClalgooui.c
+OBJ+=HClalgooui.o HClalgo.o doit.dep HClclt.o HClcltoui.c HClcltoui.o
+OBJ+=HClcltnc.o HClcltncoui.c HClcltncoui.o HClengext.cdf
+OBJ+=HClengextcdf.oui HClengextcdf.tmc HClengext.cc HClengextoui.c
+OBJ+=HClengextoui.o HClengext.o HCltbl.tmc.dep TStbl.tmc.dep
+OBJ+=HCltblnc.tmc.dep TStblnc.tmc.dep
+TGT=HClcol HClsrvr HCldisp HCldispnc HClalgo doit HClclt HClcltnc
 TGT+=HClengext
 DISTRIB=waves.out HCl.pcm tm.dac
 IDISTRIB=Experiment.config VERSION doit
-SRCDIST=waves.m waves.qcli HCl.tbl TS.tbl HCl.tma
-SRCDIST+=/usr/local/share/huarp/tdrift.tmc
+SRCDIST=waves.m waves.qcli HCl.tbl TS.tbl HCl.tma base.tmc PTRH.tmc
+SRCDIST+=/usr/local/share/huarp/ptrhm.cc T30K75KU.tmc temps.tmc
+SRCDIST+=TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc
 SRCDIST+=/usr/local/share/huarp/cpu_usage.tmc
 SRCDIST+=/usr/local/share/huarp/tmdf.tmc freemem.tmc
-SRCDIST+=/usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc
-SRCDIST+=/usr/local/share/huarp/ptrhm.cc T30K75KU.tmc temps.tmc
-SRCDIST+=TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc
-SRCDIST+=QCLI.tmc waves.tmc
-TMCBASE=/usr/local/share/huarp/tdrift.tmc
+SRCDIST+=/usr/local/share/huarp/flttime.tmc
+SRCDIST+=/usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc
+TMCBASE=base.tmc PTRH.tmc /usr/local/share/huarp/ptrhm.cc
+TMCBASE+=T30K75KU.tmc temps.tmc TS_T_t_cal.tmc
+TMCBASE+=/usr/local/share/huarp/tdrift.tmc
 TMCBASE+=/usr/local/share/huarp/cpu_usage.tmc
 TMCBASE+=/usr/local/share/huarp/tmdf.tmc freemem.tmc
-TMCBASE+=/usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc
-TMCBASE+=/usr/local/share/huarp/ptrhm.cc T30K75KU.tmc temps.tmc
-TMCBASE+=TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc
-TMCBASE+=QCLI.tmc waves.tmc
+TMCBASE+=/usr/local/share/huarp/flttime.tmc
+TMCBASE+=/usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc
 CMDBASE=/usr/local/share/huarp/root.cmd
+CMDBASE+=/usr/local/share/huarp/phrtg.cmd ao.cmd address.h
 CMDBASE+=/usr/local/share/huarp/getcon.cmd
-CMDBASE+=/usr/local/share/huarp/phrtg.cmd
 CMDBASE+=/usr/local/share/huarp/qclia.cmd QCLI.cmd waves.cmd
-COLBASE=/usr/local/share/huarp/tdrift_col.tmc
+COLBASE=AI_col.tmc PTRH_col.tmc /usr/local/share/huarp/ptrhm_col.cc
+COLBASE+=temps_col.tmc /usr/local/share/huarp/tdrift_col.tmc
 COLBASE+=/usr/local/share/huarp/cpu_usage_col.tmc
 COLBASE+=/usr/local/share/huarp/tmdf_col.tmc
-COLBASE+=/usr/local/share/huarp/freemem_col.tmc AI_col.tmc
-COLBASE+=PTRH_col.tmc /usr/local/share/huarp/ptrhm_col.cc
-COLBASE+=temps_col.tmc QCLI_col.tmc
+COLBASE+=/usr/local/share/huarp/freemem_col.tmc QCLI_col.tmc
 SWSBASE=
 QCLIBASE=waves.qcli
+GENUIBASE=HCl.genui TMbase.genui QCLI.genui
+EXTBASE=QCLI_conv.tmc
 SPECDEPBASE=/usr/local/share/huarp/TMbase.agm
 SPECDEPBASE+=/usr/local/share/huarp/freemem_def.tmc.in
 SPECDEPBASE+=/usr/local/share/huarp/TMbase.genui.in
@@ -66,8 +78,7 @@ SPECDEPBASE+=/usr/local/share/huarp/qcli.genui.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli.tbl.in
 AG_CPPFLAGS=
 PHTGT=HCltbl.tmc TStbl.tmc
-RCS=$(SRC) $(TOOL) $(SCRIPT)
-SOURCE=$(RCS) $(NONRCS)
+SOURCE=$(SRC) $(TOOL) $(SCRIPT)
 OBJECT=$(OBJ) *.err
 TARGET=$(TGT)
 DSTRB=$(TGT) $(DISTRIB) $(SCRIPT)
@@ -103,6 +114,10 @@ HClcol : HClcol.o ptrhm.o ptrhm_col.o HClcoloui.o
 	$(LINK.privCXX) HClcol.o ptrhm.o ptrhm_col.o HClcoloui.o -lsubbus -ltmpp -ltm -lnort
 	$(OUIUSE) HClcoloui.c
 	$(PROMOTE) HClcol
+HClsrvr : HClsrvr.o HClsrvroui.o
+	$(LINK.privCXX) HClsrvr.o HClsrvroui.o -lsubbus -ltmpp -ltm -lnort
+	$(OUIUSE) HClsrvroui.c
+	$(PROMOTE) HClsrvr
 HCldisp : HCldisp.o ptrhm.o HCldispoui.o
 	$(LINK.normCXX) HCldisp.o ptrhm.o HCldispoui.o -ldisp -ltmph -lph -ltmpp -ltm -lnort
 	$(OUIUSE) HCldispoui.c
@@ -120,15 +135,11 @@ HClclt : HClclt.o HClcltoui.o
 HClcltnc : HClcltnc.o HClcltncoui.o
 	$(LINK.normCXX) HClcltnc.o HClcltncoui.o -ltmnc -lncurses -ltmpp -ltm -lnort
 	$(OUIUSE) HClcltncoui.c
-HClsrvr : HClsrvr.o HClsrvroui.o
-	$(LINK.privCXX) HClsrvr.o HClsrvroui.o -ltmpp -ltm -lnort
-	$(OUIUSE) HClsrvroui.c
-	$(PROMOTE) HClsrvr
 HClengext : HClengext.o ptrhm.o HClengextoui.o
 	$(LINK.normCXX) HClengext.o ptrhm.o HClengextoui.o -ltmpp -ltm -lnort
 	$(OUIUSE) HClengextoui.c
-HClcol.cc : /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc /usr/local/share/huarp/tdrift_col.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc /usr/local/share/huarp/freemem_col.tmc AI_col.tmc PTRH_col.tmc temps_col.tmc QCLI_col.tmc
-	$(TMC.col) /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc /usr/local/share/huarp/tdrift_col.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc /usr/local/share/huarp/freemem_col.tmc AI_col.tmc PTRH_col.tmc temps_col.tmc QCLI_col.tmc
+HClcol.cc : base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc AI_col.tmc PTRH_col.tmc temps_col.tmc /usr/local/share/huarp/tdrift_col.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc /usr/local/share/huarp/freemem_col.tmc QCLI_col.tmc VERSION
+	$(TMC.col) base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc AI_col.tmc PTRH_col.tmc temps_col.tmc /usr/local/share/huarp/tdrift_col.tmc /usr/local/share/huarp/cpu_usage_col.tmc /usr/local/share/huarp/tmdf_col.tmc /usr/local/share/huarp/freemem_col.tmc QCLI_col.tmc
 HClcoloui.c : $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/collect.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
 HClcoloui.o : HClcoloui.c
@@ -137,12 +148,19 @@ ptrhm.o : /usr/local/share/huarp/ptrhm.cc
 	$(COMPILE.cc) /usr/local/share/huarp/ptrhm.cc
 ptrhm_col.o : /usr/local/share/huarp/ptrhm_col.cc
 	$(COMPILE.cc) /usr/local/share/huarp/ptrhm_col.cc
+HClcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/phrtg.cmd ao.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/qclia.cmd QCLI.cmd waves.cmd
+	$(CMDGEN) -d HClcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/phrtg.cmd ao.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/qclia.cmd QCLI.cmd waves.cmd
+HClsrvr.o : HClcmd.cc address.h
+	$(COMPILE.srvr) HClcmd.cc
+HClsrvroui.c : $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
+	$(OUI) $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/subbus.oui $(OUIDIR)/msg.oui
+HClsrvroui.o : HClsrvroui.c address.h
 HCltbl.tmc : HCl.tbl
 -include HCltbl.tmc.dep
 TStbl.tmc : TS.tbl
 -include TStbl.tmc.dep
-HCldisp.cc : /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltbl.tmc rtg.tmc TStbl.tmc
-	$(TMC) /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltbl.tmc rtg.tmc TStbl.tmc
+HCldisp.cc : base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltbl.tmc rtg.tmc TStbl.tmc VERSION
+	$(TMC) base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltbl.tmc rtg.tmc TStbl.tmc
 HCldispoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HCldispoui.o : HCldispoui.c
@@ -151,8 +169,8 @@ HCltblnc.tmc : HCl.tbl
 -include HCltblnc.tmc.dep
 TStblnc.tmc : TS.tbl
 -include TStblnc.tmc.dep
-HCldispnc.cc : /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltblnc.tmc rtg.tmc TStblnc.tmc
-	$(TMC) /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltblnc.tmc rtg.tmc TStblnc.tmc
+HCldispnc.cc : base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltblnc.tmc rtg.tmc TStblnc.tmc VERSION
+	$(TMC) base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCltblnc.tmc rtg.tmc TStblnc.tmc
 HCldispncoui.c : /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) /usr/local/share/oui/cic.oui $(OUIDIR)/nctable.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HCldispncoui.o : HCldispncoui.c
@@ -160,8 +178,8 @@ HCldispnc.o : HCldispnc.cc
 HClalgoa.tmc : HCl.tma HClsrvr
 	$(SERVER) ./HClsrvr
 	$(TMCALGO) -V "`./HClsrvr -R`" HCl.tma
-HClalgo.cc : /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc HClalgoa.tmc
-	$(TMC) /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc HClalgoa.tmc
+HClalgo.cc : base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc HClalgoa.tmc VERSION
+	$(TMC) base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc HClalgoa.tmc
 HClalgooui.c : $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/tma.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HClalgooui.o : HClalgooui.c
@@ -169,31 +187,24 @@ HClalgo.o : HClalgo.cc
 doit.dep : HCl.doit
 	mkdoit3 -M -o doit  HCl.doit
 -include doit.dep
-HClcmd.cc : /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/phrtg.cmd /usr/local/share/huarp/qclia.cmd QCLI.cmd waves.cmd
-	$(CMDGEN) -d HClcmd.dat /usr/local/share/huarp/root.cmd /usr/local/share/huarp/getcon.cmd /usr/local/share/huarp/phrtg.cmd /usr/local/share/huarp/qclia.cmd QCLI.cmd waves.cmd
-HClclt.o : HClcmd.cc
+HClclt.o : HClcmd.cc address.h
 	$(COMPILE.clt) HClcmd.cc
 HClcltoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/kbdclt.oui $(OUIDIR)/msg.oui
-HClcltoui.o : HClcltoui.c
-HClcltnc.o : HClcmd.cc
+HClcltoui.o : HClcltoui.c address.h
+HClcltnc.o : HClcmd.cc address.h
 	$(COMPILE.cltnc) HClcmd.cc
 HClcltncoui.c : $(OUIDIR)/kbdclt.oui $(OUIDIR)/nctable.oui $(OUIDIR)/msg.oui
 	$(OUI) $(OUIDIR)/kbdclt.oui $(OUIDIR)/nctable.oui $(OUIDIR)/msg.oui
-HClcltncoui.o : HClcltncoui.c
-HClsrvr.o : HClcmd.cc
-	$(COMPILE.srvr) HClcmd.cc
-HClsrvroui.c : $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/msg.oui
-	$(OUI) $(OUIDIR)/cis.oui $(OUIDIR)/seteuid.oui $(OUIDIR)/msg.oui
-HClsrvroui.o : HClsrvroui.c
-HClengext.cdf : TMbase.genui HCl.genui QCLI.genui
-	$(GENUI2ENG) TMbase.genui HCl.genui QCLI.genui
+HClcltncoui.o : HClcltncoui.c address.h
+HClengext.cdf : HCl.genui TMbase.genui QCLI.genui
+	$(GENUI2ENG) HCl.genui TMbase.genui QCLI.genui
 HClengextcdf.oui : HClengext.cdf
 	$(EDF2OUI) HClengext.cdf
 HClengextcdf.tmc : HClengext.cdf
 	$(EDF2EXT) HClengext.cdf
-HClengext.cc : /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc HClengextcdf.tmc
-	$(TMC) /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc HClengextcdf.tmc
+HClengext.cc : base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc HClengextcdf.tmc VERSION
+	$(TMC) base.tmc PTRH.tmc T30K75KU.tmc temps.tmc TS_T_t_cal.tmc /usr/local/share/huarp/tdrift.tmc /usr/local/share/huarp/cpu_usage.tmc /usr/local/share/huarp/tmdf.tmc freemem.tmc /usr/local/share/huarp/flttime.tmc /usr/local/share/huarp/qcli_types.tmc QCLI.tmc waves.tmc QCLI_conv.tmc HClengextcdf.tmc
 HClengextoui.c : HClengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 	$(OUI) HClengextcdf.oui $(OUIDIR)/dc.oui $(OUIDIR)/msg.oui
 HClengextoui.o : HClengextoui.c
@@ -210,3 +221,5 @@ clean : tidy
 clean-dist : clean
 $(IGNOREFILE) : Makefile
 	@for i in $(OBJECT) $(TARGET); do echo "$$i"; done >$(IGNOREFILE)
+COLFLAGS = -Haddress.h
+address.h : HClcol.cc

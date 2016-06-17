@@ -28,6 +28,7 @@ Rover {
 Pump {
   HBox { +-; Title: "Scroll Pump"; -+ };
   ""       "1"            "2";
+  V_St: (Pump1_V_St,6)   (Pump2_V_St,6)  V;
   CntT: (Pump1_Cnt_T,7)  (Pump2_Cnt_T,7) V;
   MotT: (Pump1_mot_T,7)  (Pump2_mot_T,7) V;
 }

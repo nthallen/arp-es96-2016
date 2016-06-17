@@ -16,6 +16,8 @@ HOMEDIR HCl16_DATA_DIR
 1 IHeatBlkTSt Temps HeaterBlock
 
 ### Pump
+1 Pump1_V_St Pumps V
+1 Pump2_V_St Pumps V
 1 Pump1_Cnt_T Pumps T
 1 Pump2_Cnt_T Pumps T
 1 Pump1_mot_T Pumps T

@@ -29,3 +29,13 @@ TM 1 Hz AI16 Pump2_Cnt_T ; Address Pump2_Cnt_T 0xC9A;
 TM 1 Hz AI16 Pump2_mot_T ; Address Pump2_mot_T 0xCDA;
 TM 1 Hz AI16 IHeatBlkT; Address IHeatBlkT 0xC8E;
 TM 1 Hz AI16 IHeatBlkTSt; Address IHeatBlkTSt 0x40A;
+
+TM typedef unsigned short AO
+  { text "%6.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
+  Calibration ( AO, VOLTS ) {
+    0, 0,
+    65536, 10
+  }
+
+TM 1 Hz AO Pump1_V_St; Address Pump1_V_St 0x410; /* AO8 */
+TM 1 Hz AO Pump2_V_St; Address Pump2_V_St 0x412; /* AO9 */
