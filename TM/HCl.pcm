@@ -6,9 +6,9 @@ Effective Frame Dimensions:
   3 Rows 53 Columns
   3 rows/sec
   1272 bits/sec
-  Data:  1168 bits/sec  92 %
+  Data:  1176 bits/sec  92 %
   Synch: 96 bits/sec  8 %
-  Empty: 8 bits/sec  1 %
+  Empty: 0 bits/sec  0 %
 -------End of Frame Statistics-----
 
 
@@ -79,14 +79,15 @@ Effective Frame Dimensions:
 1/1 Hz 2 bytes Datum ISk2T (3,2,26,2)
 1/1 Hz 2 bytes Datum ISk3T (3,2,28,2)
 1/1 Hz 2 bytes Datum Laser_I (3,2,30,2)
-1/1 Hz 2 bytes Datum Pump1_Cnt_T (3,2,32,2)
+1/1 Hz 2 bytes Datum Pump1_Head_T (3,2,32,2)
 1/1 Hz 2 bytes Datum Pump1_mot_T (3,2,34,2)
 1/1 Hz 2 bytes Datum Pump1_V_St (3,2,36,2)
-1/1 Hz 2 bytes Datum Pump2_Cnt_T (3,2,38,2)
+1/1 Hz 2 bytes Datum Pump2_Head_T (3,2,38,2)
 1/1 Hz 2 bytes Datum Pump2_mot_T (3,2,40,2)
 1/1 Hz 2 bytes Datum Pump2_V_St (3,2,42,2)
 1/1 Hz 2 bytes Datum QCLI_CS (3,2,44,2)
 1/1 Hz 2 bytes Datum QCLI_Stale (3,2,46,2)
 1/1 Hz 2 bytes Datum SSP_Stale (3,2,48,2)
+1/1 Hz 1 bytes Datum SWStat (3,2,50,1)
 -------End of PCM Definition-------
 

@@ -1,0 +1,5 @@
+SW_Variable: SWStat
+
+SWS_PUMP_ON   7   Pump On: Validate Pump_On; break;
+SWS_PUMP_OFF  8   Pump Off: Validate Pump_Off; break;
+
