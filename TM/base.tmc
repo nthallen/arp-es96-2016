@@ -19,7 +19,10 @@ Calibration (AI_500Torr, TORR) {
   20000, 500
 }
 
-TM 1 Hz AI16 Cell_P; Address Cell_P 0xC0C; /* Cell Pressure (5 PSI) */
+TM typedef AI16 AI_5PSI { text "%6.2lf"; convert TORR; }
+Calibration (AI_5PSI, TORR) { 0, 0, 32768, 275.81 }
+
+TM 1 Hz AI_5PSI Cell_P; Address Cell_P 0xC0C; /* Cell Pressure (5 PSI) */
 TM 1 Hz AI_500Torr ICelP; Address ICelP 0xCCE;
 TM 1 Hz AI16 Laser_I; Address Laser_I 0xC58;
 TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;

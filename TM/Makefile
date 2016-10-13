@@ -1,6 +1,6 @@
 # Invoking: appgen_module TMbase X 
 # Invoking: appgen_module QCLI X 
-# Makefile Generated Thu Oct 13 12:39:15 EDT 2016
+# Makefile Generated Thu Oct 13 12:58:55 EDT 2016
 MNC=HCl
 SPECFILE=HCl.spec
 PCMFILE=HCl.pcm

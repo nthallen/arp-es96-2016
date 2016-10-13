@@ -4,7 +4,7 @@ Input "PTRH.tbl";
 
 Cell {
   HBox { +-; Title: "Cell"; -+ };
-  Cell_P: (Cell_P,7) V;
+  Cell_P: (Cell_P,6) Torr;
   ICelP: (ICelP,6) Torr;
   ISk1T: (ISk1T,7)  V;
   ISk2T: (ISk2T,7)  V;
