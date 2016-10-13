@@ -17,6 +17,7 @@ cmdbase = ao.cmd
 cmdbase = address.h
 
 genuibase = HCl.genui
+swsbase = HCl.sws
 
 Module TMbase
 Module QCLI
@@ -28,7 +29,7 @@ HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCl.tbl rtg.tmc \
   /usr/local/share/oui/cic.oui TS.tbl
-HClalgo : HCl.tma
+HClalgo : HCl.tma HCl.sws
 doit : HCl.doit
 %%
 COLFLAGS = -Haddress.h

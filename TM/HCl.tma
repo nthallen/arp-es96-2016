@@ -1,3 +1,29 @@
 State Init {
   > Telemetry Start
 }
+
+Partition
+
+State Pump_Off {
+  > Set Pump 1 Set Point 0
+  > Set Pump 2 Set Point 0
+}
+
+State Pump_On {
+    > Set Pump 1 Set Point 5
+ +3 > Set Pump 2 Set Point 5
+    { if (convert(Pump1_Head_T) > 45.0 ||
+          convert(Pump2_Head_T) > 45.0)
+        Validate Pump_Over_Temp;
+    }
+}
+
+State Pump_Over_Temp {
+  > Set Pump 1 Set Point 0
+  > Set Pump 2 Set Point 0
+  { if (convert(Pump1_Head_T) < 30.0 &&
+        convert(Pump2_Head_T) < 30.0)
+      Validate Pump_On;
+  }
+}
+

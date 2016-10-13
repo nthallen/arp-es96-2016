@@ -1,20 +1,20 @@
 
 --------Frame Statistics-----------
 Major Frame: 3 minor frames, 1 Hz
-Minor Frame: 54 bytes, 3 Hz
+Minor Frame: 55 bytes, 3 Hz
 Effective Frame Dimensions:
-  3 Rows 54 Columns
+  3 Rows 55 Columns
   3 rows/sec
-  1296 bits/sec
-  Data:  1200 bits/sec  93 %
+  1320 bits/sec
+  Data:  1208 bits/sec  92 %
   Synch: 96 bits/sec  7 %
-  Empty: 0 bits/sec  0 %
+  Empty: 16 bits/sec  1 %
 -------End of Frame Statistics-----
 
 
 --------PCM Definition-------------
 3/1 Hz 2 bytes Datum MFCtr (1,0,0,2)
-3/1 Hz 2 bytes Datum Synch (1,0,52,2)
+3/1 Hz 2 bytes Datum Synch (1,0,53,2)
 1/1 Hz 36 bytes Group TS (3,0,2,36)
 1/1 Hz 4 bytes Member TS5_raw (3,0,2,4)
 1/1 Hz 2 bytes Member TS5_cnt (3,0,6,2)
@@ -37,6 +37,7 @@ Effective Frame Dimensions:
 1/1 Hz 2 bytes Member DACS_RH (3,0,46,2)
 1/1 Hz 2 bytes Member DACS_T1 (3,0,48,2)
 1/1 Hz 2 bytes Datum Cell_P (3,0,50,2)
+1/1 Hz 1 bytes Datum CPU_Pct (3,0,52,1)
 1/1 Hz 18 bytes Group SSP_grp (3,1,2,18)
 1/1 Hz 2 bytes Member SSP_T_HtSink (3,1,2,2)
 1/1 Hz 2 bytes Member SSP_T_FPGA (3,1,4,2)
@@ -64,6 +65,7 @@ Effective Frame Dimensions:
 1/1 Hz 2 bytes Member QCLI_s (3,1,44,2)
 1/1 Hz 2 bytes Member QCLI_Wave (3,1,46,2)
 1/1 Hz 4 bytes Datum SysTDrift (3,1,48,4)
+1/1 Hz 1 bytes Datum SSP_Status (3,1,52,1)
 1/1 Hz 2 bytes Datum Disk (3,2,2,2)
 1/1 Hz 2 bytes Datum freemem (3,2,4,2)
 1/1 Hz 2 bytes Datum ICelP (3,2,6,2)
@@ -79,16 +81,15 @@ Effective Frame Dimensions:
 1/1 Hz 2 bytes Datum ISk2T (3,2,26,2)
 1/1 Hz 2 bytes Datum ISk3T (3,2,28,2)
 1/1 Hz 2 bytes Datum Laser_I (3,2,30,2)
-1/1 Hz 2 bytes Datum Pump1_Cnt_T (3,2,32,2)
+1/1 Hz 2 bytes Datum Pump1_Head_T (3,2,32,2)
 1/1 Hz 2 bytes Datum Pump1_mot_T (3,2,34,2)
 1/1 Hz 2 bytes Datum Pump1_V_St (3,2,36,2)
-1/1 Hz 2 bytes Datum Pump2_Cnt_T (3,2,38,2)
+1/1 Hz 2 bytes Datum Pump2_Head_T (3,2,38,2)
 1/1 Hz 2 bytes Datum Pump2_mot_T (3,2,40,2)
 1/1 Hz 2 bytes Datum Pump2_V_St (3,2,42,2)
 1/1 Hz 2 bytes Datum QCLI_CS (3,2,44,2)
 1/1 Hz 2 bytes Datum QCLI_Stale (3,2,46,2)
 1/1 Hz 2 bytes Datum SSP_Stale (3,2,48,2)
-1/1 Hz 1 bytes Datum CPU_Pct (3,2,50,1)
-1/1 Hz 1 bytes Datum SSP_Status (3,2,51,1)
+1/1 Hz 1 bytes Datum SWStat (3,2,50,1)
 -------End of PCM Definition-------
 
