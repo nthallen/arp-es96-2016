@@ -3,6 +3,7 @@ TM 1 Hz UINT MFCtr, Synch;
 
 TM typedef double VOLTS;
 TM typedef double CELCIUS;
+TM typedef double TORR;
 TM typedef signed short AI16 {
   text "%7.4lf";
   convert VOLTS;
@@ -11,8 +12,14 @@ TM typedef signed short AI16 {
   Calibration (AI16,VOLTS) { 0, 0, 32768, 4.096 }
 
 TM typedef AI16 AI_T30K { text "%7.2lf"; convert CELCIUS; }
+TM typedef AI16 AI_500Torr { text "%6.2lf"; convert TORR; }
+Calibration (AI_500Torr, TORR) {
+  0, 0,
+  20000, 500
+}
 
 TM 1 Hz AI16 Cell_P; Address Cell_P 0xC0C; /* Cell Pressure (5 PSI) */
+TM 1 Hz AI_500Torr ICelP; Address ICelP 0xCCE;
 TM 1 Hz AI16 Laser_I; Address Laser_I 0xC58;
 TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;
 TM 1 Hz AI_T30K IRv1T; Address IRv1T 0xC04;
@@ -39,3 +46,4 @@ TM typedef unsigned short AO
 
 TM 1 Hz AO Pump1_V_St; Address Pump1_V_St 0x410; /* AO8 */
 TM 1 Hz AO Pump2_V_St; Address Pump2_V_St 0x412; /* AO9 */
+TM 1 Hz AO ICelPSt; Address ICelPSt 0x40C;

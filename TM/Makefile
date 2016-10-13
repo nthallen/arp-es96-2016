@@ -1,6 +1,6 @@
 # Invoking: appgen_module TMbase X 
 # Invoking: appgen_module QCLI X 
-# Makefile Generated Fri Jun 17 12:19:05 EDT 2016
+# Makefile Generated Thu Oct 13 12:32:10 EDT 2016
 MNC=HCl
 SPECFILE=HCl.spec
 PCMFILE=HCl.pcm
@@ -22,7 +22,7 @@ SRC+=QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCl.tbl rtg.tmc
 SRC+=/usr/local/share/oui/cic.oui TS.tbl HCl.tma HCl.doit HCl.genui
 SRC+=TMbase.genui QCLI.genui HCl.pcm
 TOOL=HCl.spec Makefile
-SCRIPT=interact
+SCRIPT=interact digio.dccc
 OBJ=waves.cmd waves.out waves.tmc waves.m waves.log HClcol.cc tm.dac
 OBJ+=HClcoloui.c HClcoloui.o HClcol.o ptrhm.o ptrhm_col.o HClcmd.cc
 OBJ+=HClcmd.dat HClsrvr.o HClsrvroui.c HClsrvroui.o HCltbl.tmc
@@ -76,6 +76,8 @@ SPECDEPBASE+=/usr/local/share/huarp/qclis.cmd.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli_conv.tmc.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli.genui.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli.tbl.in
+SPECTGTBASE=freemem.tmc TMbase.genui TMbase.tbl QCLI.tmc
+SPECTGTBASE+=QCLI_col.tmc QCLI.cmd QCLI_conv.tmc QCLI.genui QCLI.tbl
 AG_CPPFLAGS=
 PHTGT=HCltbl.tmc TStbl.tmc
 SOURCE=$(SRC) $(TOOL) $(SCRIPT)
@@ -90,7 +92,7 @@ include /usr/local/share/huarp/appgen.mk
 IGNOREFILE=.gitignore
 all : Makefile check_photon $(TGT) $(IGNOREFILE)
 all-dist : $(DSTRB) $(SRCDIST) VERSION
-Makefile : HCl.spec $(SPECDEPBASE)
+Makefile $(SPECTGTBASE) : HCl.spec $(SPECDEPBASE)
 	appgen HCl.spec
 VERSION=`cat VERSION`
 extdistribution : $(DSTRB) $(SRCDIST) VERSION

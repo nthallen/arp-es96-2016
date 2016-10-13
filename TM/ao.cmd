@@ -17,4 +17,5 @@
 &ao_chan <unsigned short>
   : Pump 1 Set Point { $0 = Pump1_V_St_Address; }
   : Pump 2 Set Point { $0 = Pump2_V_St_Address; }
+  : Cell Pressure Set Point { $0 = ICelPSt_Address; }
   ;

@@ -22,6 +22,7 @@ Module TMbase
 Module QCLI
 
 SCRIPT = interact
+SCRIPT = digio.dccc
 
 HClcol : -lsubbus
 HClsrvr : -lsubbus

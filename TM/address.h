@@ -1,4 +1,5 @@
 #define QCLI_CS_Address 0x1000
+#define ICelPSt_Address 0x40C
 #define Pump2_V_St_Address 0x412
 #define Pump1_V_St_Address 0x410
 #define IHeatBlkTSt_Address 0x40A
@@ -16,4 +17,5 @@
 #define IRv1T_Address 0xC04
 #define ILTE3R3T_Address 0xC18
 #define Laser_I_Address 0xC58
+#define ICelP_Address 0xCCE
 #define Cell_P_Address 0xC0C
