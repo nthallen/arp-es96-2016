@@ -1,4 +1,4 @@
-HEADER HCL Instrument
+HEADER HCL16 Instrument
 MNEMONIC hcl16
 HOMEDIR HCl16_DATA_DIR
 ### Cell
@@ -24,5 +24,7 @@ HOMEDIR HCl16_DATA_DIR
 1 Pump2_mot_T Pumps T
 
 1 Cell_P  Cell P
+1 ICelP   Cell P
+1 ICelPSt Cell P
 1 Laser_I LPV LaserI
 1 ILTE3R3T LPV LaserT
