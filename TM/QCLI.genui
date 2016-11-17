@@ -1,6 +1,6 @@
-  1 QCLI_Wave QCLI Wave
+  1 QCLI_Wave QCLI Wave %.0lf
   1 SSP_Num   QCLI Scan
-  1 SSP_Status QCLI SSP
+  1 SSP_Status QCLI SSP %.0lf
   1 CAOVF1:SSP_Flags:0 QCLI Overflow
   1 CAOVF2:SSP_Flags:1 QCLI Overflow
   1 CAOVF3:SSP_Flags:2 QCLI Overflow
@@ -17,8 +17,8 @@
   1 QCLI_err    QCLI_stat err
   1 QCLI_fifodep QCLI_stat fifodep
   1 QCLI_flash   QCLI_stat flash
-  1 QCLI_mode    QCLI_stat mode
-  1 QCLI_rw      QCLI_stat rw
+  1 QCLI_mode    QCLI_stat mode %.0lf
+  1 QCLI_rw      QCLI_stat rw %.0lf
   1 QCLI_present:QCLI_CS:11 QCLI_stat status
   1 QCLI_laser:QCLI_s:12 QCLI_stat status
   1 QCLI_cordte:QCLI_s:11 QCLI_stat status

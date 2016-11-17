@@ -1,5 +1,5 @@
 function ui_hcl16
-f = ne_dialg('HCL Instrument',1);
+f = ne_dialg('HCL16 Instrument',1);
 f = ne_dialg(f, 'add', 0, 1, 'ghcl16t', 'Temps' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16tr', 'Rovers' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16ts', 'Skin' );
