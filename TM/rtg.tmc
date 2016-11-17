@@ -8,3 +8,4 @@ if (last_SSP != SSP_Num) {
 }
 ci_sendfcmd(2, "PhRTG Datum CPU_Pct %lu %s\n", itime(), text(CPU_Pct));
 ci_sendfcmd(2, "PhRTG Datum Cell_P %lu %s\n", itime(), text(Cell_P));
+ci_sendfcmd(2, "PhRTG Datum ICelP %lu %s\n", itime(), text(ICelP));

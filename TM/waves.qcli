@@ -6,38 +6,231 @@
 QCLIConfig Standard;
 Digitizer SSP;
 Prefix QCLI;
-
-ICOS Waveform JPL57_3 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 330 mA to 360 mA in 1 msec;
-}
-
-ICOS Waveform JPL57_4 {
+ICOS Waveform I_250_360 {
   SampleRate = 100 MHz/100;
   Ncoadd = 900;
   Tz = 10%;
   Ramp from 250 mA to 360 mA in 1 msec;
 }
 
-ICOS Waveform JPL57_4a {
+ICOS Waveform I_250_370 {
   SampleRate = 100 MHz/100;
   Ncoadd = 900;
   Tz = 10%;
-  Ramp from 150 mA to 350 mA in 2 msec;
+  Ramp from 250 mA to 370 mA in 1 msec;
 }
 
-ICOS Waveform JPL57_5 {
+ICOS Waveform I_200_230 {
   SampleRate = 100 MHz/100;
   Ncoadd = 900;
   Tz = 10%;
- Ramp from 300 mA to 500 mA in 1 msec;
+  Ramp from 200 mA to 230 mA in 1 msec;
 }
 
-ICOS Waveform JPL57_C {
+ICOS Waveform I_210_240 {
   SampleRate = 100 MHz/100;
-  Tz = 10 msec;
-  Iz = 350 mA;
-  dI/dt = 0 A/sec;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 210 mA to 240 mA in 1 msec;
 }
+
+ICOS Waveform I_220_250 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 220 mA to 250 mA in 1 msec;
+}
+
+ICOS Waveform I_230_260 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 230 mA to 260 mA in 1 msec;
+}
+
+ICOS Waveform I_240_270 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 240 mA to 270 mA in 1 msec;
+}
+
+ICOS Waveform I_250_280 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 250 mA to 280 mA in 1 msec;
+}
+
+ICOS Waveform I_260_290 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 260 mA to 290 mA in 1 msec;
+}
+
+ICOS Waveform I_270_300 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 270 mA to 300 mA in 1 msec;
+}
+
+ICOS Waveform I_280_310 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 280 mA to 310 mA in 1 msec;
+}
+
+ICOS Waveform I_290_320 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 290 mA to 320 mA in 1 msec;
+}
+
+ICOS Waveform I_300_330 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 300 mA to 330 mA in 1 msec;
+}
+
+ICOS Waveform I_310_340 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 310 mA to 340 mA in 1 msec;
+}
+
+ICOS Waveform I_320_350 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 320 mA to 350 mA in 1 msec;
+}
+
+ICOS Waveform S_320_350 {
+  SampleRate = 10 MHz/100;
+  Ncoadd = 90;
+  Tz = 10%;
+  Ramp from 320 mA to 350 mA in 10 msec;
+}
+
+
+ICOS Waveform I_330_360 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 330 mA to 360 mA in 1 msec;
+}
+
+ICOS Waveform I_340_370 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 340 mA to 370 mA in 1 msec;
+}
+
+# Ringdown Waveform RD_JPL58 {
+#   SampleRate = 100 MHz/10;
+#   Nsample = 350;
+#   Toff = 50 msec;
+#   Ton = 50 msec;
+#   Tpre = 2 usec;
+#   I = 330 mA to 360 mA in 1000 Steps;
+# }
+# 
+# Ringdown Waveform RD_JPL58_NC10 {
+#   SampleRate = 100 MHz/10;
+#   Nsample = 350;
+#   NCoadd = 10;
+#   Toff = 5 msec;
+#   Ton = 5 msec;
+#   Tpre = 2 usec;
+#   I = 330 mA to 360 mA in 1000 Steps;
+# }
+
+# This is just to settle my curiousity
+Ringdown Waveform RD_350_90us {
+  SampleRate = 100 MHz/10;
+  Nsample = 900;
+  NCoadd = 10000;
+  Toff = 50 usec;
+  Ton = 50 usec;
+  Tpre = 2 usec;
+  I = 350 mA;
+}
+
+Ringdown Waveform RD_250_50MHz {
+  SampleRate = 100 MHz/2;
+  Nsample = 1000;
+  NCoadd = 10000;
+  Toff = 50 usec;
+  Ton = 50 usec;
+  Tpre = 2 usec;
+  I = 250 mA;
+}
+
+Ringdown Waveform RD_275_50MHz {
+  SampleRate = 100 MHz/2;
+  Nsample = 1000;
+  NCoadd = 10000;
+  Toff = 50 usec;
+  Ton = 50 usec;
+  Tpre = 2 usec;
+  I = 275 mA;
+}
+
+
+Ringdown Waveform RD_300_50MHz {
+  SampleRate = 100 MHz/2;
+  Nsample = 1000;
+  NCoadd = 10000;
+  Toff = 50 usec;
+  Ton = 50 usec;
+  Tpre = 2 usec;
+  I = 300 mA;
+}
+
+Ringdown Waveform RD_350_10MHz {
+  SampleRate = 100 MHz/10;
+  Nsample = 200;
+  NCoadd = 10000;
+  Toff = 50 usec;
+  Ton = 50 usec;
+  Tpre = 2 usec;
+  I = 350 mA;
+}
+
+Ringdown Waveform RD_360_10MHz {
+  SampleRate = 100 MHz/10;
+  Nsample = 200;
+  NCoadd = 10000;
+  Toff = 100 usec;
+  Ton = 100 usec;
+  Tpre = 2 usec;
+  I = 360 mA;
+}
+
+Ringdown Waveform RD_370_10MHz {
+  SampleRate = 100 MHz/10;
+  Nsample = 200;
+  NCoadd = 10000;
+  Toff = 100 usec;
+  Ton = 100 usec;
+  Tpre = 2 usec;
+  I = 370 mA;
+}
+
+Ringdown Waveform RD_380_10MHz {
+  SampleRate = 100 MHz/10;
+  Nsample = 200;
+  NCoadd = 10000;
+  Toff = 100 usec;
+  Ton = 100 usec;
+  Tpre = 2 usec;
+  I = 380 mA;
+}
+
