@@ -1,6 +1,6 @@
 # Invoking: appgen_module TMbase X 
 # Invoking: appgen_module QCLI X 
-# Makefile Generated Thu Oct 13 12:58:55 EDT 2016
+# Makefile Generated Thu Oct 13 13:43:48 EDT 2016
 MNC=HCl
 SPECFILE=HCl.spec
 PCMFILE=HCl.pcm
@@ -80,8 +80,6 @@ SPECDEPBASE+=/usr/local/share/huarp/qclis.cmd.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli_conv.tmc.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli.genui.in
 SPECDEPBASE+=/usr/local/share/huarp/qcli.tbl.in
-SPECTGTBASE=freemem.tmc TMbase.genui TMbase.tbl QCLI.tmc
-SPECTGTBASE+=QCLI_col.tmc QCLI.cmd QCLI_conv.tmc QCLI.genui QCLI.tbl
 AG_CPPFLAGS=
 PHTGT=HCltbl.tmc TStbl.tmc
 SOURCE=$(SRC) $(TOOL) $(SCRIPT)
@@ -96,7 +94,7 @@ include /usr/local/share/huarp/appgen.mk
 IGNOREFILE=.gitignore
 all : Makefile check_photon $(TGT) $(IGNOREFILE)
 all-dist : $(DSTRB) $(SRCDIST) VERSION
-Makefile $(SPECTGTBASE) : HCl.spec $(SPECDEPBASE)
+Makefile : HCl.spec $(SPECDEPBASE)
 	appgen HCl.spec
 VERSION=`cat VERSION`
 extdistribution : $(DSTRB) $(SRCDIST) VERSION
