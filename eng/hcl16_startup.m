@@ -7,6 +7,13 @@ if fd > 0
             oldfolder = cd(tline);
             csv2mat;
             delete *.csv
+            if exist('SSP_xform.m','file') && exist('SSP','dir')
+              SSP_xform;
+              movefile('SSP','SSP.orig');
+              fprintf(1,'Rewriting scans from SSP.orig to SSP\n');
+              rewrite_scans('SSP.orig','SSP',M);
+              movefile('SSP_xform.m','SSP_xformed.m');
+            end
             cd(oldfolder);
         end
         tline = fgetl(fd);
