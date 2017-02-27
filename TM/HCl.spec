@@ -24,6 +24,7 @@ Module QCLI
 
 SCRIPT = interact
 SCRIPT = digio.dccc
+SRCDIST = SSP_xform.m
 
 HClcol : -lsubbus
 HClsrvr : -lsubbus
