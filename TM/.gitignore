@@ -52,6 +52,7 @@ TStbl.tmc.dep
 HCltblnc.tmc.dep
 TStblnc.tmc.dep
 *.err
+Makefile
 HClcol
 HClsrvr
 HCldisp

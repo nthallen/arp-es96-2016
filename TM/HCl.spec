@@ -25,6 +25,7 @@ Module QCLI
 SCRIPT = interact
 SCRIPT = digio.dccc
 SRCDIST = SSP_xform.m
+IGNORE = Makefile
 
 HClcol : -lsubbus
 HClsrvr : -lsubbus
