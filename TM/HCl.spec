@@ -17,6 +17,7 @@ cmdbase = ao.cmd
 cmdbase = address.h
 
 genuibase = HCl.genui
+genuibase = temps.genui
 swsbase = HCl.sws
 
 Module TMbase
