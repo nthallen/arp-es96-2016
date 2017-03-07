@@ -6,6 +6,7 @@
 QCLIConfig Standard;
 Digitizer SSP;
 Prefix QCLI;
+
 ICOS Waveform I_250_360 {
   SampleRate = 100 MHz/100;
   Ncoadd = 900;
@@ -232,5 +233,10 @@ Ringdown Waveform RD_380_10MHz {
   Ton = 100 usec;
   Tpre = 2 usec;
   I = 380 mA;
+}
+
+ICOS Waveform C_300 {
+  SampleRate = 100 MHz/100;
+  Ramp from 300 mA to 300 mA in 1 msec;
 }
 
