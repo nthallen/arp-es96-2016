@@ -207,8 +207,8 @@ Ringdown Waveform RD_350_10MHz {
 
 Ringdown Waveform RD_360_10MHz {
   SampleRate = 100 MHz/10;
-  Nsample = 200;
-  NCoadd = 10000;
+  Nsample = 500;
+  NCoadd = 5000;
   Toff = 100 usec;
   Ton = 100 usec;
   Tpre = 2 usec;
