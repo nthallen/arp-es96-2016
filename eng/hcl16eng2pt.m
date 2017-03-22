@@ -6,7 +6,7 @@ D = load_eng('hcl16eng_1.mat', runs, run);
 PT.TPT = D.Thcl16eng_1;
 % PT.Tavg = (D.TS4_T + D.TS5_T)/2 + 273.15;
 PT.Tavg = ones(size(PT.TPT))*293; % No temp
-PT.CellP = D.ICelP; % The one currently on the cell
+PT.CellP = D.Cell_P; % The one currently on the cell
 PT.ScanNum = D.SSP_Num;
 PT.QCLI_Wave = D.QCLI_Wave;
 save PT.mat -STRUCT PT
