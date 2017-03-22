@@ -134,6 +134,20 @@ ICOS Waveform I_340_370 {
   Ramp from 340 mA to 370 mA in 1 msec;
 }
 
+ICOS Waveform I_340_350 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 340 mA to 350 mA in 1 msec;
+}
+
+ICOS Waveform I_340_342 {
+  SampleRate = 100 MHz/100;
+  Ncoadd = 900;
+  Tz = 10%;
+  Ramp from 340 mA to 342 mA in 1 msec;
+}
+
 # Ringdown Waveform RD_JPL58 {
 #   SampleRate = 100 MHz/10;
 #   Nsample = 350;
