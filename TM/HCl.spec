@@ -18,7 +18,8 @@ cmdbase = address.h
 
 genuibase = HCl.genui
 genuibase = temps.genui
-extbase = temps_conv.tmc
+genuibase = PTRH.genui
+extbase = temps_conv.tmc PTRH_conv.tmc
 swsbase = HCl.sws
 
 Module TMbase
