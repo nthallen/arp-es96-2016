@@ -1,5 +1,67 @@
 State Init {
   > Telemetry Start
+  Validate Idle;
+}
+
+State Idle {
+}
+
+State Calibrate {
+        > Select QCLI Waveform I_340_350
+    +2  > SSP Start
+    +2  > QCLI Run
+ +2:00  > SSP Stop
+    +1  > QCLI Stop
+#   +3  > Select QCLI Waveform I_342_347
+#   +2  > SSP Start
+#   +2  > QCLI Run
+#+2:00  > SSP Stop
+#   +1  > QCLI Stop
+#   +3  > Select QCLI Waveform I_344_346
+#   +2  > SSP Start
+#   +2  > QCLI Run
+#+2:00  > SSP Stop
+#   +1  > QCLI Stop
+
+#   +3  > Select QCLI Waveform I_340_350
+#   +2  > SSP Start
+#   +2  > QCLI Run
+#+2:00  > SSP Stop
+#   +1  > QCLI Stop
+#   +3  > Select QCLI Waveform I_342_347
+#   +2  > SSP Start
+#   +2  > QCLI Run
+#+2:00  > SSP Stop
+#   +1  > QCLI Stop
+#   +3  > Select QCLI Waveform I_344_346
+#   +2  > SSP Start
+#   +2  > QCLI Run
+#+2:00  > SSP Stop
+#   +1  > QCLI Stop
+
+        Validate RingDown_Survey;
+}
+
+State RingDown_Survey {
+    +3  > Select QCLI Waveform RD_350_10MHz
+    +2  > SSP Start
+    +2  > QCLI Run
+ +1:00  > SSP Stop
+    +1  > QCLI Stop
+
+    +3  > Select QCLI Waveform RD_300_50MHz
+    +2  > SSP Start
+    +2  > QCLI Run
+ +1:00  > SSP Stop
+    +1  > QCLI Stop
+
+    +3  > Select QCLI Waveform RD_250_50MHz
+    +2  > SSP Start
+    +2  > QCLI Run
+ +1:00  > SSP Stop
+    +1  > QCLI Stop
+
+        Validate Idle;
 }
 
 Partition
@@ -26,4 +88,3 @@ State Pump_Over_Temp {
       Validate Pump_On;
   }
 }
-

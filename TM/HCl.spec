@@ -15,6 +15,7 @@ colbase = temps_col.tmc
 cmdbase = /usr/local/share/huarp/phrtg.cmd
 cmdbase = ao.cmd
 cmdbase = address.h
+cmdbase = /usr/local/share/huarp/DACS_AI.cmd
 
 genuibase = HCl.genui
 genuibase = temps.genui
