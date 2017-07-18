@@ -1,5 +1,5 @@
-function phcl16temp_sensorst(varargin);
-% phcl16temp_sensorst( [...] );
+function phcl16tst(varargin);
+% phcl16tst( [...] );
 % Temp Sensors Temp
 h = timeplot({'TS0_T','TS1_T','TS2_T','TS3_T','TS4_T','TS5_T'}, ...
       'Temp Sensors Temp', ...

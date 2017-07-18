@@ -1,5 +1,5 @@
-function phcl16qcli_statskip(varargin);
-% phcl16qcli_statskip( [...] );
+function phcl16qcliskip(varargin);
+% phcl16qcliskip( [...] );
 % QCLI stat Skip
 h = timeplot({'SSP_TS'}, ...
       'QCLI stat Skip', ...

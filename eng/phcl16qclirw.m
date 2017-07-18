@@ -1,5 +1,5 @@
-function phcl16qcli_statrw(varargin);
-% phcl16qcli_statrw( [...] );
+function phcl16qclirw(varargin);
+% phcl16qclirw( [...] );
 % QCLI stat rw
 h = timeplot({'QCLI_rw'}, ...
       'QCLI stat rw', ...

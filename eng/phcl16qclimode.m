@@ -1,5 +1,5 @@
-function phcl16qcli_statmode(varargin);
-% phcl16qcli_statmode( [...] );
+function phcl16qclimode(varargin);
+% phcl16qclimode( [...] );
 % QCLI stat mode
 h = timeplot({'QCLI_mode'}, ...
       'QCLI stat mode', ...

@@ -1,0 +1,10 @@
+ 4 PVStep Pinch Step
+ 4 C:PVStat:7 Pinch Status
+ 4 Z:PVStat:6 Pinch Status
+ 4 B:PVStat:5 Pinch Status
+ 4 A:PVStat:4 Pinch Status
+ 4 R:PVStat:3 Pinch Status
+ 4 D:PVStat:2 Pinch Status
+ 4 O:PVStat:1 Pinch Status
+ 4 I:PVStat:0 Pinch Status
+ 4 S:IXStt:0  Pinch Status

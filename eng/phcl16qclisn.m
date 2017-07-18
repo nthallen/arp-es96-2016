@@ -1,5 +1,5 @@
-function phcl16qcli_statsn(varargin);
-% phcl16qcli_statsn( [...] );
+function phcl16qclisn(varargin);
+% phcl16qclisn( [...] );
 % QCLI stat SN
 h = timeplot({'SSP_SN'}, ...
       'QCLI stat SN', ...

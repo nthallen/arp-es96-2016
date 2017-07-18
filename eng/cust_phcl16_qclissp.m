@@ -1,10 +1,10 @@
-function cust_phcl16qclissp(h)
-% cust_phcl16qclissp(h)
-% Customize plot created by phcl16qclissp
+function cust_phcl16_qclissp(h)
+% cust_phcl16_qclissp(h)
+% Customize plot created by phcl16_qclissp
 
 % phcl16qclissp's definition:
 
-% function phcl16qclissp(varargin);
+% function phcl16_qclissp(varargin);
 % % phcl16qclissp( [...] );
 % % QCLI SSP
 % h = timeplot({'SSP_Status'}, ...

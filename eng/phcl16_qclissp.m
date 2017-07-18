@@ -1,5 +1,5 @@
-function phcl16qclissp(varargin);
-% phcl16qclissp( [...] );
+function phcl16_qclissp(varargin);
+% phcl16_qclissp( [...] );
 % QCLI SSP
 h = timeplot({'SSP_Status'}, ...
       'QCLI SSP', ...

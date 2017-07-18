@@ -16,13 +16,13 @@ HClsrvr.o
 HClsrvroui.c
 HClsrvroui.o
 HCltbl.tmc
-TStbl.tmc
+HCl2tbl.tmc
 HCldisp.cc
 HCldispoui.c
 HCldispoui.o
 HCldisp.o
 HCltblnc.tmc
-TStblnc.tmc
+HCl2tblnc.tmc
 HCldispnc.cc
 HCldispncoui.c
 HCldispncoui.o
@@ -48,9 +48,9 @@ HClengextoui.c
 HClengextoui.o
 HClengext.o
 HCltbl.tmc.dep
-TStbl.tmc.dep
+HCl2tbl.tmc.dep
 HCltblnc.tmc.dep
-TStblnc.tmc.dep
+HCl2tblnc.tmc.dep
 *.err
 Makefile
 HClcol

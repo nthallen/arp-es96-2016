@@ -49,7 +49,7 @@ QCLI_S {
       Act:  (QCLI_rw,2);
       FIFO: (QCLI_fifodep,3);
       Err:  (QCLI_err,2);
-#     Rst:  (QCLI_Reset,3);
+     Rst:  (QCLI_Reset,3);
     }
   }
 }

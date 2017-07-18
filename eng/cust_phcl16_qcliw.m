@@ -1,11 +1,11 @@
-function cust_phcl16qcliw(h)
-% cust_phcl16qcliw(h)
-% Customize plot created by phcl16qcliw
+function cust_phcl16_qcliw(h)
+% cust_phcl16_qcliw(h)
+% Customize plot created by phcl16_qcliw
 
-% phcl16qcliw's definition:
+% phcl16_qcliw's definition:
 
-% function phcl16qcliw(varargin);
-% % phcl16qcliw( [...] );
+% function phcl16_qcliw(varargin);
+% % phcl16_qcliw( [...] );
 % % QCLI Wave
 % h = timeplot({'QCLI_Wave'}, ...
 %       'QCLI Wave', ...

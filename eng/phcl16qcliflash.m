@@ -1,5 +1,5 @@
-function phcl16qcli_statflash(varargin);
-% phcl16qcli_statflash( [...] );
+function phcl16qcliflash(varargin);
+% phcl16qcliflash( [...] );
 % QCLI stat flash
 h = timeplot({'QCLI_flash'}, ...
       'QCLI stat flash', ...

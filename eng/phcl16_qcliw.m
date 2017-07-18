@@ -1,5 +1,5 @@
-function phcl16qcliw(varargin);
-% phcl16qcliw( [...] );
+function phcl16_qcliw(varargin);
+% phcl16_qcliw( [...] );
 % QCLI Wave
 h = timeplot({'QCLI_Wave'}, ...
       'QCLI Wave', ...

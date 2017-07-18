@@ -1,5 +1,5 @@
-function phcl16qcli_statfifodep(varargin);
-% phcl16qcli_statfifodep( [...] );
+function phcl16qclififodep(varargin);
+% phcl16qclififodep( [...] );
 % QCLI stat fifodep
 h = timeplot({'QCLI_fifodep'}, ...
       'QCLI stat fifodep', ...

@@ -17,5 +17,8 @@
 &ao_chan <unsigned short>
   : Pump 1 Set Point { $0 = Pump1_V_St_Address; }
   : Pump 2 Set Point { $0 = Pump2_V_St_Address; }
-  : Cell Pressure Set Point { $0 = ICelPSt_Address; }
+  : Laser TEC Set Point { $0 = Laser_TEC_St_Address; }
+  : Inlet Temperature Set Point { $0 = InletTSt_Address; }
+  : Space Heater Temperature Set Point { $0 = SpHtTSt_Address; }
+  : Cell Temperature Set Point { $0 = Cell_T_St_Address; }
   ;

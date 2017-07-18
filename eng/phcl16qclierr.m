@@ -1,5 +1,5 @@
-function phcl16qcli_staterr(varargin);
-% phcl16qcli_staterr( [...] );
+function phcl16qclierr(varargin);
+% phcl16qclierr( [...] );
 % QCLI stat err
 h = timeplot({'QCLI_err'}, ...
       'QCLI stat err', ...
