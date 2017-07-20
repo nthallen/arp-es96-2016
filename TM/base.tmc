@@ -78,5 +78,8 @@ TM 1 Hz AO Pump2_V_St; Address Pump2_V_St 0x412; /* AO9 */
 /* TM 1 Hz AI16 IHeatBlkTSt; Address IHeatBlkTSt 0x40A; */
 /* TM 1 Hz AO ICelPSt; Address ICelPSt 0x40C; */
 
-TM typedef unsigned char DStat { text "%02x"; }
+TM typedef unsigned char DStat {
+  text "%02x";
+  collect x = sbrba(x.address);
+}
 TM 1 Hz DStat DStat0; Address DStat0 0x80A;

@@ -18,6 +18,7 @@ colbase = idxcol.tmc
 
 cmdbase = /usr/local/share/huarp/phrtg.cmd
 cmdbase = ao.cmd
+cmdbase = digio.cmd
 cmdbase = address.h
 cmdbase = /usr/local/share/huarp/DACS_AI.cmd
 cmdbase = /usr/local/share/huarp/idx64.cmd

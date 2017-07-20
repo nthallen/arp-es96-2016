@@ -1,19 +1,19 @@
 0
 
 
-13
+2
   0x0808, 0
   0x0811, 0
 
-100
-  STRB,  0, 0x0001 ;  0: Cmd 0 On
-  STRB,  0, 0x0002 ;  1: Cmd 0 Off
-  STRB,  0, 0x0004 ;  2: Cmd 1 On
-  STRB,  0, 0x0008 ;  3: Cmd 1 Off
-  STRB,  0, 0x0010 ;  4: Cmd 2 On
-  STRB,  0, 0x0020 ;  5: Cmd 2 Off
-  STRB,  0, 0x0040 ;  6: Cmd 3 On
-  STRB,  0, 0x0080 ;  7: Cmd 3 Off
+16
+  STRB,  0, 0x0001 ;  0: Cmd 0 On  QCLI Reset
+  STRB,  0, 0x0002 ;  1: Cmd 0 Off QCLI Reset
+  STRB,  0, 0x0004 ;  2: Cmd 1 On  Cell Gas Exhaust Valve
+  STRB,  0, 0x0008 ;  3: Cmd 1 Off Cell Gas Exhaust Valve
+  STRB,  0, 0x0010 ;  4: Cmd 2 On  Gas Deck Valve
+  STRB,  0, 0x0020 ;  5: Cmd 2 Off Gas Deck Valve
+  STRB,  0, 0x0040 ;  6: Cmd 3 On  Cal Gas Valve
+  STRB,  0, 0x0080 ;  7: Cmd 3 Off Cal Gas Valve
   STRB,  1, 0x0100 ;  8: Cmd 4 On
   STRB,  1, 0x0200 ;  9: Cmd 4 Off
   STRB,  1, 0x0400 ; 10: Cmd 5 On
