@@ -37,6 +37,7 @@ Module QCLI RESET=
 
 SCRIPT = interact
 SCRIPT = digio.dccc
+SCRIPT = idx.idx64
 SRCDIST = SSP_xform.m
 IGNORE = Makefile
 
