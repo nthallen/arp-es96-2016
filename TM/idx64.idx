@@ -13,7 +13,7 @@ Channel 0 Pinch Valve
   # Invert Direction
   # Invert Run
   # Invert In Limit
-  # Invert Out Limit
+    Invert Out Limit
   # Invert Zero Ref
-  # Invert Kill A
-  # Invert Kill B
+    Invert Kill A
+    Invert Kill B
