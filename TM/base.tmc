@@ -58,9 +58,9 @@ TM 1 Hz AI16 SpHt2CT ; Address SpHt2CT 0xCAA;
 /* TM 1 Hz AI16 Sp9AI; Address Sp9AI 0xCAC; */
 
 TM 1 Hz AI_T30K Pump1_Head_T ; Address Pump1_Head_T 0xC1C;
-TM 1 Hz AI16 Pump1_mot_T ; Address Pump1_mot_T 0xC5C;
+TM 1 Hz AI_T30K Pump1_mot_T ; Address Pump1_mot_T 0xC5C;
 TM 1 Hz AI_T30K Pump2_Head_T ; Address Pump2_Head_T 0xCDC; /* 0xC9A */
-TM 1 Hz AI16 Pump2_mot_T ; Address Pump2_mot_T 0xC9C; /* 0xCDA */
+TM 1 Hz AI_T30K Pump2_mot_T ; Address Pump2_mot_T 0xC9C; /* 0xCDA */
 
 TM typedef unsigned short AO
   { text "%6.4lf"; convert VOLTS; collect x = sbrwa(x.address); }

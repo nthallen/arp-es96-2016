@@ -67,24 +67,21 @@ State RingDown_Survey {
 Partition
 
 State Pump_Off {
-  > Set Pump 1 Set Point 0
-  > Set Pump 2 Set Point 0
+      > Set Pumps Set Point 0
+   +2 { if (Pump1_V_St > 0 || Pump2_V_St > 0)
+          Validate Pump_On;
+      }
 }
 
-State Pump_On {
-    > Set Pump 1 Set Point 5
- +3 > Set Pump 2 Set Point 5
-    { if (convert(Pump1_Head_T) > 45.0 ||
-          convert(Pump2_Head_T) > 45.0)
-        Validate Pump_Over_Temp;
-    }
+State Pump_On NoLog {
+    Hold until (convert(Pump1_Head_T) > 42.0 ||
+          convert(Pump2_Head_T) > 42.0);
+    Hold until (convert(Pump1_Head_T) <= 42.0 &&
+          convert(Pump2_Head_T) <= 42.0) or 5
+    else Validate Pump_Over_Temp;
+    +1 Validate Pump_On;
 }
 
 State Pump_Over_Temp {
-  > Set Pump 1 Set Point 0
-  > Set Pump 2 Set Point 0
-  { if (convert(Pump1_Head_T) < 30.0 &&
-        convert(Pump2_Head_T) < 30.0)
-      Validate Pump_On;
-  }
+  Validate Pump_Off;
 }

@@ -10,10 +10,12 @@ Channel 0 Pinch Valve
   Disable Zeroref
   # Swap Limits
   # Invert Step
-  # Invert Direction
+   Invert Direction
   # Invert Run
   # Invert In Limit
+# Invert to disable out limit
     Invert Out Limit
   # Invert Zero Ref
+# Invert to disable kill switches
     Invert Kill A
     Invert Kill B
