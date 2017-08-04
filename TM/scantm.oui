@@ -1,0 +1,20 @@
+<package> scantm
+<include> msg
+<include> "scantm.h"
+<follow> msghdr
+
+<sort>
+	-d <port> specify serial port for telemetry (/dev/ser1)
+	-b <baudrate> specify baud rate for telemetry (115200)
+
+<switch>
+  case 'd':
+    set_scantm_port(optarg);
+    break;
+  case 'b':
+    set_scantm_baud(atoi(optarg));
+    break;
+  
+<package> msghdr_default
+<var>
+  char *msg_hdr_default = "Tel";

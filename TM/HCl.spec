@@ -47,6 +47,7 @@ HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
   dstat_conv.tmc HCl.tbl HCl2.tbl rtg.tmc \
   /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma HCl.sws
+scantmext : scantm.cc scantm.oui
 doit : HCl.doit
 %%
 COLFLAGS = -Haddress.h
