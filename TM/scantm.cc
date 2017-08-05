@@ -4,11 +4,15 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <string.h>
+#include <errno.h>
 #include "scantm.h"
+#include "nortlib.h"
+#include "nl_assert.h"
 
 
-scantm_data_client *DCp = 0;
-scantm_data_client::tm_port = "/dev/ser1";
+scantm_data_client *scantm_data_client::DCp = 0;
+const char *scantm_data_client::tm_port = "/dev/ser1";
+int scantm_data_client::baud = 115200;
 
 void set_scantm_port(const char *port) {
   scantm_data_client::tm_port = port;
@@ -19,13 +23,13 @@ void set_scantm_baud(int baudrate) {
 }
 
 void enqueue_scantm_scan(long scannum) {
-  if (DCp) {
-    DCp->enqueue_scan(scannum);
+  if (scantm_data_client::DCp) {
+    scantm_data_client::DCp->enqueue_scan(scannum);
   }
 }
 
-scantm_data_client::scantm_data_client(int bufsize_in, int fast = 0,
-      int non_block = 0) :
+scantm_data_client::scantm_data_client(int bufsize_in, int fast,
+      int non_block) :
       data_client(bufsize_in, fast, non_block) {
   ser_fd = open( tm_port, O_WRONLY );
   if ( ser_fd < 0 ) {
@@ -58,7 +62,7 @@ scantm_data_client::scantm_data_client(int bufsize_in, int fast = 0,
 
   DCp = this;
 
-  row_len = tm_info.nbminf;
+  row_len = tm_info.tm.nbminf;
   row_buf = (row_buf_t *)nl_new_memory(row_len);
   row_offset = row_len;
   Synch = 0;
@@ -77,11 +81,12 @@ void scantm_data_client::init_synch(uint16_t synchval) {
  *    trailing Synch
  * @param Synch
  */
-void scantm_data_client::send_row(unsigned short MFCtr, const char *raw) {
+void scantm_data_client::send_row(unsigned short MFCtr,
+                                  const unsigned char *raw) {
   if (flush_row()) return; // abandon data
   rows_this_row = 0;
   memcpy(&(row_buf->row[0]), &MFCtr, 2);
-  memcpy(&(row_buf->row[2]), raw, tm_info.nbminf-4);
+  memcpy(&(row_buf->row[2]), raw, tm_info.tm.nbminf-4);
   memcpy(&(row_buf->row[row_len-2]), &Synch, 2);
   row_offset = 0;
   if (flush_row()) return;
@@ -111,7 +116,7 @@ int scantm_data_client::flush_row() {
   return 0;
 }
 
-void scantm_data_client::enqueue_scan(long scannum) {
+void scantm_data_client::enqueue_scan(int32_t scannum) {
   next_scan = scannum;
 }
 
@@ -151,7 +156,7 @@ void scantm_data_client::send_scan_data() {
       row_buf->scan_hdr.scannum = cur_scan;
       row_buf->scan_hdr.scansize = scan_file_size;
       row_buf->scan_hdr.mfctr_offset = scan_mfctr++;
-      memset(row_buf->row[sizeof(scan_hdr_t)], 0,
+      memset(&row_buf->row[sizeof(scan_hdr_t)], 0,
         row_len-sizeof(scan_hdr_t)-3);
       row_buf->row[row_len-3] = 0;
       memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
@@ -179,7 +184,7 @@ void scantm_data_client::send_scan_data() {
           // scanbufsize is not much bigger than the blocksize
         }
       }
-      int rv = read(scan_fd, scanbuf+scan_cp, remaining);
+      int rv = ::read(scan_fd, scanbuf+scan_cp, remaining);
       if (rv < 0) {
         nl_error(2, "Error %d reading scan %d", errno, cur_scan);
         close(scan_fd);

@@ -10,7 +10,7 @@
 
 #ifdef __cplusplus
 
-#define EXTRACTION_INIT init_synch(SYNCHVAL);
+#define EXTRACTION_INIT DC.init_synch(SYNCHVAL);
 #define EXTRACTION_ROW send_row(MFCtr, raw);
 #define DATA_CLIENT_CLASS scantm_data_client
 
@@ -29,16 +29,17 @@ class scantm_data_client : public data_client {
   public:
     scantm_data_client(int bufsize_in, int fast = 0, int non_block = 0);
     void init_synch(uint16_t synchval);
+    void enqueue_scan(int32_t scannum);
     static scantm_data_client *DCp;
     static void set_port(const char *port);
     static const int max_possible_ssp_size = 49180;
     static const int scanbufsize = max_possible_ssp_size;
     static const int blocksize = 512;
+    static const char *tm_port;
+    static int baud;
   protected:
     void process_data();
   private:
-    static const char *tm_port;
-    static int baud;
     int ser_fd, scan_fd;
     int32_t cur_scan;
     int32_t next_scan;
@@ -53,9 +54,7 @@ class scantm_data_client : public data_client {
     uint16_t rows_per_row, rows_this_row;
     
     int flush_row();
-    void send_row(uint16_t MFCtr, const char *raw,
-      uint16_t Synch);
-    void enqueue_scan(int32_t scannum);
+    void send_row(uint16_t MFCtr, const unsigned char *raw);
     void send_scan_data();
 };
 
