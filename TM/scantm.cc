@@ -41,7 +41,11 @@ scantm_data_client::scantm_data_client(int bufsize_in, int fast,
     struct termios termios_p;
 
     if ( tcgetattr( ser_fd, &termios_p) ) {
-      nl_error( 2, "Error on tcgetattr: %s", strerror(errno) );
+      if (errno == ENOTTY) {
+        nl_error(1, "%s is not a serial port", tm_port);
+      } else {
+        nl_error( 2, "Error on tcgetattr: %s", strerror(errno) );
+      }
       return;
     }
     termios_p.c_iflag = 0;
