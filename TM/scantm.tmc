@@ -1,0 +1,4 @@
+%{
+  #include "scantm.h"
+%}
+

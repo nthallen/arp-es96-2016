@@ -36,6 +36,7 @@ HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc HCl.tbl rtg.tmc \
   /usr/local/share/oui/cic.oui TS.tbl
 HClalgo : HCl.tma HCl.sws
+scantmext : scantm.cc scantm.oui scantm.tmc
 doit : HCl.doit
 %%
 COLFLAGS = -Haddress.h

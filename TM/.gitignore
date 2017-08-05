@@ -33,6 +33,11 @@ HClalgo.cc
 HClalgooui.c
 HClalgooui.o
 HClalgo.o
+scantmext.cc
+scantmextoui.c
+scantmextoui.o
+scantmext.o
+scantm.o
 doit.dep
 HClclt.o
 HClcltoui.c
@@ -58,6 +63,7 @@ HClsrvr
 HCldisp
 HCldispnc
 HClalgo
+scantmext
 doit
 HClclt
 HClcltnc
