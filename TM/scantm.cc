@@ -31,7 +31,7 @@ void enqueue_scantm_scan(long scannum) {
 scantm_data_client::scantm_data_client(int bufsize_in, int fast,
       int non_block) :
       data_client(bufsize_in, fast, non_block) {
-  ser_fd = open( tm_port, O_WRONLY );
+  ser_fd = open( tm_port, O_WRONLY|O_CREAT, 0664 );
   if ( ser_fd < 0 ) {
     nl_error( 3,
       "Error %d opening telemetry port %s: %s", errno, tm_port,
@@ -46,15 +46,15 @@ scantm_data_client::scantm_data_client(int bufsize_in, int fast,
       } else {
         nl_error( 2, "Error on tcgetattr: %s", strerror(errno) );
       }
-      return;
+    } else {
+      termios_p.c_iflag = 0;
+      termios_p.c_lflag &= ~(ECHO|ICANON|ISIG|ECHOE|ECHOK|ECHONL);
+      termios_p.c_cflag = CLOCAL|CREAD|CS8;
+      termios_p.c_oflag &= ~(OPOST);
+      termios_p.c_ispeed = termios_p.c_ospeed = baud;
+      if ( tcsetattr(ser_fd, TCSANOW, &termios_p) )
+        nl_error( 2, "Error on tcsetattr: %s", strerror(errno) );
     }
-    termios_p.c_iflag = 0;
-    termios_p.c_lflag &= ~(ECHO|ICANON|ISIG|ECHOE|ECHOK|ECHONL);
-    termios_p.c_cflag = CLOCAL|CREAD|CS8;
-    termios_p.c_oflag &= ~(OPOST);
-    termios_p.c_ispeed = termios_p.c_ospeed = baud;
-    if ( tcsetattr(ser_fd, TCSANOW, &termios_p) )
-      nl_error( 2, "Error on tcsetattr: %s", strerror(errno) );
   }
 
   scan_fd = -1;
@@ -103,7 +103,7 @@ void scantm_data_client::send_row(unsigned short MFCtr,
 int scantm_data_client::flush_row() {
   if (row_offset < row_len) {
     int nb = row_len - row_offset;
-    int rv = write(ser_fd, row_buf+row_offset, nb);
+    int rv = write(ser_fd, &row_buf->row[row_offset], nb);
     if (rv < 0) {
       nl_error(3, "Error %d from write", errno);
     } else if (rv < nb) {

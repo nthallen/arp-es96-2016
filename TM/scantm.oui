@@ -7,6 +7,8 @@
 	-d <port> specify serial port for telemetry (/dev/ser1)
 	-b <baudrate> specify baud rate for telemetry (115200)
 
+<opts> "d:b:"
+
 <switch>
   case 'd':
     set_scantm_port(optarg);
