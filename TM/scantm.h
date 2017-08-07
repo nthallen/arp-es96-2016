@@ -36,6 +36,7 @@ class scantm_data_client : public data_client {
     static const int scanbufsize = max_possible_ssp_size;
     static const int blocksize = 512;
     static const char *tm_port;
+    static const char *base;
     static int baud;
   protected:
     void process_data();
@@ -64,7 +65,8 @@ extern "C" {
 /* This is all that is exposed to a C module */
 extern void set_scantm_port(const char *port);
 extern void set_scantm_baud(int baudrate);
-extern void enque_scantm_scan(long scannum);
+extern void set_scantm_base(const char *path);
+extern void enqueue_scantm_scan(long scannum);
 
 #ifdef __cplusplus
 };
