@@ -1,4 +1,10 @@
 %{
   #include "scantm.h"
+  QCLI_WORD cur_scantm = 0;
 %}
+
+if (SSP_Num != 0 && SSP_Num != cur_scantm) {
+  cur_scantm = SSP_Num;
+  enqueue_scantm_scan(SSP_Num);
+}
 

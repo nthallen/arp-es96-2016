@@ -6,8 +6,9 @@
 <sort>
 	-d <port> specify serial port for telemetry (/dev/ser1)
 	-b <baudrate> specify baud rate for telemetry (115200)
+	-p <path> specify base path to scan files (SSP)
 
-<opts> "d:b:"
+<opts> "d:b:p:"
 
 <switch>
   case 'd':
@@ -15,6 +16,9 @@
     break;
   case 'b':
     set_scantm_baud(atoi(optarg));
+    break;
+  case 'p':
+    set_scantm_base(optarg);
     break;
   
 <package> msghdr_default
