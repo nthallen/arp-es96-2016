@@ -1,4 +1,9 @@
 #define QCLI_CS_Address 0x1000
+#define PM0V2_Address 0x368
+#define PM0I2_Address 0x366
+#define PM0V1_Address 0x364
+#define PM0I1_Address 0x362
+#define PM0Stat_Address 0x360
 #define PVStat_Address 0xA0E
 #define PVStep_Address 0xA0C
 #define Ct0Stat_Address 0x600

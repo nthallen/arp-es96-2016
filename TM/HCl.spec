@@ -8,6 +8,7 @@ tmcbase = temps.tmc
 tmcbase = TS_T_t_cal.tmc
 tmcbase = RPM.tmc
 tmcbase = idx.tmc
+tmcbase = pwrmon.tmc
 
 colbase = AI_col.tmc
 colbase = PTRH_col.tmc
@@ -29,6 +30,7 @@ genuibase = idx.genui
 genuibase = temps.genui
 genuibase = PTRH.genui
 genuibase = RPM.genui
+genuibase = pwrmon.genui
 extbase = temps_conv.tmc PTRH_conv.tmc
 swsbase = HCl.sws
 
@@ -44,7 +46,7 @@ IGNORE = Makefile
 HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
-  dstat_conv.tmc HCl.tbl HCl2.tbl rtg.tmc \
+  dstat_conv.tmc pwrmon_conv.tmc HCl.tbl HCl2.tbl rtg.tmc \
   /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma HCl.sws
 scantmext : scantm.cc scantm.oui scantm.tmc
