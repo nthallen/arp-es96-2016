@@ -1,0 +1,9 @@
+ 1 PM0V1  Power Voltage
+ 1 PM0V2  Power Voltage
+ 1 PM0I1  Power Current
+ 1 PM0I2  Power Current
+ 1 PM0I1_S:PM0Stat:0  Power Status
+ 1 PM0I2_S:PM0Stat:2  Power Status
+ 1 PM0TO_S:PM0Stat:4  Power Status
+ 1 PM0V1_S:PM0Stat:1  Power Status
+ 1 PM0V2_S:PM0Stat:3  Power Status
