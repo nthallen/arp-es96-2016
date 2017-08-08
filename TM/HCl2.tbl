@@ -1,6 +1,6 @@
 Input "TMbase.tbl";
-#Input "QCLI.tbl";
 Input "PTRH.tbl";
+Input "pwrmon.tbl";
 
 Ambient {
   HBox { +-; Title: "Ambient"; -+ };
@@ -73,16 +73,20 @@ Pump {
       [Rover];
     };
   }; |+; {
-    [Pump];
     HBox {
-      { 
-        [GasDeck];
-        [Ambient];
+      {
+        [Pump];
+        [pwrmon];
       }; |; {
+        [Ambient];
         [SpaceHeater];
-        VGlue 0+1;
-        [TMbaseB];
-      } }
+      }
+    };
+    HBox {
+      [GasDeck];
+      |;
+      [TMbaseB];
+    }
   }; |+ };
   -
 }
