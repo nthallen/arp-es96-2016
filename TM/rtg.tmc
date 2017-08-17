@@ -8,7 +8,9 @@ if (last_SSP != SSP_Num) {
 }
 ci_sendfcmd(2, "PhRTG Datum CPU_Pct %lu %s\n", itime(), text(CPU_Pct));
 ci_sendfcmd(2, "PhRTG Datum Cell_P %lu %s\n", itime(), text(Cell_P));
-ci_sendfcmd(2, "PhRTG Datum Pump_Head_Ts %lu %.3lf %.3lf\n",
-  itime(), convert(Pump1_Head_T), convert(Pump2_Head_T));
+ci_sendfcmd(2, "PhRTG Datum Amb_P %lu %s\n", itime(), text(Amb_P));
+ci_sendfcmd(2, "PhRTG Datum Pump_Ts %lu %.3lf %.3lf %.3lf %.3lf\n",
+  itime(), convert(Pump1_Head_T), convert(Pump2_Head_T),
+  convert(Pump1_mot_T), convert(Pump2_mot_T));
 ci_sendfcmd(2, "PhRTG Datum Pump_RPMs %lu %u %u\n",
   itime(), RPM1, RPM2);
