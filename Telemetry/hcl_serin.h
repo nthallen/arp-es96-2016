@@ -3,6 +3,7 @@
 
 #include <pthread.h>
 #include <semaphore.h>
+#include <termios.h>
 #include "mlf.h"
 
 #ifdef __cplusplus
@@ -35,17 +36,19 @@ class HCl_serin : public data_generator {
   private:
     void process_row(const unsigned char *row);
     void process_scan_row(const unsigned char *row);
+    void update_termios(int cur_min);
     mlf_def_t *mlf;
     int ser_fd;
     termios termios_s;
     bool is_terminal;
     bool have_synch;
-    bool have_tstamp;
     uint16_t next_minor_frame;
     uint16_t synch_lsb, synch_msb;
     uint16_t scan_synch_lsb, scan_synch_msb;
     static const int inbuf_size = 16384;
-    const unsigned char inbuf[inbuf_size]; /**< Stores incoming raw telemetry data */
+    static const uint16_t TS_MFC_LIMIT = 32767;
+    uint16_t ROLLOVER_MFC;
+    unsigned char inbuf[inbuf_size]; /**< Stores incoming raw telemetry data */
     int cp; /**< Current parsing position in inbuf */
     int nc; /**< Current number of characters in inbuf */
     /** scanbuf will be dynamically grown as needed to contain a full scan */
@@ -83,7 +86,7 @@ typedef struct {
   unsigned long  ScanNum;
   signed short T_HtSink;
   signed short T_FPGA;
-} __attribute__((packed)) ssp_scan_header_t;
+} __attribute__((packed)) ssp_scan_hdr_t;
 
 extern "C" {
 #endif

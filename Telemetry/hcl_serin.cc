@@ -6,10 +6,12 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <sys/select.h>
+#include <stdint.h>
 #include "hcl_serin.h"
 #include "nortlib.h"
 #include "oui.h"
 #include "nl_assert.h"
+#include "tm.h"
 
 #define RDR_BUFSIZE 16384
 #ifndef MSG_ERROR
@@ -19,7 +21,7 @@
 static const char *opt_basepath = ".";
 static int opt_autostart;
 static int opt_regulate;
-static int opt_serdev;
+static char *opt_serdev;
 static int opt_baud = 115200;
 
 /** Options we need to support:
@@ -67,10 +69,25 @@ int main( int argc, char **argv ) {
   load_tmdac(opt_basepath);
   int nQrows = RDR_BUFSIZE/tmi(nbrow);
   if (nQrows < 2) nQrows = 2;
-  HCl_serin serin(nQrows, nQrows/2, RDR_BUFSIZE, opt_basepath );
+  HCl_serin serin(nQrows, nQrows/2, opt_basepath );
   serin.data_generator::init(0);
   serin.control_loop();
   nl_error(0, "Shutdown");
+}
+
+static uint16_t lcm( uint16_t ain, uint16_t bin ) {
+  short int t, a, b;
+  // first calculate the gcd via the euclidean algorithm
+  a = ain;
+  b = bin;
+  while ( b != 0 ) {
+    t = b;
+    b = a % b;
+    a = t;
+  }
+  assert(a != 0);
+  a = ain/a;
+  return a * bin;
 }
 
 /**
@@ -89,8 +106,8 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
   if ( rv )
     nl_error( 3, "Mutex initialization failed: %s",
             strerror(errno));
-  init_tm_type();
-  nl_assert(input_tm_type == TMTYPE_DATA_T3);
+  // init_tm_type();
+  // nl_assert(input_tm_type == TMTYPE_DATA_T3);
   char mlf_base[PATH_MAX];
   snprintf(mlf_base, PATH_MAX, "%s/SSP", path );
   mlf = mlf_init( 3, 60, 1, mlf_base, "dat", NULL );
@@ -111,6 +128,9 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
   cur_scansize = 0;
   cur_scanmfc_offset = 0;
   next_scanmfc = 0;
+  uint16_t mfcspermajf = tmi(nrowmajf)/tm_info.nrowminf;
+  uint16_t lcmMn = lcm(mfcspermajf,tmi(nsecsper));
+  ROLLOVER_MFC = (USHRT_MAX+1L)%lcmMn;
 
   ser_fd = open( opt_serdev, O_RDONLY|O_NONBLOCK );
   if ( ser_fd < 0 ) {
@@ -209,7 +229,7 @@ void HCl_serin::event(enum dg_event evt) {
       break;
     case dg_event_quit:
       nl_error( 0, "Quit event" );
-      dc_quit = true;
+      // dc_quit = true;
       if ( ot_blocked ) {
         ot_blocked = 0;
         sem_post(&ot_sem);
@@ -252,14 +272,15 @@ void *HCl_serin::input_thread() {
    */
   fd_set readfds, writefds, exceptfds;
   struct timeval tv;
-  while (!dc_quit) {
+  while (!quit) {
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
     FD_ZERO(&exceptfds);
     FD_SET(ser_fd, &readfds);
+    int width = ser_fd+1;
     tv.tv_sec = 1;
     tv.tv_usec = 0;
-    rc = select(width, &readfds, &writefds, &exceptfds, to.timeout_val());
+    int rc = select(width, &readfds, &writefds, &exceptfds, &tv);
     // rc==0 means timeout, which we ignore
     if ( rc < 0 ) {
       if ( errno != EINTR ) {
@@ -296,13 +317,14 @@ void HCl_serin::process_serin() {
         // We have a scan row
         process_scan_row(&inbuf[cp]);
         cp += tmi(nbminf);
-      ) else {
+      } else {
+        int i;
         if (have_synch) {
           have_synch = false;
           nl_error(MSG_DBG(0), "Lost synch");
         }
         // We need to resynch
-        for (int i = cp; !have_synch && i+1 < nc; ++i) {
+        for (i = cp; !have_synch && i+1 < nc; ++i) {
           if (inbuf[i] == synch_lsb &&
               inbuf[i+1] == synch_msb) {
             // Found TM synch
@@ -353,16 +375,16 @@ void HCl_serin::process_row(const unsigned char *row) {
       commit_tstamp(MFCtr, time(NULL));
     } else {
       commit_tstamp( 0, tm_info.t_stmp.secs +
-        MFSECDEN *
+        tmi(nsecsper) *
           ((long)USHRT_MAX - tm_info.t_stmp.mfc_num - ROLLOVER_MFC + 1) /
-            MFSECNUM );
+            tmi(nrowsper) );
     }
   } else if (MFCtr > tm_info.t_stmp.mfc_num &&
         MFCtr-tm_info.t_stmp.mfc_num > TS_MFC_LIMIT) {
     // Advance time_stamp by a calculated number of seconds, mfcs
-    uin16_t q = (MFCtr - tm_info.t_stmp.mfc_num)/MFSECSNUM;
-    commit_tstamp(tm_info.t_stmp.mfc_num + q*MFSECNUM,
-      tm_info.t_stmp.secs + MFSECDEN * q);
+    uint16_t q = (MFCtr - tm_info.t_stmp.mfc_num)/tmi(nrowsper);
+    commit_tstamp(tm_info.t_stmp.mfc_num + q*tmi(nrowsper),
+      tm_info.t_stmp.secs + tmi(nsecsper) * q);
   }
   for (;;) {
     unsigned char *dest;
@@ -436,12 +458,14 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
       memcpy(&scanbuf[0], &row[sizeof(scan_hdr_t)], cur_scan_offset);
       ssp_scan_hdr_t *ssp_hdr = (ssp_scan_hdr_t *)&scanbuf[0];
       if (ssp_hdr->NWordsHdr != 6) {
-        nl_error(MSG_WARN, "SN:%u: Expected:NWordsHdr=6 Rec'd:%u", cur_scan, ssp_hdr->NWordsHdr);
+        nl_error(MSG_WARN, "SN:%u: Expected:NWordsHdr=6 Rec'd:%u",
+          cur_scan, ssp_hdr->NWordsHdr);
       }
-      uint16_t chk_size = size(uint32_t)*(7+ssp_hdr->NChannels*ssp_hdr->NSamples);
+      uint16_t chk_size =
+        sizeof(uint32_t)*(7+ssp_hdr->NChannels*ssp_hdr->NSamples);
       if (cur_scansize != chk_size) {
-        nl_error(MSG_WARN, "SN:%u: SSP NS=%u,NC=%u does not match scansize:%u", cur_scan,
-          ssp_hdr->NSamples, ssp_hdr->NChannels, cur_scansize);
+        nl_error(MSG_WARN, "SN:%u: SSP NS=%u,NC=%u does not match scansize:%u",
+          cur_scan, ssp_hdr->NSamples, ssp_hdr->NChannels, cur_scansize);
       }
       scan_active = true;
     } else {
@@ -453,8 +477,8 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
       memcpy(&scan_ptr[cur_scan_offset], row, fragsize);
       cur_scan_offset += fragsize;
       if (cur_scan_offset == cur_scansize) {
-        mlf_set_index(cur_scan);
-        fd = mlf_next_fd();
+        mlf_set_index(mlf, cur_scan);
+        int fd = mlf_next_fd(mlf);
         write(fd, &scanbuf[0], cur_scansize);
         close(fd);
       }
@@ -480,7 +504,7 @@ void HCl_serin::update_termios(int cur_min) {
     if (cur_min < 1) cur_min = 1;
     if (cur_min != termios_s.c_cc[VMIN]) {
       termios_s.c_cc[VMIN] = cur_min;
-      if (tcsetattr(fd, TCSANOW, &termios_s)) {
+      if (tcsetattr(ser_fd, TCSANOW, &termios_s)) {
         nl_error(MSG_ERROR, "Error from tcsetattr: %s", strerror(errno));
       }
     }
@@ -495,7 +519,7 @@ void *output_thread(void *Reader_ptr ) {
 void *HCl_serin::output_thread() {
   for (;;) {
     lock(__FILE__,__LINE__);
-    if ( quit || dc_quit ) {
+    if ( quit ) {
       unlock();
       break;
     }
@@ -512,7 +536,7 @@ void *HCl_serin::output_thread() {
           unlock();
           sem_wait(&ot_sem);
           lock(__FILE__,__LINE__);
-          int breakout = !started || !regulated || dc_quit;
+          int breakout = !started || !regulated || quit;
           unlock();
           if (breakout) break;
           transmit_data(1); // only one row
@@ -535,7 +559,7 @@ void *HCl_serin::output_thread() {
       } else {
         // untimed loop
         for (;;) {
-          int breakout = !started || dc_quit || regulated;
+          int breakout = !started || quit || regulated;
           if ( it_blocked == IT_BLOCKED_DATA ) {
             it_blocked = 0;
             sem_post(&it_sem);
