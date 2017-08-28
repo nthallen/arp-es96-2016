@@ -5,7 +5,7 @@ Input "pwrmon.tbl";
 Ambient {
   HBox { +-; Title: "Ambient"; -+ };
   Amb_P: (Amb_P,6) Torr;
-  Amb_T: (TS0_T,7) HBox { "V "; (TS0_cnt,1) };
+  Amb_T: (TS0_T,7) HBox { "V "; (TS0_cnt,3) };
 }
 
 Laser {
@@ -62,7 +62,7 @@ Pump {
   V_St:  (Pump1_V_St,6)    (Pump2_V_St,6)  V;
   Tach:  (RPM1,5)          (RPM2,5) RPM;
   HeadT: (Pump1_Head_T,7)  (Pump2_Head_T,7) C;
-  MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) V;
+  MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) C;
 }
 
 { HBox { |+; {

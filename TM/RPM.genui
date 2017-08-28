@@ -1,6 +1,6 @@
  1 RPM1 Pumps RPM
  1 RPM2 Pumps RPM
- 1 OVF1:Ct0Stat:4 Pumps Status
- 1 OVF2:Ct0Stat:5 Pumps Status
- 1 L2Stat:Ct0Stat:14 Pumps Status
- 1 Resynch:Ct0Stat:15 Pumps Status
+ 1 OVF1:Ct0Stat:4 Pumps Status %u
+ 1 OVF2:Ct0Stat:5 Pumps Status %u
+ 1 L2Stat:Ct0Stat:14 Pumps Status %u
+ 1 Resynch:Ct0Stat:15 Pumps Status %u

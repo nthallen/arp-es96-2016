@@ -11,5 +11,7 @@ extern SWData_t SWData;
 #define SWS_PUMP_OFF 8
 #define SWS_CAL_SEQ 9
 #define SWS_CAL_RD 10
+#define SWS_PUMP_CYCLE 11
+#define SWS_TIME_WARP 254
 
 #endif
