@@ -37,6 +37,7 @@ class HCl_serin : public data_generator {
     void process_row(const unsigned char *row);
     void process_scan_row(const unsigned char *row);
     void update_termios(int cur_min);
+    void dump_bytes(int lvl, int start, int end);
     mlf_def_t *mlf;
     int ser_fd;
     termios termios_s;
