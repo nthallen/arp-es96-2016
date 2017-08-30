@@ -36,6 +36,7 @@ swsbase = HCl.sws
 
 Module TMbase
 Module QCLI RESET=
+Module Telemetry
 
 SCRIPT = interact
 SCRIPT = digio.dccc

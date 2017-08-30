@@ -1,5 +1,11 @@
-display HCldisp -C $FlightNode
+display HCldisp
 client HClclt
+serin hcl_serin -a -d /dev/serusb1
+# client [SI] HClserclt
+# extraction [!screen] phrtgsrvr -C $FlightNode:
+# extraction [!screen] HClrtgext
+extraction [PB] scantmext -d /dev/serusb2
+extraction [SI] lgr -N `mlf_find LOG`
 memo
 batchfile interact
 phrtg

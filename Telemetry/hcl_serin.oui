@@ -9,7 +9,7 @@
 	-a autostart regulated
 	-b baud : set serial baud rate [115200]
 	-d path : specify serial device or simulation file
-	-P path : specify base path for scan files [./SSP]
+	-P path : specify base path for scan files [.]
 <init>
   hcl_serin_init(argc, argv);
 
