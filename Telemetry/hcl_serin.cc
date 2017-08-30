@@ -340,9 +340,8 @@ void HCl_serin::process_serin() {
         if (have_synch) {
           int new_cp;
           // i now points to synch_msb
-          nl_error(MSG_DBG(0), "Found synch");
-          // This logic ensures new_cp >= cp (and together with
-          // the earlier synch check, new_cp > cp)
+          // nl_error(MSG_DBG(0), "Found synch");
+          // This logic ensures new_cp >= cp
           if (++i-cp >= tmi(nbminf)) {
             new_cp = i-tmi(nbminf);
           } else {
@@ -398,7 +397,9 @@ void HCl_serin::process_row(const unsigned char *row) {
     if (nr > 0) {
       unlock();
       // copy data into the queue and update indexes
-      memcpy(dest, &inbuf[cp], nbQrow);
+      nl_error(MSG_DBG(1), "Transmitting: MFCtr=%04X", MFCtr);
+      dump_bytes(MSG_DBG(1), cp, cp+tmi(nbminf));
+      memcpy(dest, &inbuf[cp+2], nbQrow);
       commit_rows(MFCtr, 0, 1);
       break;
     } else {
