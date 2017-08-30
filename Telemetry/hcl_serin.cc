@@ -58,21 +58,21 @@ void hcl_serin_init( int argc, char **argv ) {
         opt_basepath = optarg;
         break;
       case '?':
-        nl_error(3, "Unrecognized Option -%c", optopt);
+        nl_error(MSG_FATAL, "Unrecognized Option -%c", optopt);
     }
   }
 }
 
 int main( int argc, char **argv ) {
   oui_init_options( argc, argv );
-  nl_error(0, "Startup");
+  nl_error(MSG, "Startup");
   load_tmdac(opt_basepath);
   int nQrows = RDR_BUFSIZE/tmi(nbrow);
   if (nQrows < 2) nQrows = 2;
   HCl_serin serin(nQrows, nQrows/2, opt_basepath );
   serin.data_generator::init(0);
   serin.control_loop();
-  nl_error(0, "Shutdown");
+  nl_error(MSG, "Shutdown");
 }
 
 static uint16_t lcm( uint16_t ain, uint16_t bin ) {
@@ -101,10 +101,10 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
   it_blocked = 0;
   ot_blocked = 0;
   if ( sem_init( &it_sem, 0, 0) || sem_init( &ot_sem, 0, 0 ) )
-    nl_error( 3, "Semaphore initialization failed" );
+    nl_error(MSG_FATAL, "Semaphore initialization failed" );
   int rv = pthread_mutex_init( &dq_mutex, NULL );
   if ( rv )
-    nl_error( 3, "Mutex initialization failed: %s",
+    nl_error(MSG_FATAL, "Mutex initialization failed: %s",
             strerror(errno));
   // init_tm_type();
   // nl_assert(input_tm_type == TMTYPE_DATA_T3);
@@ -163,18 +163,18 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
 static void pt_create( void *(*func)(void *), pthread_t *thread, void *arg ) {
   int rv = pthread_create( thread, NULL, func, arg );
   if ( rv != EOK )
-    nl_error(3,"pthread_create failed: %s", strerror(errno));
+    nl_error(MSG_FATAL,"pthread_create failed: %s", strerror(errno));
 }
 
 static void pt_join( pthread_t thread, const char *which ) {
   void *value;
   int rv = pthread_join(thread, &value);
   if ( rv != EOK )
-    nl_error( 2, "pthread_join(%d, %s) returned %d: %s",
+    nl_error(MSG_ERROR, "pthread_join(%d, %s) returned %d: %s",
        thread, which, rv, strerror(rv) );
   else if ( value != 0 )
-    nl_error( 2, "pthread_join(%s) returned non-zero value", which );
-  else nl_error( -2, "%s shutdown", which );
+    nl_error(MSG_ERROR, "pthread_join(%s) returned non-zero value", which );
+  else nl_error(MSG_DBG(0), "%s shutdown", which );
 }
 
 void HCl_serin::control_loop() {
@@ -189,7 +189,7 @@ void HCl_serin::control_loop() {
 void HCl_serin::lock(const char *by, int line) {
   int rv = pthread_mutex_lock(&dq_mutex);
   if (rv)
-    nl_error( 3, "Mutex lock failed: %s",
+    nl_error(MSG_FATAL, "Mutex lock failed: %s",
             strerror(rv));
   locked_by_file = by;
   locked_by_line = line;
@@ -198,7 +198,7 @@ void HCl_serin::lock(const char *by, int line) {
 void HCl_serin::unlock() {
   int rv = pthread_mutex_unlock(&dq_mutex);
   if (rv)
-    nl_error( 3, "Mutex unlock failed: %s",
+    nl_error(MSG_FATAL, "Mutex unlock failed: %s",
             strerror(rv));
 }
 
@@ -228,7 +228,7 @@ void HCl_serin::event(enum dg_event evt) {
       }
       break;
     case dg_event_quit:
-      nl_error( 0, "Quit event" );
+      nl_error(MSG, "Quit event" );
       // dc_quit = true;
       if ( ot_blocked ) {
         ot_blocked = 0;
@@ -284,7 +284,7 @@ void *HCl_serin::input_thread() {
     // rc==0 means timeout, which we ignore
     if ( rc < 0 ) {
       if ( errno != EINTR ) {
-        nl_error(3,
+        nl_error(MSG_FATAL,
           "HCl_serin::input_thread(): Unexpected error from select: %d", errno);
       }
     } else if (rc > 0) {
@@ -303,6 +303,7 @@ void HCl_serin::process_serin() {
     nl_error(MSG_FATAL, "Error %d on read from ser_fd", errno);
   } else {
     nc += rv;
+    nl_error(MSG_DBG(1), "Recd %d chars. nc=%d", rv, nc);
     while (cp + tmi(nbminf) <= nc ) {
       if (have_synch &&
           inbuf[cp+tmi(nbminf)-2] == synch_lsb &&
@@ -340,6 +341,8 @@ void HCl_serin::process_serin() {
           int new_cp;
           // i now points to synch_msb
           nl_error(MSG_DBG(0), "Found synch");
+          // This logic ensures new_cp >= cp (and together with
+          // the earlier synch check, new_cp > cp)
           if (++i-cp >= tmi(nbminf)) {
             new_cp = i-tmi(nbminf);
           } else {
@@ -347,6 +350,8 @@ void HCl_serin::process_serin() {
           }
           nl_error(MSG_DBG(0), "Found synch, discarding %d bytes",
               new_cp - cp);
+          dump_bytes(MSG_DBG(1), cp, new_cp);
+          cp = new_cp;
         }
       }
     }
@@ -422,7 +427,7 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
         if (hdr->scansize != cur_scansize) {
           // One or the other was corrupted? Could check
           // against NS, NC if we've read them
-          nl_error(2, "Scansize discrepancy: SN:%u size was %u, now %u",
+          nl_error(MSG_ERROR, "Scansize discrepancy: SN:%u size was %u, now %u",
                 cur_scan, cur_scansize, hdr->scansize);
           scan_active = false;
           return;
@@ -434,7 +439,7 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
           return;
         } else {
           // We either missed 255 mfs or mfctr_offset is corrupted
-          nl_error(2, "SN:%u: Expected mfctr_offset %u received %u",
+          nl_error(MSG_ERROR, "SN:%u: Expected mfctr_offset %u received %u",
             cur_scan, cur_scanmfc_offset+255, hdr->mfctr_offset);
           scan_active = false;
           return;
@@ -483,6 +488,43 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
         close(fd);
       }
     }
+  }
+}
+
+/**
+ * @param lvl The MSG level as specified in nortlib.h
+ * @param ttl Text prepended to the first row
+ * @param start The offset in inbuf of the first character
+ * @param end The offset in inbuf one past the last character
+ * Outputs as hex the bytes of inbuf from offset start to end-1,
+ * limiting the output to 20 bytes per line
+ */
+void HCl_serin::dump_bytes(int lvl, int start, int end) {
+  char obuf[80];
+  int rowoffset, coloffset;
+  if (lvl < nl_debug_lvl) return;
+  rowoffset = start;
+  coloffset = 0;
+  while (rowoffset+coloffset < end) {
+    // Output "XX " at coloffset*3
+    uint8_t val = inbuf[rowoffset+coloffset];
+    uint8_t nibble = (val>>8)&0xF;
+    nibble += (nibble<10) ? '0' : ('A'-10);
+    obuf[coloffset*3] = nibble;
+    nibble = val&0xF;
+    nibble += (nibble<10) ? '0' : ('A'-10);
+    obuf[coloffset*3+1] = nibble;
+    obuf[coloffset*3+2] = ' ';
+    if (++coloffset >= 20) {
+      obuf[coloffset*3-1] = '\0';
+      nl_error(lvl, "%s", obuf);
+      rowoffset += coloffset;
+      coloffset = 0;
+    }
+  }
+  if (coloffset > 0) {
+    obuf[coloffset*3-1] = '\0';
+    nl_error(lvl, "%s", obuf);
   }
 }
 
