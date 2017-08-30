@@ -502,7 +502,7 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
 void HCl_serin::dump_bytes(int lvl, int start, int end) {
   char obuf[80];
   int rowoffset, coloffset;
-  if (lvl < nl_debug_lvl) return;
+  if (lvl < nl_debug_level) return;
   rowoffset = start;
   coloffset = 0;
   while (rowoffset+coloffset < end) {
