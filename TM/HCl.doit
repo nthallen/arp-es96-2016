@@ -1,6 +1,6 @@
 display HCldisp
 client HClclt
-serin hcl_serin -a -d /dev/serusb1
+serin hcl_serin -a -d /dev/serusb1 -v
 # client [SI] HClserclt
 # extraction [!screen] phrtgsrvr -C $FlightNode:
 # extraction [!screen] HClrtgext
