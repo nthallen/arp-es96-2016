@@ -422,17 +422,16 @@ void HCl_serin::process_row(const unsigned char *row) {
 
 void HCl_serin::process_scan_row(const unsigned char *row) {
   uint8_t scanmfc = row[tmi(nbminf)-3];
-  if (scanmfc != next_scanmfc) {
+  if (scan_active && scanmfc != next_scanmfc) {
     // we have lost some data
-    if (scan_active) {
-      nl_error(MSG_WARN,"Missed some scan rows: cleanup needed");
-      // fill in any missing data with NaNs
-    } else {
+    nl_error(MSG_WARN,"Missed some scan rows: cleanup needed");
+    // fill in any missing data with NaNs
+    // } else {
       // We don't know enough until we get more info
-      nl_error(MSG_WARN,"Scan row while not active: scanmfc=%d next=%d",
-        scanmfc, next_scanmfc);
-      return;
-    }
+      // nl_error(MSG_WARN,"Scan row while not active: scanmfc=%d next=%d",
+        // scanmfc, next_scanmfc);
+      // return;
+    // }
   }
   if (scanmfc == 0) {
     scan_hdr_t *hdr = (scan_hdr_t *)row;
@@ -461,11 +460,9 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
         // We must have missed the end of the previous scan and
         // quite a lot of it before then. Let's blow it off for now
         scan_active = false;
-        return;
       }
     }
-    nl_assert(scan_active == false);
-    if (hdr->mfctr_offset == 0) {
+    if (!scan_active && hdr->mfctr_offset == 0) {
       cur_scan = hdr->scannum;
       cur_scansize = hdr->scansize;
       nl_error(MSG_DBG(1), "Start of Scan %u: %u", cur_scan, cur_scansize);
@@ -488,21 +485,29 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
           cur_scan, ssp_hdr->NSamples, ssp_hdr->NChannels, cur_scansize);
       }
       scan_active = true;
-    } else {
-      unsigned char *scan_ptr = (unsigned char *)&scanbuf[0];
-      unsigned short fragsize = tmi(nbminf)-3;
-      if (cur_scan_offset+fragsize > cur_scansize) {
-        fragsize = cur_scansize-cur_scan_offset;
-      }
-      memcpy(&scan_ptr[cur_scan_offset], row, fragsize);
-      cur_scan_offset += fragsize;
-      if (cur_scan_offset == cur_scansize) {
-        mlf_set_index(mlf, cur_scan);
-        int fd = mlf_next_fd(mlf);
-        write(fd, &scanbuf[0], cur_scansize);
-        close(fd);
-      }
+      next_scanmfc = 1;
+      return;
     }
+  }
+  if (scan_active) {
+    unsigned char *scan_ptr = (unsigned char *)&scanbuf[0];
+    unsigned short fragsize = tmi(nbminf)-3;
+    if (cur_scan_offset+fragsize > cur_scansize) {
+      fragsize = cur_scansize-cur_scan_offset;
+    }
+    memcpy(&scan_ptr[cur_scan_offset], row, fragsize);
+    cur_scan_offset += fragsize;
+    next_scanmfc = (scanmfc+1) & 0xFF;
+    if (cur_scan_offset == cur_scansize) {
+      nl_error(MSG_DBG(1), "End of Scan %u", cur_scan);
+      mlf_set_index(mlf, cur_scan);
+      int fd = mlf_next_fd(mlf);
+      write(fd, &scanbuf[0], cur_scansize);
+      close(fd);
+      scan_active = false;
+    }
+  } else {
+    nl_error(MSG_DBG(1), "Scan row while !active: mfc = %d", scanmfc);
   }
 }
 
