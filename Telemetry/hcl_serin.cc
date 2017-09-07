@@ -14,9 +14,6 @@
 #include "tm.h"
 
 #define RDR_BUFSIZE 16384
-#ifndef MSG_ERROR
-  #define MSG_ERROR MSG_FAIL
-#endif
 
 static const char *opt_basepath = ".";
 static int opt_autostart;
@@ -118,8 +115,8 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
   locked_by_line = 0;
   synch_lsb = tmi(synch) & 0xFF;
   synch_msb = (tmi(synch) >> 8) & 0xFF;
-  scan_synch_lsb = ~synch_lsb;
-  scan_synch_msb = ~synch_msb;
+  scan_synch_lsb = (~synch_lsb) & 0xFF;
+  scan_synch_msb = (~synch_msb) & 0xFF;
   have_synch = false;
   have_tstamp = false;
   next_minor_frame = 0;
@@ -282,7 +279,9 @@ void *HCl_serin::input_thread() {
     tv.tv_usec = 0;
     int rc = select(width, &readfds, &writefds, &exceptfds, &tv);
     // rc==0 means timeout, which we ignore
-    if ( rc < 0 ) {
+    if ( rc == 0 ) {
+      nl_error(MSG, "Timeout reading from ser_fd");
+    } else if ( rc < 0 ) {
       if ( errno != EINTR ) {
         nl_error(MSG_FATAL,
           "HCl_serin::input_thread(): Unexpected error from select: %d", errno);
@@ -316,6 +315,7 @@ void HCl_serin::process_serin() {
           inbuf[cp+tmi(nbminf)-2] == scan_synch_lsb &&
           inbuf[cp+tmi(nbminf)-1] == scan_synch_msb ) {
         // We have a scan row
+        nl_error(MSG_DBG(1), "scan_row cp,nc = %d,%d", cp, nc);
         process_scan_row(&inbuf[cp]);
         cp += tmi(nbminf);
       } else {
@@ -349,10 +349,20 @@ void HCl_serin::process_serin() {
           }
           nl_error(MSG_DBG(0), "Found synch, discarding %d bytes",
               new_cp - cp);
-          dump_bytes(MSG_DBG(1), cp, new_cp);
+          dump_bytes(MSG_DBG(2), cp, new_cp);
           cp = new_cp;
+        } else {
+          break;
         }
       }
+    }
+    if (inbuf_size-nc <= tmi(nbminf) &&
+        nc-cp > tmi(nbminf)) {
+      int cp1 = nc - tmi(nbminf) + 1;
+      nl_error(MSG_WARN,
+          "Buffer full, no synch, discarding %d bytes",
+          cp1 - cp);
+      cp = cp1;
     }
     if (nc-cp < tmi(nbminf)) {
       if (nc > cp && cp > 0) {
@@ -398,7 +408,7 @@ void HCl_serin::process_row(const unsigned char *row) {
       unlock();
       // copy data into the queue and update indexes
       nl_error(MSG_DBG(1), "Transmitting: MFCtr=%04X", MFCtr);
-      dump_bytes(MSG_DBG(1), cp, cp+tmi(nbminf));
+      dump_bytes(MSG_DBG(2), cp, cp+tmi(nbminf));
       memcpy(dest, &inbuf[cp+2], nbQrow);
       commit_rows(MFCtr, 0, 1);
       break;
@@ -415,9 +425,12 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
   if (scanmfc != next_scanmfc) {
     // we have lost some data
     if (scan_active) {
+      nl_error(MSG_WARN,"Missed some scan rows: cleanup needed");
       // fill in any missing data with NaNs
     } else {
       // We don't know enough until we get more info
+      nl_error(MSG_WARN,"Scan row while not active: scanmfc=%d next=%d",
+        scanmfc, next_scanmfc);
       return;
     }
   }
@@ -437,7 +450,6 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
         if (hdr->mfctr_offset == cur_scanmfc_offset+255) {
           // and we're at the right offset
           cur_scanmfc_offset = hdr->mfctr_offset;
-          return;
         } else {
           // We either missed 255 mfs or mfctr_offset is corrupted
           nl_error(MSG_ERROR, "SN:%u: Expected mfctr_offset %u received %u",
@@ -449,12 +461,14 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
         // We must have missed the end of the previous scan and
         // quite a lot of it before then. Let's blow it off for now
         scan_active = false;
+        return;
       }
     }
     nl_assert(scan_active == false);
     if (hdr->mfctr_offset == 0) {
       cur_scan = hdr->scannum;
       cur_scansize = hdr->scansize;
+      nl_error(MSG_DBG(1), "Start of Scan %u: %u", cur_scan, cur_scansize);
       if (cur_scansize > scanbuf_size*sizeof(uint32_t)) {
         nl_error(MSG_WARN, "SN:%u: Scansize=%u exceeds maximum", cur_scansize);
         return; // Abandon scan
@@ -509,7 +523,7 @@ void HCl_serin::dump_bytes(int lvl, int start, int end) {
   while (rowoffset+coloffset < end) {
     // Output "XX " at coloffset*3
     uint8_t val = inbuf[rowoffset+coloffset];
-    uint8_t nibble = (val>>8)&0xF;
+    uint8_t nibble = (val>>4)&0xF;
     nibble += (nibble<10) ? '0' : ('A'-10);
     obuf[coloffset*3] = nibble;
     nibble = val&0xF;
