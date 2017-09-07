@@ -44,7 +44,7 @@ class scantm_data_client : public data_client {
     int ser_fd, scan_fd;
     int32_t cur_scan;
     int32_t next_scan;
-    uint16_t scan_file_size, scan_file_offset;
+    uint32_t scan_file_size, scan_file_offset;
     uint16_t scan_nb, scan_cp;
     uint16_t scan_mfctr, scan_mfctr_offset;
     mlf_def_t *mlf;
@@ -52,7 +52,8 @@ class scantm_data_client : public data_client {
     row_buf_t *row_buf;
     uint16_t row_len, row_offset;
     uint16_t Synch, scan_synch;
-    uint16_t rows_per_row, rows_this_row;
+    uint16_t rows_per_row; //*< Scan rows transmitted per TM row
+    uint16_t rows_this_row; //*< Scan rows transmitted so far this TM row
     
     int flush_row();
     void send_row(uint16_t MFCtr, const unsigned char *raw);

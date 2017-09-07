@@ -151,7 +151,15 @@ void scantm_data_client::send_scan_data() {
         cur_scan = 0;
         return;
       }
-      nl_error(-2, "Transmitting scan %ld: %ld bytes",
+      if (scan_file_size > scanbufsize) {
+        nl_error(2, "Scan %d size %lu exceeds max possible %d",
+          cur_scan, scan_file_size, scanbufsize);
+        close(scan_fd);
+        scan_fd = -1;
+        cur_scan = 0;
+        return;
+      }
+      nl_error(-2, "Transmitting scan %ld: %lu bytes",
         cur_scan, scan_file_size);
       scan_cp = scan_nb = 0;
       scan_mfctr = 0;
@@ -160,19 +168,19 @@ void scantm_data_client::send_scan_data() {
     }
     if (flush_row()) return;
     if (rows_this_row < rows_per_row &&
-          scan_mfctr < scan_mfctr_offset ||
-          scan_mfctr > scan_mfctr_offset + 255) {
-      // create a header and send it
+        ( scan_mfctr < scan_mfctr_offset ||
+          scan_mfctr > scan_mfctr_offset + 255)) {
+      // create a header
       scan_mfctr_offset = scan_mfctr;
-      row_buf->scan_hdr.scannum = cur_scan;
-      row_buf->scan_hdr.scansize = scan_file_size;
-      row_buf->scan_hdr.mfctr_offset = scan_mfctr++;
-      memset(&row_buf->row[sizeof(scan_hdr_t)], 0,
-        row_len-sizeof(scan_hdr_t)-3);
-      row_buf->row[row_len-3] = 0;
-      memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
-      row_offset = 0;
-      if (flush_row()) return;
+      // row_buf->scan_hdr.scannum = cur_scan;
+      // row_buf->scan_hdr.scansize = scan_file_size;
+      // row_buf->scan_hdr.mfctr_offset = scan_mfctr++;
+      // memset(&row_buf->row[sizeof(scan_hdr_t)], 0,
+        // row_len-sizeof(scan_hdr_t)-3);
+      // row_buf->row[row_len-3] = 0;
+      // memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
+      // row_offset = 0;
+      // if (flush_row()) return;
     }
     if (scan_nb - scan_cp < row_len-3 && scan_file_offset < scan_file_size) {
       // Less than one row of data currently in scanbuf and
@@ -216,16 +224,25 @@ void scantm_data_client::send_scan_data() {
       scan_fd = -1;
       cur_scan = 0;
     } else {
+      uint16_t row_mfc = scan_mfctr++ - scan_mfctr_offset;
+      uint16_t hdr_offset = 0;
       // transmit a row
       int available = scan_nb - scan_cp;
-      if (available >= row_len-3) {
-        available = row_len - 3;
-        memcpy(&(row_buf->row[0]), &scanbuf[scan_cp], available);
-      } else {
-        memcpy(&(row_buf->row[0]), &scanbuf[scan_cp], available);
-        memset(&(row_buf->row[available]), 0, row_len - 3 - available);
+      if (row_mfc == 0) {
+        row_buf->scan_hdr.scannum = cur_scan;
+        row_buf->scan_hdr.scansize = scan_file_size;
+        row_buf->scan_hdr.mfctr_offset = scan_mfctr++;
+        hdr_offset = sizeof(scan_hdr_t);
       }
-      row_buf->row[row_len-3] = scan_mfctr++ - scan_mfctr_offset;
+      if (available >= row_len-3-hdr_offset) {
+        available = row_len - 3 - hdr_offset;
+        memcpy(&(row_buf->row[hdr_offset]), &scanbuf[scan_cp], available);
+      } else {
+        memcpy(&(row_buf->row[hdr_offset]), &scanbuf[scan_cp], available);
+        memset(&(row_buf->row[hdr_offset+available]), 0,
+          row_len - 3 - available - hdr_offset);
+      }
+      row_buf->row[row_len-3] = row_mfc;
       memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
       scan_cp += available;
       row_offset = 0;
