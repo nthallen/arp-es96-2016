@@ -4,8 +4,8 @@ Input "pwrmon.tbl";
 
 Ambient {
   HBox { +-; Title: "Ambient"; -+ };
-  Amb_P: (Amb_P,6) Torr;
-  Amb_T: (TS0_T,7) HBox { "V "; (TS0_cnt,3) };
+  Amb_P: (Amb_P,7) Torr;
+  Amb_T: (TS0_T,9) HBox { "V "; (TS0_cnt,3) };
 }
 
 Laser {
@@ -18,9 +18,9 @@ Laser {
 
 GasDeck {
   HBox { +-; Title: "Gas Deck"; -+ };
-  GD__T: (GD__T,6) C;
-  GasHP: (GasHP,6) PSI;
-  GasLP: (GasLP,6) PSI;
+  GD__T: (GD__T,7) C;
+  GasHP: (GasHP,7) PSI;
+  GasLP: (GasLP,7) PSI;
   { GDVlv:  (GDVlvS,6);
     CalGas: (CalGasVlvS,6);
     ExVlv:  (CellExVlvS,6);
@@ -30,8 +30,8 @@ GasDeck {
 SpaceHeater {
   HBox { +-; Title: "Space Heater"; -+ };
   SpHtTSt: (SpHtTSt,6) V;
-  SpHt1CT: (SpHt1CT,6) V;
-  SpHt2CT: (SpHt2CT,6) V;
+  SpHt1CT: (SpHt1CT,7) V;
+  SpHt2CT: (SpHt2CT,7) V;
 }
 
 Rover {
@@ -46,8 +46,8 @@ Rover {
 
 Inlet {
   HBox { +-; Title: Inlet; -+ };
-  TSt: (InletTSt,7) V;
-  CT:  (InletCT,6)  V;
+  TSt: (InletTSt,6) V;
+  CT:  (InletCT,7)  V;
   "1:" (Inlt1T,7) C;
   "2:" (Inlt2T,7) C;
   "3:" (Inlt3T,7) C;

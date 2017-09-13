@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <sys/select.h>
 #include <stdint.h>
+#include <unistd.h>
 #include "hcl_serin.h"
 #include "nortlib.h"
 #include "oui.h"
@@ -68,6 +69,7 @@ int main( int argc, char **argv ) {
   if (nQrows < 2) nQrows = 2;
   HCl_serin serin(nQrows, nQrows/2, opt_basepath );
   serin.data_generator::init(0);
+  seteuid(getuid());
   serin.control_loop();
   nl_error(MSG, "Shutdown");
 }
@@ -105,10 +107,6 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
             strerror(errno));
   // init_tm_type();
   // nl_assert(input_tm_type == TMTYPE_DATA_T3);
-  char mlf_base[PATH_MAX];
-  snprintf(mlf_base, PATH_MAX, "%s/SSP", path );
-  mlf = mlf_init( 3, 60, 1, mlf_base, "dat", NULL );
-  // mlf_set_index( mlf, opt_start_file ); // We will set when input comes
   regulated = opt_regulate;
   autostart = opt_autostart;
   locked_by_file = 0;
@@ -147,7 +145,7 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
       termios_s.c_iflag = 0;
       termios_s.c_lflag &= ~(ECHO|ICANON|ISIG|ECHOE|ECHOK|ECHONL);
       termios_s.c_cflag = CLOCAL|CREAD|CS8;
-      termios_s.c_oflag &= ~(OPOST);
+      termios_s.c_oflag &= ~(OPOST|ONLCR);
       termios_s.c_ispeed = termios_s.c_ospeed = opt_baud;
       if ( tcsetattr(ser_fd, TCSANOW, &termios_s) )
         nl_error(MSG_FAIL, "Error on tcsetattr: %s", strerror(errno) );
@@ -267,6 +265,10 @@ void *HCl_serin::input_thread() {
    * Or we could just have select timeout after 1 second.
    * I will implement the timeout first, optimize later.
    */
+  char mlf_base[PATH_MAX];
+  snprintf(mlf_base, PATH_MAX, "%s/SSP", opt_basepath );
+  mlf = mlf_init( 3, 60, 1, mlf_base, "dat", NULL );
+
   fd_set readfds, writefds, exceptfds;
   struct timeval tv;
   while (!quit) {
@@ -302,7 +304,7 @@ void HCl_serin::process_serin() {
     nl_error(MSG_FATAL, "Error %d on read from ser_fd", errno);
   } else {
     nc += rv;
-    nl_error(MSG_DBG(1), "Recd %d chars. nc=%d", rv, nc);
+    nl_error(MSG_DBG(2), "Recd %d chars. nc=%d", rv, nc);
     while (cp + tmi(nbminf) <= nc ) {
       if (have_synch &&
           inbuf[cp+tmi(nbminf)-2] == synch_lsb &&
@@ -315,7 +317,7 @@ void HCl_serin::process_serin() {
           inbuf[cp+tmi(nbminf)-2] == scan_synch_lsb &&
           inbuf[cp+tmi(nbminf)-1] == scan_synch_msb ) {
         // We have a scan row
-        nl_error(MSG_DBG(1), "scan_row cp,nc = %d,%d", cp, nc);
+        nl_error(MSG_DBG(2), "scan_row cp,nc = %d,%d", cp, nc);
         process_scan_row(&inbuf[cp]);
         cp += tmi(nbminf);
       } else {
@@ -420,18 +422,71 @@ void HCl_serin::process_row(const unsigned char *row) {
   }
 }
 
+uint16_t HCl_serin::mfcbytes(uint16_t mfc) {
+  uint16_t m = mfc>>8;
+  uint16_t l = mfc & 0xFF;
+  uint16_t L1 = tmi(nbminf)-3;
+  return((m*256+l+1)*L1 - (m+1)*sizeof(scan_hdr_t));
+}
+
+// Now I need to set every 32-bit word from first_byte to last_byte
+// to NAN32.
+void HCl_serin::nan_fill(uint16_t first_byte, uint16_t last_byte) {
+  if (last_byte+1 < cur_scansize) {
+    nl_error(MSG_WARN, "Scan %u: lost bytes %u-%u",
+      cur_scan, first_byte, last_byte);
+  } else {
+    nl_error(MSG_WARN, "Scan %u: lost from byte %u to end",
+      cur_scan, first_byte);
+  }
+  uint16_t first_word = first_byte/sizeof(uint32_t);
+  uint16_t last_word = last_byte/sizeof(uint32_t);
+  for (uint16_t wordno = first_word; wordno <= last_word; ++wordno) {
+    scanbuf[wordno] = NAN32;
+  }
+  cur_scan_offset = last_byte+1;
+}
+
+void HCl_serin::write_scan_file() {
+  nl_assert(scan_active && cur_scan_offset > 0);
+  if (cur_scan_offset < cur_scansize) {
+    nl_error(MSG_DBG(0), "Scan %u last %u bytes lost", cur_scan,
+      cur_scansize - cur_scan_offset);
+    nan_fill(cur_scan_offset, cur_scansize-1);
+  } else {
+    nl_error(MSG_DBG(1), "End of Scan %u", cur_scan);
+  }
+  mlf_set_index(mlf, cur_scan);
+  int fd = mlf_next_fd(mlf);
+  write(fd, &scanbuf[0], cur_scansize);
+  close(fd);
+  scan_active = false;
+}
+
 void HCl_serin::process_scan_row(const unsigned char *row) {
   uint8_t scanmfc = row[tmi(nbminf)-3];
+  uint16_t gap_start = 0;
   if (scan_active && scanmfc != next_scanmfc) {
     // we have lost some data
-    nl_error(MSG_WARN,"Missed some scan rows: cleanup needed");
+    //nl_error(MSG_WARN,"Scan %u: Missed some scan rows");
     // fill in any missing data with NaNs
-    // } else {
-      // We don't know enough until we get more info
-      // nl_error(MSG_WARN,"Scan row while not active: scanmfc=%d next=%d",
-        // scanmfc, next_scanmfc);
-      // return;
-    // }
+    // How many rows are missing? We'll assume the smallest gap
+    uint16_t first_mfc = next_scanmfc ? (next_scanmfc+cur_scanmfc_offset) :
+      cur_scanmfc_offset+256;
+    uint16_t new_mfc = scanmfc+cur_scanmfc_offset;
+    if (new_mfc < first_mfc) {
+      new_mfc += 256;
+      cur_scanmfc_offset += 256;
+    }
+    uint16_t first_byte = mfcbytes(first_mfc-1);
+    nl_assert(first_byte == cur_scan_offset);
+    uint16_t last_byte = mfcbytes(new_mfc) - 1;
+    if (last_byte >= cur_scansize) {
+      write_scan_file();
+    } else {
+      gap_start = cur_scan_offset;
+      cur_scan_offset = last_byte;
+    }
   }
   if (scanmfc == 0) {
     scan_hdr_t *hdr = (scan_hdr_t *)row;
@@ -446,48 +501,54 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
           return;
         }
         // We're in the right scan and the right size
-        if (hdr->mfctr_offset == cur_scanmfc_offset+255) {
+        if (hdr->mfctr_offset == cur_scanmfc_offset+256) {
           // and we're at the right offset
           cur_scanmfc_offset = hdr->mfctr_offset;
         } else {
           // We either missed 255 mfs or mfctr_offset is corrupted
           nl_error(MSG_ERROR, "SN:%u: Expected mfctr_offset %u received %u",
-            cur_scan, cur_scanmfc_offset+255, hdr->mfctr_offset);
+            cur_scan, cur_scanmfc_offset+256, hdr->mfctr_offset);
           scan_active = false;
           return;
         }
       } else {
-        // We must have missed the end of the previous scan and
-        // quite a lot of it before then. Let's blow it off for now
-        scan_active = false;
+        // We must have missed the end of the previous scan
+        // We may have tried to work around this with gap_start
+        if (gap_start > 0) cur_scan_offset = gap_start;
+        write_scan_file();
       }
     }
-    if (!scan_active && hdr->mfctr_offset == 0) {
-      cur_scan = hdr->scannum;
-      cur_scansize = hdr->scansize;
-      nl_error(MSG_DBG(1), "Start of Scan %u: %u", cur_scan, cur_scansize);
-      if (cur_scansize > scanbuf_size*sizeof(uint32_t)) {
-        nl_error(MSG_WARN, "SN:%u: Scansize=%u exceeds maximum", cur_scansize);
-        return; // Abandon scan
+    if (!scan_active) {
+      if (hdr->mfctr_offset == 0) {
+        cur_scan = hdr->scannum;
+        cur_scansize = hdr->scansize;
+        nl_error(MSG_DBG(1), "Start of Scan %u: %u", cur_scan, cur_scansize);
+        if (cur_scansize > scanbuf_size*sizeof(uint32_t)) {
+          nl_error(MSG_WARN, "SN:%u: Scansize=%u exceeds maximum", cur_scansize);
+          return; // Abandon scan
+        }
+        cur_scanmfc_offset = 0;
+        cur_scan_offset = tmi(nbminf)-sizeof(scan_hdr_t)-3;
+        memcpy(&scanbuf[0], &row[sizeof(scan_hdr_t)], cur_scan_offset);
+        ssp_scan_hdr_t *ssp_hdr = (ssp_scan_hdr_t *)&scanbuf[0];
+        if (ssp_hdr->NWordsHdr != 6) {
+          nl_error(MSG_WARN, "SN:%u: Expected:NWordsHdr=6 Rec'd:%u",
+            cur_scan, ssp_hdr->NWordsHdr);
+        }
+        uint16_t chk_size =
+          sizeof(uint32_t)*(7+ssp_hdr->NChannels*ssp_hdr->NSamples);
+        if (cur_scansize != chk_size) {
+          nl_error(MSG_WARN, "SN:%u: SSP NS=%u,NC=%u does not match scansize:%u",
+            cur_scan, ssp_hdr->NSamples, ssp_hdr->NChannels, cur_scansize);
+        }
+        scan_active = true;
+        next_scanmfc = 1;
+        return;
+      } else {
+        nl_error(MSG_DBG(1), "!active scanmfc=0 mfctr_offset=%u",
+          hdr->mfctr_offset);
       }
-      cur_scanmfc_offset = 0;
-      cur_scan_offset = tmi(nbminf)-sizeof(scan_hdr_t)-3;
-      memcpy(&scanbuf[0], &row[sizeof(scan_hdr_t)], cur_scan_offset);
-      ssp_scan_hdr_t *ssp_hdr = (ssp_scan_hdr_t *)&scanbuf[0];
-      if (ssp_hdr->NWordsHdr != 6) {
-        nl_error(MSG_WARN, "SN:%u: Expected:NWordsHdr=6 Rec'd:%u",
-          cur_scan, ssp_hdr->NWordsHdr);
-      }
-      uint16_t chk_size =
-        sizeof(uint32_t)*(7+ssp_hdr->NChannels*ssp_hdr->NSamples);
-      if (cur_scansize != chk_size) {
-        nl_error(MSG_WARN, "SN:%u: SSP NS=%u,NC=%u does not match scansize:%u",
-          cur_scan, ssp_hdr->NSamples, ssp_hdr->NChannels, cur_scansize);
-      }
-      scan_active = true;
-      next_scanmfc = 1;
-      return;
-    }
+    } 
   }
   if (scan_active) {
     unsigned char *scan_ptr = (unsigned char *)&scanbuf[0];
@@ -496,15 +557,13 @@ void HCl_serin::process_scan_row(const unsigned char *row) {
       fragsize = cur_scansize-cur_scan_offset;
     }
     memcpy(&scan_ptr[cur_scan_offset], row, fragsize);
+    if (gap_start > 0) {
+      nan_fill(gap_start, cur_scan_offset-1);
+    }
     cur_scan_offset += fragsize;
     next_scanmfc = (scanmfc+1) & 0xFF;
-    if (cur_scan_offset == cur_scansize) {
-      nl_error(MSG_DBG(1), "End of Scan %u", cur_scan);
-      mlf_set_index(mlf, cur_scan);
-      int fd = mlf_next_fd(mlf);
-      write(fd, &scanbuf[0], cur_scansize);
-      close(fd);
-      scan_active = false;
+    if (cur_scan_offset >= cur_scansize) {
+      write_scan_file();
     }
   } else {
     nl_error(MSG_DBG(1), "Scan row while !active: mfc = %d", scanmfc);

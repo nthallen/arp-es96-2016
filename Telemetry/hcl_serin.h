@@ -38,6 +38,9 @@ class HCl_serin : public data_generator {
     void process_scan_row(const unsigned char *row);
     void update_termios(int cur_min);
     void dump_bytes(int lvl, int start, int end);
+    uint16_t mfcbytes(uint16_t mfc);
+    void write_scan_file();
+    void nan_fill(uint16_t first_byte, uint16_t last_byte);
     mlf_def_t *mlf;
     int ser_fd;
     termios termios_s;
@@ -48,11 +51,11 @@ class HCl_serin : public data_generator {
     uint16_t scan_synch_lsb, scan_synch_msb;
     static const int inbuf_size = 16384;
     static const uint16_t TS_MFC_LIMIT = 32767;
+    static const uint32_t NAN32 = 0xFFC00000U;
     uint16_t ROLLOVER_MFC;
     unsigned char inbuf[inbuf_size]; /**< Stores incoming raw telemetry data */
     int cp; /**< Current parsing position in inbuf */
     int nc; /**< Current number of characters in inbuf */
-    /** scanbuf will be dynamically grown as needed to contain a full scan */
     bool scan_active;
     uint16_t cur_scan;
     uint16_t cur_scansize;
@@ -61,7 +64,8 @@ class HCl_serin : public data_generator {
     uint16_t cur_scan_offset;
     //* Maximum SSP scan file size = (hdr+NS*NC). hdr=7, NS<=4096, NC<=3
     static const int scanbuf_size = 7+4096*3;
-    float scanbuf[scanbuf_size];
+    /** scanbuf is sized large enough to contain an entire scan */
+    uint32_t scanbuf[scanbuf_size];
     const char *locked_by_file; /**< Source file where current lock was requested */
     int locked_by_line; /**< Source line where current lock was requested */
 };

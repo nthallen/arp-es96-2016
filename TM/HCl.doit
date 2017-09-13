@@ -1,10 +1,12 @@
 display HCldisp
 client HClclt
-serin hcl_serin -a -d /dev/serusb1 -v
+serin hcl_serin -a -d /dev/serusb2
+# client [!SI] HClclt
 # client [SI] HClserclt
-# extraction [!screen] phrtgsrvr -C $FlightNode:
+# server [SI] cmd/server hclsisrvr
+# server [!SI&!screen] cmd/server phrtgsrvr -C $FlightNode
 # extraction [!screen] HClrtgext
-extraction [PB] scantmext -d /dev/serusb2
+extraction [PB] scantmext -d /dev/serusb1 -p $ddir/SSP
 extraction [SI] lgr -N `mlf_find LOG`
 memo
 batchfile interact

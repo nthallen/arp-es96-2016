@@ -20,6 +20,22 @@ typedef struct {
   uint16_t mfctr_offset;
 } __attribute__((packed)) scan_hdr_t;
 
+//* Copied from sspdrv/ssp_ad.h
+typedef struct {
+  unsigned short NWordsHdr;
+  unsigned short FormatVersion;
+  unsigned char  NChannels;
+  unsigned char  NF;
+  unsigned short NSamples;
+  unsigned short NCoadd;
+  unsigned short NAvg;
+  unsigned short NSkL;
+  unsigned short NSkP;
+  unsigned long  ScanNum;
+  signed short T_HtSink;
+  signed short T_FPGA;
+} __attribute__((packed)) ssp_scan_hdr_t;
+
 typedef union {
   scan_hdr_t scan_hdr;
   uint8_t row[0];
@@ -50,6 +66,7 @@ class scantm_data_client : public data_client {
     mlf_def_t *mlf;
     uint8_t scanbuf[scanbufsize];
     row_buf_t *row_buf;
+    ssp_scan_hdr_t *ssp_hdr;
     uint16_t row_len, row_offset;
     uint16_t Synch, scan_synch;
     uint16_t rows_per_row; //*< Scan rows transmitted per TM row
