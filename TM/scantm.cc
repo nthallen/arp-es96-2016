@@ -55,7 +55,8 @@ scantm_data_client::scantm_data_client(int bufsize_in, int fast,
       termios_p.c_iflag = 0;
       termios_p.c_lflag &= ~(ECHO|ICANON|ISIG|ECHOE|ECHOK|ECHONL);
       termios_p.c_cflag = CLOCAL|CREAD|CS8;
-      termios_p.c_oflag &= ~(OPOST);
+      termios_p.c_cflag &= ~HUPCL;
+      termios_p.c_oflag &= ~(OPOST|ONLCR);
       termios_p.c_ispeed = termios_p.c_ospeed = baud;
       if ( tcsetattr(ser_fd, TCSANOW, &termios_p) )
         nl_error( 2, "Error on tcsetattr: %s", strerror(errno) );
@@ -139,6 +140,8 @@ void scantm_data_client::send_scan_data() {
       next_scan = 0;
       mlf_set_index(mlf, cur_scan);
       scan_fd = mlf_next_fd(mlf);
+      nl_error(MSG_DBG(0), "Reading scan %lu from path %s",
+        cur_scan, mlf->fpath);
       if (scan_fd < 0) { // error is already reported
         cur_scan = 0;
         return;
@@ -151,30 +154,67 @@ void scantm_data_client::send_scan_data() {
         cur_scan = 0;
         return;
       }
-      nl_error(-2, "Transmitting scan %ld: %ld bytes",
+      if (scan_file_size > scanbufsize) {
+        nl_error(MSG_ERROR, "Scan %d size %lu exceeds max possible %d",
+          cur_scan, scan_file_size, scanbufsize);
+        close(scan_fd);
+        scan_fd = -1;
+        cur_scan = 0;
+        return;
+      }
+      int rv = ::read(scan_fd, scanbuf, scan_file_size);
+      if (rv < 0) {
+        nl_error(MSG_ERROR, "Error %d reading scan %d", errno, cur_scan);
+        close(scan_fd);
+        scan_fd = -1;
+        cur_scan = 0;
+        return;
+      }
+      scan_nb = rv;
+      if (rv < scan_file_size) {
+        nl_error(MSG_WARN, "Short read on scan %d: %d/%d",
+            cur_scan, rv, scan_file_size);
+      }
+      ssp_hdr = (ssp_scan_hdr_t *)scanbuf;
+      int chk_size = sizeof(uint32_t)*(7+ssp_hdr->NChannels*ssp_hdr->NSamples);
+      if (chk_size > scan_file_size) {
+        nl_error(MSG_ERROR, "Scan file %d is short: %d/%d",
+          cur_scan, scan_file_size, chk_size);
+        close(scan_fd);
+        scan_fd = -1;
+        cur_scan = 0;
+        return;
+      } else if (chk_size < scan_file_size) {
+        nl_error(MSG_DBG(0), "Scan file %d is long: %d/%d",
+          cur_scan, scan_file_size, chk_size);
+        scan_file_size = chk_size;
+        if (scan_nb > scan_file_size)
+          scan_nb = scan_file_size;
+      }
+      nl_error(MSG_DBG(0), "Transmitting scan %ld: %lu bytes",
         cur_scan, scan_file_size);
-      scan_cp = scan_nb = 0;
+      scan_cp = 0;
       scan_mfctr = 0;
       scan_mfctr_offset = 1;
-      scan_file_offset = 0;
+      scan_file_offset = scan_nb;
     }
     if (flush_row()) return;
-    if (rows_this_row < rows_per_row &&
-          scan_mfctr < scan_mfctr_offset ||
-          scan_mfctr > scan_mfctr_offset + 255) {
-      // create a header and send it
+    if (scan_mfctr < scan_mfctr_offset ||
+        scan_mfctr > scan_mfctr_offset + 255) {
+      // create a header
       scan_mfctr_offset = scan_mfctr;
-      row_buf->scan_hdr.scannum = cur_scan;
-      row_buf->scan_hdr.scansize = scan_file_size;
-      row_buf->scan_hdr.mfctr_offset = scan_mfctr++;
-      memset(&row_buf->row[sizeof(scan_hdr_t)], 0,
-        row_len-sizeof(scan_hdr_t)-3);
-      row_buf->row[row_len-3] = 0;
-      memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
-      row_offset = 0;
-      if (flush_row()) return;
+      // row_buf->scan_hdr.scannum = cur_scan;
+      // row_buf->scan_hdr.scansize = scan_file_size;
+      // row_buf->scan_hdr.mfctr_offset = scan_mfctr++;
+      // memset(&row_buf->row[sizeof(scan_hdr_t)], 0,
+        // row_len-sizeof(scan_hdr_t)-3);
+      // row_buf->row[row_len-3] = 0;
+      // memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
+      // row_offset = 0;
+      // if (flush_row()) return;
     }
-    if (scan_nb - scan_cp < row_len-3 && scan_file_offset < scan_file_size) {
+    if (scan_nb - scan_cp < row_len-3 &&
+        scan_file_offset < scan_file_size) {
       // Less than one row of data currently in scanbuf and
       // more data left in the file, so read in more.
       if (scan_nb > scan_cp && scan_cp > 0) {
@@ -196,16 +236,6 @@ void scantm_data_client::send_scan_data() {
         }
       }
       int rv = ::read(scan_fd, scanbuf+scan_cp, remaining);
-      if (rv < 0) {
-        nl_error(2, "Error %d reading scan %d", errno, cur_scan);
-        close(scan_fd);
-        scan_fd = -1;
-        cur_scan = 0;
-        return;
-      }
-      if (rv < remaining) {
-        nl_error(1, "Short read on scan %d: %d/%d", cur_scan, rv, remaining);
-      }
       scan_nb += rv;
       scan_file_offset += rv;
     }
@@ -216,16 +246,25 @@ void scantm_data_client::send_scan_data() {
       scan_fd = -1;
       cur_scan = 0;
     } else {
+      uint16_t row_mfc = scan_mfctr++ - scan_mfctr_offset;
+      uint16_t hdr_offset = 0;
       // transmit a row
       int available = scan_nb - scan_cp;
-      if (available >= row_len-3) {
-        available = row_len - 3;
-        memcpy(&(row_buf->row[0]), &scanbuf[scan_cp], available);
-      } else {
-        memcpy(&(row_buf->row[0]), &scanbuf[scan_cp], available);
-        memset(&(row_buf->row[available]), 0, row_len - 3 - available);
+      if (row_mfc == 0) {
+        row_buf->scan_hdr.scannum = cur_scan;
+        row_buf->scan_hdr.scansize = scan_file_size;
+        row_buf->scan_hdr.mfctr_offset = scan_mfctr_offset;
+        hdr_offset = sizeof(scan_hdr_t);
       }
-      row_buf->row[row_len-3] = scan_mfctr++ - scan_mfctr_offset;
+      if (available >= row_len-3-hdr_offset) {
+        available = row_len - 3 - hdr_offset;
+        memcpy(&(row_buf->row[hdr_offset]), &scanbuf[scan_cp], available);
+      } else {
+        memcpy(&(row_buf->row[hdr_offset]), &scanbuf[scan_cp], available);
+        memset(&(row_buf->row[hdr_offset+available]), 0,
+          row_len - 3 - available - hdr_offset);
+      }
+      row_buf->row[row_len-3] = row_mfc;
       memcpy(&(row_buf->row[row_len-2]), &scan_synch, 2);
       scan_cp += available;
       row_offset = 0;

@@ -1,19 +1,21 @@
 HEADER HCL16 Instrument
 MNEMONIC hcl16
 HOMEDIR HCl16_DATA_DIR
-### Cell
-1 IRv1T Temps Rovers
-1 IRv2T Temps Rovers
-1 IRv3T Temps Rovers
-1 IRv4T Temps Rovers
-#1 IRv5T Temps Rovers
+1 InletTSt Temps Inlet_CT
+1 InletCT Temps Inlet_CT
+1 Inlt1T Temps Inlet
+1 Inlt2T Temps Inlet
+1 Inlt3T Temps Inlet
+1 Inlt4T Temps Inlet
+1 Inlt5T Temps Inlet
+1 Inlt6T Temps Inlet
 
-1 ISk1T Temps Skin
-1 ISk2T Temps Skin
-1 ISk3T Temps Skin
-
-1 IHeatBlkT Temps HeaterBlock
-1 IHeatBlkTSt Temps HeaterBlock
+1 Rov1T Temps Rovers
+1 Rov2T Temps Rovers
+1 Rov3T Temps Rovers
+1 Rov4T Temps Rovers
+1 Rov5T Temps Rovers
+1 Rov6T Temps Rovers
 
 ### Pump
 1 Pump1_V_St Pumps V
@@ -24,7 +26,29 @@ HOMEDIR HCl16_DATA_DIR
 1 Pump2_mot_T Pumps T
 
 1 Cell_P  Cell P
-1 ICelP   Cell P
-1 ICelPSt Cell P
-1 Laser_I LPV LaserI
-1 ILTE3R3T LPV LaserT
+1 Cell_T_St Cell CT
+1 ICelCT  Cell CT
+1 Amb_P        Ambient P
+
+1 Laser_I      LPV LaserI
+1 ILTE3R3T     LPV LaserT
+1 Laser_TEC_St LPV LaserT
+1 ILH_T        LPV LHT
+
+1 SpHtTSt Temps SpHtCT
+1 SpHt1CT Temps SpHtCT
+1 SpHt2CT Temps SpHtCT
+
+1 GasHP GasDeck P
+1 GasLP GasDeck P
+1 GD__T GasDeck T
+1 CellExVlvS:DStat0:1 GasDeck Status
+1 GDVlvS:DStat0:2 GasDeck Status
+1 CalGasVlvS:DStat0:3 GasDeck Status
+
+#1 IPampT Temps Det
+#1 ISSPT Temps Det
+1 IDetT Temps Det
+
+1 QCLI_Reset:DStat0:0 QCLI_stat status
+1 SWStat TMbase SWStat

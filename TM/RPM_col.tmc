@@ -1,0 +1,18 @@
+%{
+  #include "subbus.h"
+
+  static void Ct64_init( void ) {
+    sbwr( 0x600, 0x0F00 ); /* 1 Hz */
+  }
+%}
+TM INITFUNC Ct64_init();
+
+%{
+  subbus_mread_req *Cts_req;
+
+  void Cts_init(int A1, int A2, int A3) {
+    Cts_req = pack_mread_requests(
+      A1, A2, A3, 0);
+  }
+%}
+TM INITFUNC Cts_init(Ct0Stat.address, RPM1.address, RPM2.address);

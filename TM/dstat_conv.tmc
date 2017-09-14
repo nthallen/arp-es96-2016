@@ -1,0 +1,18 @@
+%{
+  #define on_off_text(x) ((x)?" On":"Off")
+  #define open_closed_text(x) ((x)?"  Open":"Closed")
+%}
+TM typedef unsigned char On_Off_T { text "%3d" on_off_text(); }
+TM typedef unsigned char Open_Closed_T { text "%6d" open_closed_text(); }
+
+On_Off_t QCLI_Reset; Invalidate QCLI_Reset;
+{ QCLI_Reset = (DStat0>>0) & 1; Validate QCLI_Reset; }
+
+Open_Closed_T CellExVlvS; Invalidate CellExVlvS;
+{ CellExVlvS = (DStat0>>1) & 1; Validate CellExVlvS; }
+
+Open_Closed_T GDVlvS; Invalidate GDVlvS;
+{ GDVlvS = (DStat0>>2) & 1; Validate GDVlvS; }
+
+Open_Closed_T CalGasVlvS; Invalidate CalGasVlvS;
+{ CalGasVlvS = (DStat0>>3) & 1; Validate CalGasVlvS; }

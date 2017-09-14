@@ -1,0 +1,92 @@
+Input "TMbase.tbl";
+Input "PTRH.tbl";
+Input "pwrmon.tbl";
+
+Ambient {
+  HBox { +-; Title: "Ambient"; -+ };
+  Amb_P: (Amb_P,7) Torr;
+  Amb_T: (TS0_T,9) HBox { "V "; (TS0_cnt,3) };
+}
+
+Laser {
+  HBox { +-; Title: Laser; -+ };
+  ILTE3R3T: (ILTE3R3T,7) V;
+  LaserTSt: (Laser_TEC_St,7) V;
+  Laser_I:   (Laser_I,7) V;
+  LHT:      (ILH_T,6) C;
+}
+
+GasDeck {
+  HBox { +-; Title: "Gas Deck"; -+ };
+  GD__T: (GD__T,7) C;
+  GasHP: (GasHP,7) PSI;
+  GasLP: (GasLP,7) PSI;
+  { GDVlv:  (GDVlvS,6);
+    CalGas: (CalGasVlvS,6);
+    ExVlv:  (CellExVlvS,6);
+  };
+}
+
+SpaceHeater {
+  HBox { +-; Title: "Space Heater"; -+ };
+  SpHtTSt: (SpHtTSt,6) V;
+  SpHt1CT: (SpHt1CT,7) V;
+  SpHt2CT: (SpHt2CT,7) V;
+}
+
+Rover {
+  HBox { +-; Title: Rover; -+ };
+  "1:" (Rov1T,7) C;
+  "2:" (Rov2T,7) C;
+  "3:" (Rov3T,7) C;
+  "4:" (Rov4T,7) C;
+  "5:" (Rov5T,7) C;
+  "6:" (Rov6T,7) C;
+}
+
+Inlet {
+  HBox { +-; Title: Inlet; -+ };
+  TSt: (InletTSt,6) V;
+  CT:  (InletCT,7)  V;
+  "1:" (Inlt1T,7) C;
+  "2:" (Inlt2T,7) C;
+  "3:" (Inlt3T,7) C;
+  "4:" (Inlt4T,7) C;
+  "5:" (Inlt5T,7) C;
+  "6:" (Inlt6T,7) C;
+}
+
+Pump {
+  HBox { +-; Title: "Scroll Pumps"; -+ };
+  #""       "1"            "2";
+  V_St:  (Pump1_V_St,6)    (Pump2_V_St,6)  V;
+  Tach:  (RPM1,5)          (RPM2,5) RPM;
+  HeadT: (Pump1_Head_T,7)  (Pump2_Head_T,7) C;
+  MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) C;
+}
+
+{ HBox { |+; {
+    [PTRH];
+    HBox {
+      [Inlet];
+      |;
+      [Rover];
+    };
+  }; |+; {
+    HBox {
+      {
+        [Pump];
+        [pwrmon];
+      }; |; {
+        [Ambient];
+        [SpaceHeater];
+      }
+    };
+    HBox {
+      [GasDeck];
+      |;
+      [TMbaseB];
+    }
+  }; |+ };
+  -
+}

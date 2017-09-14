@@ -4,7 +4,7 @@
   #define TS_buf_ptr (unsigned short *)TS_buf
 %}
 TM typedef signed long TS_raw_t;
-TM typedef unsigned short TS_cnt_t { text "%5u"; }
+TM typedef unsigned short TS_cnt_t { text "%3u"; }
 /* TM typedef double TS_T_t { text "%7.2lf"; convert CELCIUS; } */
 TM typedef double TS_T_t { text "%9.5lf"; }
 

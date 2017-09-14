@@ -1,0 +1,63 @@
+%{
+/* SB/64 Ungated Counters
+
+  600  Status
+  602  Hardware Rev
+  610  Counter 1 Low Word
+  612  Counter 1 High Word
+  614  Counter 2 Low Word
+  616  Counter 2 High Word
+  618  Counter 3 Low Word
+  61A  Counter 3 High Word
+  61C  Counter 4 Low Word
+  61E  Counter 4 High Word
+
+Status
+
+  D0  Counter 1 Overflow
+  D1  Counter 2 Overflow
+  D2  Counter 3 Overflow
+  D3  Counter 4 Overflow
+  D4  Counter 1 16-bit Overflow
+  D5  Counter 2 16-bit Overflow
+  D6  Counter 3 16-bit Overflow
+  D7  Counter 4 16-bit Overflow
+  D8-D11 Integration Period
+        F == 1 Hz
+        7 == 2 Hz
+        3 == 4 Hz
+        1 == 8 Hz
+        0 == 16 Hz
+  D14 L2Stat
+  D15 Resynch
+
+  Counter is automatically synchronized with reads of the status
+  word, but in order for this to work reliably, we need to take
+  steps to make sure the status and the counters are read in the
+  correct order and close together in time. i.e. we need to use a
+  TM group to collect the counters.
+
+  The counters must be programmed initially to set the
+  integration period. This must match the reporting rate.
+
+*/
+
+  #define CT24long(x) ((long)((x).low) + (((unsigned long)((x).high))<<16))
+%}
+TM typedef UINT CT16 { collect x = sbrwa( x.address ); }
+TM typedef CT16 CTstat {
+        text "%04x";
+}
+
+TM 1 Hz CT16 RPM1; Address RPM1 0x610; /* Pump1_RPM_Pulse */
+TM 1 Hz CT16 RPM2; Address RPM2 0x614; /* Pump2_RPM_Pulse */
+TM 1 Hz Ctstat Ct0Stat; Address Ct0Stat 0x600; /* Counter 0 Stat */
+
+Group Cts ( Ct0Stat, RPM1, RPM2 ) {
+  unsigned short Cts_Raw[3];
+  mread_subbus(Cts_req, &Cts_Raw[0]);
+  Ct0Stat = Cts_Raw[0];
+  RPM1  = Cts_Raw[1];
+  RPM2 = Cts_Raw[2];
+}
+

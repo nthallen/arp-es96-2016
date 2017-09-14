@@ -21,25 +21,46 @@ Calibration (AI_500Torr, TORR) {
 
 TM typedef AI16 AI_5PSI { text "%6.2lf"; convert TORR; }
 Calibration (AI_5PSI, TORR) { 0, 0, 32768, 275.81 }
+TM typedef AI16 AI_15PSI { text "%7.2lf"; convert TORR; }
+Calibration (AI_15PSI, TORR) { 0, 0, 32768, 827.43 }
 
 TM 1 Hz AI_5PSI Cell_P; Address Cell_P 0xC0C; /* Cell Pressure (5 PSI) */
-TM 1 Hz AI_500Torr ICelP; Address ICelP 0xCCE;
+TM 1 Hz AI_15PSI Amb_P; Address Amb_P 0xC9A; /* Ambient Pressure */
 TM 1 Hz AI16 Laser_I; Address Laser_I 0xC58;
 TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;
-TM 1 Hz AI_T30K IRv1T; Address IRv1T 0xC04;
-TM 1 Hz AI_T30K IRv2T; Address IRv2T 0xC84;
-TM 1 Hz AI_T30K IRv3T; Address IRv3T 0xC06;
-TM 1 Hz AI_T30K IRv4T; Address IRv4T 0xC86;
-/* TM 1 Hz AI_T30K IRv5T; Address IRv5T 0xC08; */
-TM 1 Hz AI_T30K ISk1T; Address ISk1T 0xC46;
-TM 1 Hz AI_T30K ISk2T; Address ISk2T 0xCC2;
-TM 1 Hz AI_T30K ISk3T; Address ISk3T 0xC82;
+/* TM 1 Hz AI_T30K IPampT; Address IPampT 0xC98; */
+/* TM 1 Hz AI_T30K ISSPT; Address ISSPT 0xC1A; */
+TM 1 Hz AI_T30K IDetT; Address IDetT 0xC5A;
+
+TM 1 Hz AI_T30K ILH_T; Address ILH_T 0xC00;
+TM 1 Hz AI16 GasHP; Address GasHP 0xC80;
+TM 1 Hz AI16 GasLP; Address GasLP 0xCC0;
+TM 1 Hz AI_T30K GD__T; Address GD__T 0xC02;
+TM 1 Hz AI_T30K Inlt1T; Address Inlt1T 0xC42;
+TM 1 Hz AI_T30K Inlt2T; Address Inlt2T 0xC82;
+TM 1 Hz AI_T30K Inlt3T; Address Inlt3T 0xCC2;
+TM 1 Hz AI_T30K Inlt4T; Address Inlt4T 0xC04;
+TM 1 Hz AI_T30K Inlt5T; Address Inlt5T 0xC44;
+TM 1 Hz AI_T30K Inlt6T; Address Inlt6T 0xC84;
+TM 1 Hz AI_T30K Rov1T; Address Rov1T 0xCC4;
+TM 1 Hz AI_T30K Rov2T; Address Rov2T 0xCC6;
+TM 1 Hz AI_T30K Rov3T; Address Rov3T 0xC06;
+TM 1 Hz AI_T30K Rov4T; Address Rov4T 0xC86;
+TM 1 Hz AI_T30K Rov5T; Address Rov5T 0xC08;
+TM 1 Hz AI_T30K Rov6T; Address Rov6T 0xC46;
+
+TM 1 Hz AI16 ICelCT ; Address ICelCT 0xC0A;
+TM 1 Hz AI16 InletCT ; Address InletCT 0xC4A;
+TM 1 Hz AI16 SpHt1CT ; Address SpHt1CT 0xC8A;
+TM 1 Hz AI16 SpHt2CT ; Address SpHt2CT 0xCAA;
+
+/* TM 1 Hz AI16 Sp6AI; Address Sp6AI 0xC6E; */
+/* TM 1 Hz AI16 Sp9AI; Address Sp9AI 0xCAC; */
+
 TM 1 Hz AI_T30K Pump1_Head_T ; Address Pump1_Head_T 0xC1C;
-TM 1 Hz AI16 Pump1_mot_T ; Address Pump1_mot_T 0xC5C;
+TM 1 Hz AI_T30K Pump1_mot_T ; Address Pump1_mot_T 0xC5C;
 TM 1 Hz AI_T30K Pump2_Head_T ; Address Pump2_Head_T 0xCDC; /* 0xC9A */
-TM 1 Hz AI16 Pump2_mot_T ; Address Pump2_mot_T 0xC9C; /* 0xCDA */
-TM 1 Hz AI16 IHeatBlkT; Address IHeatBlkT 0xC8E;
-TM 1 Hz AI16 IHeatBlkTSt; Address IHeatBlkTSt 0x40A;
+TM 1 Hz AI_T30K Pump2_mot_T ; Address Pump2_mot_T 0xC9C; /* 0xCDA */
 
 TM typedef unsigned short AO
   { text "%6.4lf"; convert VOLTS; collect x = sbrwa(x.address); }
@@ -48,6 +69,17 @@ TM typedef unsigned short AO
     65536, 10
   }
 
+TM 1 Hz AO Laser_TEC_St; Address Laser_TEC_St 0x400; /* AO0 */
+TM 1 Hz AO InletTSt; Address InletTSt 0x404; /* AO2 */
+TM 1 Hz AO SpHtTSt; Address SpHtTSt 0x406; /* AO3 */
+TM 1 Hz AO Cell_T_St; Address Cell_T_St 0x408; /* AO4 */
 TM 1 Hz AO Pump1_V_St; Address Pump1_V_St 0x410; /* AO8 */
 TM 1 Hz AO Pump2_V_St; Address Pump2_V_St 0x412; /* AO9 */
-TM 1 Hz AO ICelPSt; Address ICelPSt 0x40C;
+/* TM 1 Hz AI16 IHeatBlkTSt; Address IHeatBlkTSt 0x40A; */
+/* TM 1 Hz AO ICelPSt; Address ICelPSt 0x40C; */
+
+TM typedef unsigned char DStat {
+  text "%02x";
+  collect x = sbrba(x.address);
+}
+TM 1 Hz DStat DStat0; Address DStat0 0x80A;

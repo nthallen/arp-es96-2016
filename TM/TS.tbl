@@ -1,12 +1,12 @@
 TS {
   HBox { +-; Title: "Temp Sensors"; -+;};
   ""        >Temp<    ""       >Cnt<;
-  "0"       (TS0_T,7) C        (TS0_cnt,5);
-  "1"       (TS1_T,7) C        (TS1_cnt,5);
-  "2"       (TS2_T,7) C        (TS2_cnt,5);
-  "3"       (TS3_T,7) C        (TS3_cnt,5);
-  "4"       (TS4_T,7) C        (TS4_cnt,5);
-  "5"       (TS5_T,7) C        (TS5_cnt,5);
+  "0"       (TS0_T,7) C        (TS0_cnt,1);
+  "1"       (TS1_T,7) C        (TS1_cnt,1);
+  "2"       (TS2_T,7) C        (TS2_cnt,1);
+  "3"       (TS3_T,7) C        (TS3_cnt,1);
+  "4"       (TS4_T,7) C        (TS4_cnt,1);
+  "5"       (TS5_T,7) C        (TS5_cnt,1);
 }
 
 { [TS] }

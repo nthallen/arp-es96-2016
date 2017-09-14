@@ -64,27 +64,52 @@ State RingDown_Survey {
         Validate Idle;
 }
 
-Partition
-
-State Pump_Off {
-  > Set Pump 1 Set Point 0
-  > Set Pump 2 Set Point 0
+State PumpCycle {
+  > Set Pumps Set Point 1.0
+      +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
+      +1 > SWStat Set 30
+      +1 Hold until (SWStat == SWS_TIME_WARP) or 59;
+      +1 > SWStat Set 0
+   Validate PumpCycleLoop;
 }
 
-State Pump_On {
-    > Set Pump 1 Set Point 5
- +3 > Set Pump 2 Set Point 5
-    { if (convert(Pump1_Head_T) > 45.0 ||
-          convert(Pump2_Head_T) > 45.0)
-        Validate Pump_Over_Temp;
-    }
+State PumpCycleLoop {
+  { if (Pump1_V_St == 0) Validate Idle; }
+     +1 { ci_sendfcmd(0, "Set Pumps Set Point %.2lf\n",
+            convert(Pump1_V_St)+0.25); }
+     +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
+     +1 > SWStat Set 30
+  +1:00 > SWStat Set 0
+        Validate PumpCycleLoop;
+}
+
+Partition
+%{
+  #define HEAD_MAX_T 80.0
+  #define ELEC_MAX_T 58.0
+%}
+
+State Pump_Off {
+      > Set Pumps Set Point 0
+   +2 { if (Pump1_V_St > 0 || Pump2_V_St > 0)
+          Validate Pump_On;
+      }
+}
+
+State Pump_On NoLog {
+    Hold until (convert(Pump1_Head_T) > HEAD_MAX_T ||
+          convert(Pump2_Head_T) > HEAD_MAX_T ||
+          convert(Pump1_mot_T) > ELEC_MAX_T ||
+          convert(Pump2_mot_T) > ELEC_MAX_T);
+    Hold until (convert(Pump1_Head_T) <= HEAD_MAX_T &&
+          convert(Pump2_Head_T) <= HEAD_MAX_T &&
+          convert(Pump1_mot_T) <= ELEC_MAX_T &&
+          convert(Pump2_mot_T) <= ELEC_MAX_T)
+          or 5
+    else Validate Pump_Over_Temp;
+    +1 Validate Pump_On;
 }
 
 State Pump_Over_Temp {
-  > Set Pump 1 Set Point 0
-  > Set Pump 2 Set Point 0
-  { if (convert(Pump1_Head_T) < 30.0 &&
-        convert(Pump2_Head_T) < 30.0)
-      Validate Pump_On;
-  }
+  Validate Pump_Off;
 }

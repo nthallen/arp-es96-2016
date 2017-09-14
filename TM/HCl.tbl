@@ -1,58 +1,48 @@
-Input "TMbase.tbl";
+#Input "TMbase.tbl";
 Input "QCLI.tbl";
-Input "PTRH.tbl";
+#Input "PTRH.tbl";
 
 Cell {
   HBox { +-; Title: "Cell"; -+ };
-  Cell_P: (Cell_P,6) Torr;
-  ICelP: (ICelP,6) Torr;
-  ISk1T: (ISk1T,7)  V;
-  ISk2T: (ISk2T,7)  V;
-  ISk3T: (ISk3T,7)  V;
+  P:    (Cell_P,6) Torr;
+  T_St: (Cell_T_St,6) V;
+  CT:   (ICelCT,7) V;
+  InT:  (TS1_T,9) HBox{ "V "; (TS1_cnt,3) };
+  C1T:    (TS2_T,9) HBox{ "V "; (TS2_cnt,3) };
+  C2T:    (TS3_T,9) HBox{ "V "; (TS3_cnt,3) };
+  C3T:    (TS4_T,9) HBox{ "V "; (TS4_cnt,3) };
+  OutT:   (TS5_T,9) HBox{ "V "; (TS5_cnt,3) };
 }
 
 Laser {
   HBox { +-; Title: Laser; -+ };
   ILTE3R3T: (ILTE3R3T,7) V;
-  Laser_I:   (Laser_I,7) V;
+  LaserTSt: (Laser_TEC_St,6) V;
+  Laser_I:  (Laser_I,7) V;
+  LHT:      (ILH_T,7) C;
+  IDetT:    (IDetT,7) C;
 }
 
-Rover {
-  HBox { +-; Title: Rover; -+ };
-  "1:" (IRv1T,7) V;
-  "2:" (IRv2T,7) V;
-  "3:" (IRv3T,7) V;
-  "4:" (IRv4T,7) V;
- #"5:" (IRv5T,7) V;
+Pinch {
+  HBox { +-; Title: "Pinch Valve"; -+ };
+  (PVStep,5) (PVDgrm,5) (PVKill,4) (PVScan,4);
 }
 
-Pump {
-  HBox { +-; Title: "Scroll Pump"; -+ };
-  ""       "1"            "2";
-  V_St: (Pump1_V_St,6)   (Pump2_V_St,6)  V;
-  HeadT: (Pump1_Head_T,7)  (Pump2_Head_T,7) C;
-  MotT: (Pump1_mot_T,7)  (Pump2_mot_T,7) V;
-}
-
-Heater {
-  HBox { +-; Title: "Heater"; -+ };
-  BlkT: (IHeatBlkT,7) V;
-  BlkTSt: (IHeatBlkTSt,7) V;
+Status {
+  HBox { +-; Title: "Status"; -+ };
+  SWStat: (SWStat,3);
+  { (flttime,9) };
+  MFCtr: (MFCtr,5);
 }
 
 { HBox { |+; {
-    [QCLISSP];
-    [Pump];
-  }; |+; {
-    [PTRH];
-    HBox { [Rover]; |+; [Cell] };
-    HBox {
-      { [Heater];
-        [Laser];
-      }; |; {
-        [TMbaseB];
-        SWStat: (SWStat,3);
-      } }
-  }; |+ };
+      [QCLISSP];
+      [Pinch];
+    }; |+; {
+      [Cell];
+      [Laser];
+      [Status];
+    }; |+;
+  };
   -
 }
