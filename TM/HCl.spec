@@ -38,6 +38,7 @@ Module TMbase
 Module QCLI RESET=
 Module Telemetry
 
+DISTRIB = SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc
 SCRIPT = interact
 SCRIPT = digio.dccc
 SCRIPT = idx.idx64
@@ -47,11 +48,19 @@ IGNORE = Makefile
 HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
-  dstat_conv.tmc pwrmon_conv.tmc HCl.tbl HCl2.tbl rtg.tmc \
+  dstat_conv.tmc pwrmon_conv.tmc HCl.tbl HCl2.tbl \
   /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma HCl.sws
+HClrtgext : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc \
+  dstat_conv.tmc pwrmon_conv.tmc rtg.tmc \
+  /usr/local/share/oui/cic.oui
+ssprtgext : ssprtg.tmc
 scantmext : scantm.cc scantm.oui scantm.tmc
 doit : HCl.doit
 %%
 COLFLAGS = -Haddress.h
 address.h : HClcol.cc
+SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc :
+	cd SerIn && make
+clean-dist : clean-SerIn
+	cd SerIn && make clean

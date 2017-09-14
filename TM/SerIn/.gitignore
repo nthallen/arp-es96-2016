@@ -1,0 +1,15 @@
+hclsicmd.cc
+hclsicmd.dat
+hclsiclt.o
+hclsicltoui.c
+hclsicltoui.o
+hclsicltnc.o
+hclsicltncoui.c
+hclsicltncoui.o
+hclsisrvr.o
+hclsisrvroui.c
+hclsisrvroui.o
+*.err
+hclsiclt
+hclsicltnc
+hclsisrvr

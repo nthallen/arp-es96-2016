@@ -61,6 +61,23 @@ void hcl_serin_init( int argc, char **argv ) {
   }
 }
 
+static void cmd_init() {
+  int nlrsave = set_response(NLRSP_QUIET);
+  int i;
+  for (i = 0; i < 5; ++i) {
+    sleep(1);
+    if (cic_init()) {
+      cic_reset();
+    } else {
+      set_response(nlrsave);
+      return;
+    }
+  }
+  set_response(nlrsave);
+  cic_init();
+}
+
+
 int main( int argc, char **argv ) {
   oui_init_options( argc, argv );
   nl_error(MSG, "Startup");
@@ -268,6 +285,7 @@ void *HCl_serin::input_thread() {
   char mlf_base[PATH_MAX];
   snprintf(mlf_base, PATH_MAX, "%s/SSP", opt_basepath );
   mlf = mlf_init( 3, 60, 1, mlf_base, "dat", NULL );
+  cmd_init();
 
   fd_set readfds, writefds, exceptfds;
   struct timeval tv;
@@ -461,6 +479,9 @@ void HCl_serin::write_scan_file() {
   write(fd, &scanbuf[0], cur_scansize);
   close(fd);
   scan_active = false;
+  ci_sendfcmd(2, "PhRTG File SSP %lu\n", cur_scan);
+  nl_error(MSG_DBG(0), "Wrote scan %lu to path %s", cur_scan,
+    mlf->fpath);
 }
 
 void HCl_serin::process_scan_row(const unsigned char *row) {

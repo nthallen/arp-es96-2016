@@ -140,6 +140,8 @@ void scantm_data_client::send_scan_data() {
       next_scan = 0;
       mlf_set_index(mlf, cur_scan);
       scan_fd = mlf_next_fd(mlf);
+      nl_error(MSG_DBG(0), "Reading scan %lu from path %s",
+        cur_scan, mlf->fpath);
       if (scan_fd < 0) { // error is already reported
         cur_scan = 0;
         return;

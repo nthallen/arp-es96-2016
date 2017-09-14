@@ -1,5 +1,5 @@
 <package> hcl_serin
-<include> msg dc
+<include> msg dc cic
 <include> "hcl_serin.h"
 <follow> msg dc
 
