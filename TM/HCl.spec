@@ -63,4 +63,6 @@ address.h : HClcol.cc
 SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc :
 	cd SerIn && make
 clean-dist : clean-SerIn
+.PHONY : clean-SerIn
+clean-SerIn :
 	cd SerIn && make clean
