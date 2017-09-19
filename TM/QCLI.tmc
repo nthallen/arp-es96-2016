@@ -14,14 +14,14 @@ TM 1 HZ QCLI_CS_t QCLI_CS; Address QCLI_CS 0x1000;
 
 TM "Receive" SSP 1;
 
-TM 1 Hz QCLI_WORD SSP_Num;
-TM 1 Hz QCLI_WORD SSP_SN;
-TM 1 Hz QCLI_WORD SSP_TS;
-TM 1 Hz XLONG SSP_Flags;
-TM 1 Hz SSP_Status_t SSP_Status;
-TM 1 Hz UINT SSP_Stale;
-TM 1 Hz T_FPGA_t SSP_T_FPGA;
-TM 1 Hz T_HtSink_t SSP_T_HtSink;
+TM 4 Hz QCLI_WORD SSP_Num;
+TM 4 Hz QCLI_WORD SSP_SN;
+TM 4 Hz QCLI_WORD SSP_TS;
+TM 4 Hz XLONG SSP_Flags;
+TM 4 Hz SSP_Status_t SSP_Status;
+TM 4 Hz UINT SSP_Stale;
+TM 4 Hz T_FPGA_t SSP_T_FPGA;
+TM 4 Hz T_HtSink_t SSP_T_HtSink;
 
 Group SSP_grp ( SSP_Num, SSP_SN, SSP_TS, SSP_Flags,
 		 SSP_T_FPGA, SSP_T_HtSink ) {

@@ -6,3 +6,5 @@ if (last_SSP != SSP_Num) {
   ci_sendfcmd(2, "PhRTG File SSP %lu\n", SSP_Num );
   last_SSP = SSP_Num;
 }
+ci_sendfcmd(2, "PhRTG Datum SSP_amp %lu %7.1f %7.1f\n",
+    itime(), SSP_amp0, SSP_amp1);

@@ -73,6 +73,8 @@ f = ne_dialg(f, 'add', 1, 0, 'phcl16_qcliw', 'Wave' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16_qclis', 'Scan' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16_qclissp', 'SSP' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16_qclio', 'Overflow' );
+f = ne_dialg(f, 'add', 0, 1, 'ghcl16ssp', 'SSP' );
+f = ne_dialg(f, 'add', 1, 0, 'phcl16sspa', 'Amp' );
 f = ne_listdirs(f, 'HCl16_DATA_DIR', 15);
 f = ne_dialg(f, 'newcol');
 ne_dialg(f, 'resize');

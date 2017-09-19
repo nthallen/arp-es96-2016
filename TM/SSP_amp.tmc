@@ -1,0 +1,9 @@
+TM "Receive" SSP_amp 1;
+
+TM 4 Hz SSP_Amp_t SSP_amp0;
+TM 4 Hz SSP_Amp_t SSP_amp1;
+
+Group SSP_amp_grp (SSP_amp0, SSP_amp1) {
+  SSP_amp0 = SSP_amp.amplitude[0];
+  SSP_amp1 = SSP_amp.amplitude[1];
+}
