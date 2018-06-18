@@ -5,7 +5,7 @@ Input "pwrmon.tbl";
 Ambient {
   HBox { +-; Title: "Ambient"; -+ };
   Amb_P: (Amb_P,7) Torr;
-  Amb_T: (TS0_T,9) HBox { "V "; (TS0_cnt,3) };
+  Amb_T: (TS0_T,7) HBox { "C "; (TS0_cnt,3) };
 }
 
 Laser {

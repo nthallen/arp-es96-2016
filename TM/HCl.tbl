@@ -7,11 +7,11 @@ Cell {
   P:    (Cell_P,6) Torr;
   T_St: (Cell_T_St,6) V;
   CT:   (ICelCT,7) V;
-  InT:  (TS1_T,9) HBox{ "V "; (TS1_cnt,3) };
-  C1T:    (TS2_T,9) HBox{ "V "; (TS2_cnt,3) };
-  C2T:    (TS3_T,9) HBox{ "V "; (TS3_cnt,3) };
-  C3T:    (TS4_T,9) HBox{ "V "; (TS4_cnt,3) };
-  OutT:   (TS5_T,9) HBox{ "V "; (TS5_cnt,3) };
+  InT:  (TS1_T,7) HBox{ "C "; (TS1_cnt,3) };
+  C1T:    (TS2_T,7) HBox{ "C "; (TS2_cnt,3) };
+  C2T:    (TS3_T,7) HBox{ "C "; (TS3_cnt,3) };
+  C3T:    (TS4_T,7) HBox{ "C "; (TS4_cnt,3) };
+  OutT:   (TS5_T,7) HBox{ "C "; (TS5_cnt,3) };
 }
 
 Laser {
