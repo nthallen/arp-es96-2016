@@ -16,6 +16,7 @@ colbase = /usr/local/share/huarp/ptrhm_col.cc
 colbase = temps_col.tmc
 colbase = RPM_col.tmc
 colbase = idxcol.tmc
+colbase = /usr/local/share/huarp/DACS_ID.tmc
 
 cmdbase = /usr/local/share/huarp/phrtg.cmd
 cmdbase = ao.cmd
