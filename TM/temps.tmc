@@ -6,6 +6,7 @@
 TM typedef signed long TS_raw_t;
 TM typedef unsigned short TS_cnt_t { text "%3u"; }
 TM typedef double TS_T_t { text "%7.2lf"; convert CELCIUS; }
+TM typedef double AmbTS_T_t { text "%7.2lf"; convert CELCIUS; }
 /* TM typedef double TS_T_t { text "%9.5lf"; } */
 
 TM 1 Hz TS_raw_t TS0_raw; TM 1 Hz TS_cnt_t TS0_cnt;

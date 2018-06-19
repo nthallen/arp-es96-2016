@@ -5,6 +5,7 @@ tmcbase = PTRH.tmc
 tmcbase = /usr/local/share/huarp/ptrhm.cc
 tmcbase = T30K75KU.tmc
 tmcbase = temps.tmc
+tmcbase = AmbTS_T_t_cal.tmc
 tmcbase = TS_T_t_cal.tmc
 tmcbase = RPM.tmc
 tmcbase = idx.tmc

@@ -2,7 +2,7 @@
 
   #define to_double(x) (double)x
 %}
-TS_T_t TS0_T; Invalidate TS0_T;
+AmbTS_T_t TS0_T; Invalidate TS0_T;
 {
   if (TS0_cnt > 0) {
     TS0_T = (to_double(TS0_raw))/TS0_cnt;
