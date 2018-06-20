@@ -33,7 +33,7 @@ genuibase = temps.genui
 genuibase = PTRH.genui
 genuibase = RPM.genui
 genuibase = pwrmon.genui
-extbase = temps_conv.tmc PTRH_conv.tmc
+extbase = VigoT.tmc temps_conv.tmc PTRH_conv.tmc
 swsbase = HCl.sws
 
 Module TMbase
@@ -50,7 +50,7 @@ IGNORE = Makefile
 HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
-  dstat_conv.tmc pwrmon_conv.tmc HCl.tbl HCl2.tbl \
+  dstat_conv.tmc pwrmon_conv.tmc VigoT.tmc HCl.tbl HCl2.tbl \
   /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma HCl.sws
 HClrtgext : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc \

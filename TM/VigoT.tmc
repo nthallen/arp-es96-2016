@@ -1,5 +1,5 @@
 /* Vigo Thermistor pulled up by 75K */
-Calibration ( VigoT, AI_VigoT, KELVIN ) {
+Calibration ( AI_VigoT, KELVIN ) {
    416, 319.45,
    472, 315.03,
    528, 311.21,
