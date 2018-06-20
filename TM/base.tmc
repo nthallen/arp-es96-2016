@@ -4,6 +4,7 @@ TM 1 Hz UINT MFCtr, Synch;
 
 TM typedef double VOLTS;
 TM typedef double CELCIUS;
+TM typedef double KELVIN;
 TM typedef double TORR;
 TM typedef signed short AI16 {
   text "%7.4lf";
@@ -24,13 +25,17 @@ Calibration (AI_5PSI, TORR) { 0, 0, 32768, 275.81 }
 TM typedef AI16 AI_15PSI { text "%7.2lf"; convert TORR; }
 Calibration (AI_15PSI, TORR) { 0, 0, 32768, 827.43 }
 
+TM typedef AI16 AI_VigoT
+  { text "%6.2lf"; convert KELVIN; }
+  /* Calibration in VigoT.tmc */
+
 TM 1 Hz AI_5PSI Cell_P; Address Cell_P 0xC0C; /* Cell Pressure (5 PSI) */
 TM 1 Hz AI_15PSI Amb_P; Address Amb_P 0xC9A; /* Ambient Pressure */
 TM 1 Hz AI16 Laser_I; Address Laser_I 0xC58;
 TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;
 /* TM 1 Hz AI_T30K IPampT; Address IPampT 0xC98; */
 /* TM 1 Hz AI_T30K ISSPT; Address ISSPT 0xC1A; */
-TM 1 Hz AI_T30K IDetT; Address IDetT 0xC5A;
+TM 1 Hz AI_VigoT IDetT; Address IDetT 0xC5A;
 
 TM 1 Hz AI_T30K ILH_T; Address ILH_T 0xC00;
 TM 1 Hz AI16 GasHP; Address GasHP 0xC80;

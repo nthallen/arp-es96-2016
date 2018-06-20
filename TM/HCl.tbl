@@ -20,7 +20,7 @@ Laser {
   LaserTSt: (Laser_TEC_St,6) V;
   Laser_I:  (Laser_I,7) V;
   LHT:      (ILH_T,7) C;
-  IDetT:    (IDetT,7) C;
+  IDetT:    (IDetT,6) K;
 }
 
 Pinch {
