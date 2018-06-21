@@ -10,6 +10,8 @@ tmcbase = TS_T_t_cal.tmc
 tmcbase = RPM.tmc
 tmcbase = idx.tmc
 tmcbase = pwrmon.tmc
+tmcbase = /usr/local/share/huarp/vl_temp.tmc
+tmcbase = /usr/local/share/huarp/ebx11_temp.tmc
 
 colbase = AI_col.tmc
 colbase = PTRH_col.tmc
@@ -18,6 +20,7 @@ colbase = temps_col.tmc
 colbase = RPM_col.tmc
 colbase = idxcol.tmc
 colbase = /usr/local/share/huarp/DACS_ID.tmc
+colbase = /usr/local/share/huarp/vl_temp_col.tmc
 
 cmdbase = /usr/local/share/huarp/phrtg.cmd
 cmdbase = ao.cmd

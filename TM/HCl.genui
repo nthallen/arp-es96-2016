@@ -50,5 +50,8 @@ HOMEDIR HCl16_DATA_DIR
 #1 ISSPT Temps Det
 1 IDetT Temps Det
 
+1 vl_cpuT DACS T
+1 vl_bdT  DACS T
+
 1 QCLI_Reset:DStat0:0 QCLI_stat status
 1 SWStat TMbase SWStat
