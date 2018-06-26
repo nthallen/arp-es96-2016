@@ -34,6 +34,8 @@ SpaceHeater {
   SpHt2CT: (SpHt2CT,7) V;
 }
 
+CPU
+
 Rover {
   HBox { +-; Title: Rover; -+ };
   "1:" (Rov1T,7) C;
@@ -65,6 +67,11 @@ Pump {
   MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) C;
 }
 
+EBX11_Tempps {
+  CPU_T: (vl_cpuT,3) C;
+  Bd_T:  (vl_bdT,3)  C;
+}
+
 { HBox { |+; {
     [PTRH];
     HBox {
@@ -85,7 +92,11 @@ Pump {
     HBox {
       [GasDeck];
       |;
-      [TMbaseB];
+      {
+        HBox{ +-; Title: "System"; -+ };
+        [EBX11_Temps];
+        [TMbase];
+      }
     }
   }; |+ };
   -
