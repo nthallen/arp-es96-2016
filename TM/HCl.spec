@@ -44,7 +44,7 @@ DISTRIB = SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc
 SCRIPT = interact
 SCRIPT = digio.dccc
 SCRIPT = idx.idx64
-SRCDIST = SSP_xform.m
+# SRCDIST = SSP_xform.m
 IGNORE = Makefile
 
 HClcol : -lsubbus
