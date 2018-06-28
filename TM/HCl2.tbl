@@ -19,8 +19,8 @@ Laser {
 GasDeck {
   HBox { +-; Title: "Gas Deck"; -+ };
   GD__T: (GD__T,7) C;
-  GasHP: (GasHP,7) PSI;
-  GasLP: (GasLP,7) PSI;
+  GasHP: (GasHP,6) PSI;
+  GasLP: (GasLP,6) PSI;
   { GDVlv:  (GDVlvS,6);
     CalGas: (CalGasVlvS,6);
     ExVlv:  (CellExVlvS,6);
@@ -33,8 +33,6 @@ SpaceHeater {
   SpHt1CT: (SpHt1CT,7) V;
   SpHt2CT: (SpHt2CT,7) V;
 }
-
-CPU
 
 Rover {
   HBox { +-; Title: Rover; -+ };
@@ -67,7 +65,7 @@ Pump {
   MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) C;
 }
 
-EBX11_Tempps {
+EBX11_Temps {
   CPU_T: (vl_cpuT,3) C;
   Bd_T:  (vl_bdT,3)  C;
 }
@@ -95,6 +93,7 @@ EBX11_Tempps {
       {
         HBox{ +-; Title: "System"; -+ };
         [EBX11_Temps];
+        -;
         [TMbase];
       }
     }
