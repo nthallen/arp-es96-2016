@@ -6,12 +6,16 @@ TM typedef double VOLTS;
 TM typedef double CELCIUS;
 TM typedef double KELVIN;
 TM typedef double TORR;
+TM typedef double PSIG { text "%6.1lf"; }
 TM typedef signed short AI16 {
   text "%7.4lf";
   convert VOLTS;
   collect x = sbrwa(x.address);
 }
   Calibration (AI16,VOLTS) { 0, 0, 32768, 4.096 }
+
+TM typedef AI16 AI16_5V { text "%7.4lf"; convert VOLTS; }
+  Calibration (AI16_5V, VOLTS) { 0, 0, 32768, 5.3333 }
 
 TM typedef AI16 AI_T30K { text "%7.2lf"; convert CELCIUS; }
 TM typedef AI16 AI_500Torr { text "%6.2lf"; convert TORR; }
@@ -22,8 +26,15 @@ Calibration (AI_500Torr, TORR) {
 
 TM typedef AI16 AI_5PSI { text "%6.2lf"; convert TORR; }
 Calibration (AI_5PSI, TORR) { 0, 0, 32768, 275.81 }
+
 TM typedef AI16 AI_15PSI { text "%7.2lf"; convert TORR; }
 Calibration (AI_15PSI, TORR) { 0, 0, 32768, 827.43 }
+
+TM typedef AI16_5V AI_2500psig { text "%6.1lf"; convert PSIG; }
+  Calibration (AI_2500psig, PSIG) { 6155, 0, 30720, 2500 }
+
+TM typedef AI16_5V AI_100psig { text "%6.1lf"; convert PSIG; }
+  Calibration (AI_100psig, PSIG) { 6155, 0, 30720, 100 }
 
 TM typedef AI16 AI_VigoT
   { text "%6.2lf"; convert KELVIN; }
@@ -38,8 +49,8 @@ TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;
 TM 1 Hz AI_VigoT IDetT; Address IDetT 0xC5A;
 
 TM 1 Hz AI_T30K ILH_T; Address ILH_T 0xC00;
-TM 1 Hz AI16 GasHP; Address GasHP 0xC80;
-TM 1 Hz AI16 GasLP; Address GasLP 0xCC0;
+TM 1 Hz AI_2500psig GasHP; Address GasHP 0xC80; /* Gas Deck High Pressure (5000 psig) */
+TM 1 Hz AI_100psig GasLP; Address GasLP 0xCC0; /* Gas Deck Low Pressure (100 psig) */
 TM 1 Hz AI_T30K GD__T; Address GD__T 0xC02;
 TM 1 Hz AI_T30K Inlt1T; Address Inlt1T 0xC42;
 TM 1 Hz AI_T30K Inlt2T; Address Inlt2T 0xC82;
