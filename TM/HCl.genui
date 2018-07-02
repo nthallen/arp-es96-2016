@@ -42,6 +42,8 @@ HOMEDIR HCl16_DATA_DIR
 1 GasHP GasDeck P
 1 GasLP GasDeck P
 1 GD__T GasDeck T
+1 GasFl GasDeck Flow
+1 GsFlSt GasDeck Flow
 1 CellExVlvS:DStat0:1 GasDeck Status
 1 GDVlvS:DStat0:2 GasDeck Status
 1 CalGasVlvS:DStat0:3 GasDeck Status

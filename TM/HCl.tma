@@ -64,6 +64,9 @@ State RingDown_Survey {
         Validate Idle;
 }
 
+#----------------------------------------------
+# States for testing pump temperatures
+#----------------------------------------------
 State PumpCycle {
   > Set Pumps Set Point 1.0
       +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
@@ -84,6 +87,11 @@ State PumpCycleLoop {
 }
 
 Partition
+#----------------------------------------------
+# Pump Temperature Watchdog
+#   Will shut off pumps if they exceed  max
+#   temp limits
+#----------------------------------------------
 %{
   #define HEAD_MAX_T 80.0
   #define ELEC_MAX_T 58.0
@@ -112,4 +120,25 @@ State Pump_On NoLog {
 
 State Pump_Over_Temp {
   Validate Pump_Off;
+}
+
+#----------------------------------------------
+# Cell Pressure Control
+#   Need:
+#     Pressure setpoint: Torr 16-bit 0-278
+#     Proportional gain: 
+#     Integral gain:
+#     PINCH_CLOSED_STEP 200
+#     PINCH_CLOSED_MARGIN 10
+#     PINCH_CLOSED_LIMIT (PINCH_CLOSED_STEP+PINCH_CLOSED_MARGIN)
+#----------------------------------------------
+Partition
+State Pinch_Idle {}
+
+State Pinch_Init {
+  # This should drive fully closed. The step count should
+  # be PINCH_CLOSED_LIMIT, which should be enough to guarantee
+  # that we are fully closed. That is unless we can drive in
+  # well past fully open. In that case, it should be greater
+  > Drive Pinch Valve Out 210
 }

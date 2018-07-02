@@ -25,6 +25,8 @@ GasDeck {
     CalGas: (CalGasVlvS,6);
     ExVlv:  (CellExVlvS,6);
   };
+  GasFl:  (GasFl,6) SLM;
+  GsFlSt: (GsFlSt,6) SLM;
 }
 
 SpaceHeater {

@@ -37,6 +37,9 @@
       set_ao(Pump1_V_St_Address, $5, 6553.6, 0., 32768.);
       set_ao(Pump2_V_St_Address, $5, 6553.6, 0., 32768.);
     }
+  : Set Gas Flow Setpoint %lf (SLM) * {
+      set_ao(GsFlSt_Address, $5, 32768./20., 0., 32768.);
+    }
   ;
 
 &ao_chan <unsigned short>
