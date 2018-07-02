@@ -25,6 +25,7 @@ f = ne_dialg(f, 'add', 1, 0, 'phcl16lpvlht', 'LHT' );
 f = ne_dialg(f, 'add', 0, 1, 'ghcl16gd', 'Gas Deck' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16gdp', 'P' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16gdt', 'T' );
+f = ne_dialg(f, 'add', 1, 0, 'phcl16gdf', 'Flow' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16gds', 'Status' );
 f = ne_dialg(f, 'add', 0, 1, 'ghcl16dacs', 'DACS' );
 f = ne_dialg(f, 'add', 1, 0, 'phcl16dacst', 'T' );

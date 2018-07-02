@@ -15,6 +15,7 @@
 #define Cell_T_St_Address 0x408
 #define SpHtTSt_Address 0x406
 #define InletTSt_Address 0x404
+#define GsFlSt_Address 0x402
 #define Laser_TEC_St_Address 0x400
 #define Pump2_mot_T_Address 0xC9C
 #define Pump2_Head_T_Address 0xCDC
@@ -39,6 +40,7 @@
 #define GD__T_Address 0xC02
 #define GasLP_Address 0xCC0
 #define GasHP_Address 0xC80
+#define GasFl_Address 0xC40
 #define ILH_T_Address 0xC00
 #define IDetT_Address 0xC5A
 #define ILTE3R3T_Address 0xC18
