@@ -1,3 +1,9 @@
   4 SSP_amp0   SSP Amp %7.1f
   4 SSP_amp1   SSP Amp %7.1f
 #  4 SSP_amp2   SSP Amp %7.1f
+  4 SSP_noise0   SSP Amp %7.1f
+  4 SSP_noise1   SSP Amp %7.1f
+#  4 SSP_noise2   SSP Amp %7.1f
+  4 SSP_noise_pct0   SSP NSR %7.1f
+  4 SSP_noise_pct1   SSP NSR %7.1f
+#  4 SSP_noise_pct2   SSP NSR %7.1f

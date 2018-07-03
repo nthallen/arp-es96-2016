@@ -8,3 +8,7 @@ if (last_SSP != SSP_Num) {
 }
 ci_sendfcmd(2, "PhRTG Datum SSP_amp %.2lf %7.1f %7.1f\n",
     dtime(), SSP_amp0, SSP_amp1);
+ci_sendfcmd(2, "PhRTG Datum SSP_noise %.2lf %7.1f %7.1f\n",
+    dtime(), SSP_noise0, SSP_noise1);
+ci_sendfcmd(2, "PhRTG Datum SSP_noise_pct %.2lf %.5f %.5f\n",
+    dtime(), SSP_noise_pct0, SSP_noise_pct1);

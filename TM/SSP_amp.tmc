@@ -2,8 +2,18 @@ TM "Receive" SSP_amp 1;
 
 TM 4 Hz SSP_Amp_t SSP_amp0;
 TM 4 Hz SSP_Amp_t SSP_amp1;
+TM 4 Hz SSP_Noise_t SSP_noise0;
+TM 4 Hz SSP_Noise_t SSP_noise1;
+TM 4 Hz SSP_NoisePct_t SSP_noise_pct0;
+TM 4 Hz SSP_NoisePct_t SSP_noise_pct1;
 
-Group SSP_amp_grp (SSP_amp0, SSP_amp1) {
+Group SSP_amp_grp (SSP_amp0, SSP_amp1,
+      SSP_noise0, SSP_noise1,
+      SSP_noise_pct0, SSP_noise_pct1) {
   SSP_amp0 = SSP_amp.amplitude[0];
   SSP_amp1 = SSP_amp.amplitude[1];
+  SSP_noise0 = SSP_amp.noise[0];
+  SSP_noise1 = SSP_amp.noise[1];
+  SSP_noise_pct0 = SSP_amp.noise_percent[0];
+  SSP_noise_pct1 = SSP_amp.noise_percent[1];
 }

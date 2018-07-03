@@ -40,7 +40,7 @@ extbase = VigoT.tmc temps_conv.tmc PTRH_conv.tmc
 swsbase = HCl.sws
 
 Module TMbase
-Module QCLI mode=amp RESET= SSPRATE=4
+Module QCLI mode=noise RESET= SSPRATE=4
 Module Telemetry
 
 DISTRIB = SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc
