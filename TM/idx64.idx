@@ -10,7 +10,7 @@ Channel 0 Pinch Valve
   Disable Zeroref
   # Swap Limits
   # Invert Step
-  # Invert Direction
+   Invert Direction
    Invert Run
   # Invert In Limit
 # Invert to disable out limit
