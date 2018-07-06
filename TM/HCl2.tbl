@@ -18,12 +18,15 @@ Laser {
 
 GasDeck {
   HBox { +-; Title: "Gas Deck"; -+ };
-  GD__T: (GD__T,7) C;
-  GasHP: (GasHP,6) PSI;
-  GasLP: (GasLP,6) PSI;
-  { GDVlv:  (GDVlvS,6);
-    CalGas: (CalGasVlvS,6);
-    ExVlv:  (CellExVlvS,6);
+  HBox {
+    { GD__T: (GD__T,7) C;
+      GasHP: (GasHP,6) PSI;
+      GasLP: (GasLP,6) PSI;
+    }; |; {
+      GD:  (GDVlvS,6);
+      Cal: (CalGasVlvS,6);
+      Exh:  (CellExVlvS,6);
+    }
   };
 }
 
@@ -79,22 +82,22 @@ EBX11_Temps {
     };
   }; |+; {
     HBox {
+      [GasDeck];
+      |+;
+      [SpaceHeater];
+    };
+    HBox {
       {
         [Pump];
         [pwrmon];
       }; |; {
         [Ambient];
-        [SpaceHeater];
-      }
-    };
-    HBox {
-      [GasDeck];
-      |;
-      {
-        HBox{ +-; Title: "System"; -+ };
-        [EBX11_Temps];
-        -;
-        [TMbase];
+        {
+          HBox{ +-; Title: "System"; -+ };
+          [EBX11_Temps];
+          -;
+          [TMbase];
+        }
       }
     }
   }; |+ };
