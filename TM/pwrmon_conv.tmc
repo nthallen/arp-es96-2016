@@ -23,9 +23,9 @@ PMTO PM1TO; invalidate PM1TO;
    I've used channel 1 here:
  */
 PMOK PmpsIS; invalidate PmpsIS;
-  { PmpsIS = (PMStat>>0)&1; Validate PmpsIS; }
+  { PmpsIS = (PM1Stat>>0)&1; Validate PmpsIS; }
 PMOK PmpsVS; invalidate PmpsVS;
-  { PmpsVS = (PMStat>>1)&1; Validate PmpsVS; }
+  { PmpsVS = (PM1Stat>>1)&1; Validate PmpsVS; }
 /*
 PMOK PmpsIS; invalidate PmpsIS;
   { PmpsIS = (PM1Stat>>2)&1; Validate PmpsIS; }
