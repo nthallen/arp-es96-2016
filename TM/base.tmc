@@ -7,7 +7,6 @@ TM typedef double CELCIUS;
 TM typedef double KELVIN;
 TM typedef double TORR;
 TM typedef double PSIG { text "%6.1lf"; }
-TM typedef double SLM { text "%6.3lf"; }
 TM typedef signed short AI16 {
   text "%7.4lf";
   convert VOLTS;
@@ -37,9 +36,6 @@ TM typedef AI16_5V AI_2500psig { text "%6.1lf"; convert PSIG; }
 TM typedef AI16_5V AI_100psig { text "%6.1lf"; convert PSIG; }
   Calibration (AI_100psig, PSIG) { 6155, 0, 30720, 100 }
 
-TM typedef AI16_5V AI_20SLM { text "%6.3lf"; convert SLM; }
-  Calibration (AI_20SLM, SLM) { 0, 0, 30720, 20 }
-
 TM typedef AI16 AI_VigoT
   { text "%6.2lf"; convert KELVIN; }
   /* Calibration in VigoT.tmc */
@@ -53,7 +49,6 @@ TM 1 Hz AI16 ILTE3R3T; Address ILTE3R3T 0xC18;
 TM 1 Hz AI_VigoT IDetT; Address IDetT 0xC5A;
 
 TM 1 Hz AI_T30K ILH_T; Address ILH_T 0xC00;
-TM 1 Hz AI_20SLM GasFl; Address GasFl 0xC40; /* Gas Deck Flow */
 TM 1 Hz AI_2500psig GasHP; Address GasHP 0xC80; /* Gas Deck High Pressure (5000 psig) */
 TM 1 Hz AI_100psig GasLP; Address GasLP 0xCC0; /* Gas Deck Low Pressure (100 psig) */
 TM 1 Hz AI_T30K GD__T; Address GD__T 0xC02;
@@ -90,11 +85,7 @@ TM typedef unsigned short AO
     65536, 10
   }
 
-TM typedef AO AO_20SLM { text "%6.3lf"; convert SLM; }
-  Calibration (AO_20SLM, SLM) { 0, 0, 32768, 20 }
-
 TM 1 Hz AO Laser_TEC_St; Address Laser_TEC_St 0x400; /* AO0 */
-TM 1 Hz AO_20SLM GsFlSt; Address GsFlSt 0x402; /* AO1 Gas Flow Setpoint GAS DECK */
 TM 1 Hz AO InletTSt; Address InletTSt 0x404; /* AO2 */
 TM 1 Hz AO SpHtTSt; Address SpHtTSt 0x406; /* AO3 */
 TM 1 Hz AO Cell_T_St; Address Cell_T_St 0x408; /* AO4 */

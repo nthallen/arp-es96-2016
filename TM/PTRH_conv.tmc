@@ -27,17 +27,3 @@ PTRHP_t ILPV_P; invalidate ILPV_P;
 { ILPV_P =
     ILPV.MS5607P(ILPV_Pa, ILPV_Pb) * 760./1013.;
   Validate ILPV_P; }
-
-PTRHT_t IDPV_T1C; invalidate IDPV_T1C;
-{ IDPV_T1C = IDPV.SHT21T(IDPV_T1);
-  Validate IDPV_T1C; }
-PTRHT_t IDPV_T2C; invalidate IDPV_T2C;
-{ IDPV_T2C = IDPV.MS5607T(IDPV_T2a, IDPV_T2b);
-  Validate IDPV_T2C; }
-SHT21RH_t IDPV_RHC; invalidate IDPV_RHC;
-{ IDPV_RHC = IDPV.SHT21RH(IDPV_RH);
-  Validate IDPV_RHC; }
-PTRHP_t IDPV_P; invalidate IDPV_P;
-{ IDPV_P =
-    IDPV.MS5607P(IDPV_Pa, IDPV_Pb) * 760./1013.;
-  Validate IDPV_P; }
