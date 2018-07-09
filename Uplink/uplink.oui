@@ -1,0 +1,17 @@
+<package> uplink
+<include> "uplink.h"
+<include> msg
+<follow> msg
+
+<opts> "p:"
+<sort>
+        -p serial port for uplink
+
+<switch>
+  case 'p':
+    uplink_port = optarg;
+    break;
+
+<package> msghdr_default
+<var>
+  char *msg_hdr_default = "Uplink";
