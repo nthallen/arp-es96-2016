@@ -3,13 +3,17 @@
 <include> msg
 <follow> msg
 
-<opts> "p:"
+<opts> "p:a:"
 <sort>
-        -p serial port for uplink
+	-p <port> serial port for uplink
+	-a XX 2-digit hex instrument address
 
 <switch>
   case 'p':
     uplink_port = optarg;
+    break;
+  case 'a':
+    uplink_addr = optarg;
     break;
 
 <package> msghdr_default
