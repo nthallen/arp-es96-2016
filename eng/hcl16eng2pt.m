@@ -10,7 +10,7 @@ if isfield(D4,'SSP_Num')
   PT.Tavg = ones(size(PT.TPT))*293; % No temp
   PT.CellP = interp1(D.Thcl16eng_1, D.Cell_P, D4.Thcl16eng_4, 'nearest');
   PT.ScanNum = cummax(D4.SSP_Num);
-  PT.QCLI_Wave = interp1(D.Thcl16eng_1, D.QCLI_Wave, D4.Thcl16eng_4, 'nearest');
+  PT.QCLI_Wave = interp1(D.Thcl16eng_1, D.QCLI_Wave, D4.Thcl16eng_4, 'nearest','extrap');
 else
   PT.TPT = D.Thcl16eng_1;
   % PT.Tavg = (D.TS4_T + D.TS5_T)/2 + 273.15;
