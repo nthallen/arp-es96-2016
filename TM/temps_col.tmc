@@ -10,6 +10,6 @@
   TS_rec_t TS_buf[6];
   subbus_mread_req *TS_req;
 %}
-TM INITFUNC TS_req = pack_mread_request(18, "480:2:4A2");
+/* TM INITFUNC TS_req = pack_mread_request(18, "480:2:4A2"); */
 /* We can move TS0 to the second string by changing the address list: */
-/* TM INITFUNC TS_req = pack_mread_request(18, "4C0:2:4C4,486:2:4A2"); */
+TM INITFUNC TS_req = pack_mread_request(18, "4C0:2:4C4,486:2:4A2");

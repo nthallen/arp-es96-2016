@@ -28,6 +28,6 @@ Group TS (
   TS1_cnt = TS_cnt(1); TS1_raw = TS_raw(1);
   TS2_cnt = TS_cnt(2); TS2_raw = TS_raw(2);
   TS3_cnt = TS_cnt(3); TS3_raw = TS_raw(3);
-  TS4_cnt = TS_cnt(4); TS4_raw = TS_raw(4);
-  TS5_cnt = TS_cnt(5); TS5_raw = TS_raw(5);
+  TS4_cnt = TS_cnt(5); TS4_raw = TS_raw(5);
+  TS5_cnt = TS_cnt(4); TS5_raw = TS_raw(4);
 }
