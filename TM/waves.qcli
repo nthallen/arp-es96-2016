@@ -7,203 +7,34 @@ QCLIConfig Standard;
 Digitizer SSP;
 Prefix QCLI;
 
-ICOS Waveform I_250_360 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 250 mA to 360 mA in 1 msec;
-}
-
-ICOS Waveform I_250_370 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 250 mA to 370 mA in 1 msec;
-}
-
-ICOS Waveform I_200_230 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 200 mA to 230 mA in 1 msec;
-}
-
-ICOS Waveform I_210_240 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 210 mA to 240 mA in 1 msec;
-}
-
-ICOS Waveform I_220_250 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 220 mA to 250 mA in 1 msec;
-}
-
-ICOS Waveform I_230_260 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 230 mA to 260 mA in 1 msec;
-}
-
-ICOS Waveform I_240_270 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 240 mA to 270 mA in 1 msec;
-}
-
-ICOS Waveform I_250_280 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 250 mA to 280 mA in 1 msec;
-}
-
-ICOS Waveform I_260_290 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 260 mA to 290 mA in 1 msec;
-}
-
-ICOS Waveform I_270_300 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 270 mA to 300 mA in 1 msec;
-}
-
-ICOS Waveform I_280_310 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 280 mA to 310 mA in 1 msec;
-}
-
 ICOS Waveform I_290_320 {
   SampleRate = 100 MHz/100;
-  Ncoadd = 900;
+  Ncoadd = 190;
   Tz = 10%;
   Ramp from 290 mA to 320 mA in 1 msec;
 }
 
-ICOS Waveform I_300_330 {
+ICOS Waveform I_300_310 {
   SampleRate = 100 MHz/100;
-  Ncoadd = 900;
+  Ncoadd = 190;
   Tz = 10%;
-  Ramp from 300 mA to 330 mA in 1 msec;
+  Ramp from 300 mA to 310 mA in 1 msec;
 }
 
-ICOS Waveform I_310_340 {
+ICOS Waveform I_285_330 {
   SampleRate = 100 MHz/100;
-  Ncoadd = 900;
+  Ncoadd = 95;
   Tz = 10%;
-  Ramp from 310 mA to 340 mA in 1 msec;
+  Ramp from 285 mA to 330 mA in 2 msec;
 }
 
-ICOS Waveform I_320_350 {
+ICOS Waveform I_250_370 {
   SampleRate = 100 MHz/100;
-  Ncoadd = 900;
+  Ncoadd = 70;
   Tz = 10%;
-  Ramp from 320 mA to 350 mA in 1 msec;
+  Ramp from 250 mA to 370 mA in 3 msec;
 }
 
-ICOS Waveform S_320_350 {
-  SampleRate = 10 MHz/100;
-  Ncoadd = 90;
-  Tz = 10%;
-  Ramp from 320 mA to 350 mA in 10 msec;
-}
-
-
-ICOS Waveform I_330_360 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 330 mA to 360 mA in 1 msec;
-}
-
-ICOS Waveform I_340_370 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 340 mA to 370 mA in 1 msec;
-}
-
-ICOS Waveform I_340_350 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 340 mA to 350 mA in 1 msec;
-}
-
-ICOS Waveform I_342_347 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 342 mA to 347 mA in 1 msec;
-}
-
-ICOS Waveform I_342_344 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 342 mA to 344 mA in 1 msec;
-}
-
-ICOS Waveform I_343_345 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 343 mA to 345 mA in 1 msec;
-}
-
-ICOS Waveform I_344_346 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 344 mA to 346 mA in 1 msec;
-}
-
-ICOS Waveform I_346_348 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 346 mA to 348 mA in 1 msec;
-}
-
-ICOS Waveform I_348_380 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 348 mA to 350 mA in 1 msec;
-}
-
-ICOS Waveform I_345_350 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 345 mA to 350 mA in 1 msec;
-}
-
-ICOS Waveform I_340_342 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 900;
-  Tz = 10%;
-  Ramp from 340 mA to 342 mA in 1 msec;
-}
-
-# Slow waveform to test fit
-ICOS Waveform I_244_258 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 300;
-  Tz = 10%;
-  Ramp from 244 mA to 258 mA in 3 msec;
-}
 
 # Ringdown Waveform RD_JPL58 {
 #   SampleRate = 100 MHz/10;
@@ -256,14 +87,14 @@ Ringdown Waveform RD_275_50MHz {
 }
 
 
-Ringdown Waveform RD_300_50MHz {
+Ringdown Waveform RD_320_50MHz {
   SampleRate = 100 MHz/2;
-  Nsample = 1000;
-  NCoadd = 10000;
+  Nsample = 2000;
+  NCoadd = 1000;
   Toff = 50 usec;
   Ton = 50 usec;
   Tpre = 2 usec;
-  I = 300 mA;
+  I = 320 mA;
 }
 
 Ringdown Waveform RD_350_10MHz {
@@ -313,15 +144,16 @@ ICOS Waveform C_300 {
 
 ICOS Waveform I_210_250 {
   SampleRate = 100 MHz/100;
-  Ncoadd = 900;
+  Ncoadd = 190;
   Tz = 10%;
   Ramp from 210 mA to 250 mA in 1 msec;
 }
 
 ICOS Waveform I_200_250 {
   SampleRate = 100 MHz/100;
-  Ncoadd = 900;
+  Ncoadd = 190;
   Tz = 10%;
   Ramp from 200 mA to 250 mA in 1 msec;
 }
+
 
