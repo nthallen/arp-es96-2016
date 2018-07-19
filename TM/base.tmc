@@ -2,6 +2,8 @@ TM typedef unsigned short UINT { text "%5d"; }
 TM typedef unsigned char UCHAR { text "%3d"; }
 TM 1 Hz UINT MFCtr, Synch;
 
+TM typedef short int PIgain { text "%6d"; }
+
 TM typedef double VOLTS;
 TM typedef double CELCIUS;
 TM typedef double KELVIN;

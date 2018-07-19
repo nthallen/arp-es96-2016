@@ -26,6 +26,7 @@ HOMEDIR HCl16_DATA_DIR
 1 Pump2_mot_T Pumps T
 
 1 Cell_P  Cell P
+1 Pset Cell P
 1 Cell_T_St Cell CT
 1 ICelCT  Cell CT
 1 Amb_P        Ambient P
@@ -52,6 +53,9 @@ HOMEDIR HCl16_DATA_DIR
 
 1 vl_cpuT DACS T
 1 vl_bdT  DACS T
+
+1 Pgain TMbase Gains
+1 Igain TMbase Gains
 
 1 QCLI_Reset:DStat0:0 QCLI_stat status
 1 SWStat TMbase SWStat

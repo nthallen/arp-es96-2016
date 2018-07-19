@@ -68,6 +68,12 @@ Pump {
   MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) C;
 }
 
+Gains {
+  HBox { +-; Title: "Gains"; -+ };
+  P: (Pgain,6);
+  I: (Igain,6);
+}
+
 EBX11_Temps {
   CPU_T: (vl_cpuT,3) C;
   Bd_T:  (vl_bdT,3)  C;
@@ -78,7 +84,9 @@ EBX11_Temps {
     HBox {
       [Inlet];
       |;
-      [Rover];
+      { [Rover];
+        [Gains];
+      }
     };
   }; |+; {
     HBox {

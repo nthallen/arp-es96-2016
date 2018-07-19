@@ -5,5 +5,11 @@ SWS_PUMP_OFF  8   Pump Off: Validate Pump_Off; break;
 SWS_CAL_SEQ   9   Calibrate: Validate Calibrate; break;
 SWS_CAL_RD   10   RingDown: Validate RingDown_Survey; break;
 SWS_PUMP_CYCLE 11 Pump Cycle: Validate PumpCycle; break;
+
+SWS_PCTRL_ENA 20  Cell Pressure Regulate: Validate Pinch_Init; break;
+SWS_PCTRL_DIS 21  Cell Pressure Deregulate: Validate Pinch_Idle; break;
 SWS_TIME_WARP 254 Time Warp: break;
 
+SW_Variable: <short int,PIgain> Pgain Cell Proportional Gain
+SW_Variable: <short int,PIgain> Igain Cell Integral Gain
+SW_Variable: <short int,PIgain> Pset Cell Pressure

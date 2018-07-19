@@ -123,17 +123,63 @@ State Pump_Over_Temp {
 #     Pressure setpoint: Torr 16-bit 0-278
 #     Proportional gain: 
 #     Integral gain:
-#     PINCH_CLOSED_STEP 200
-#     PINCH_CLOSED_MARGIN 10
-#     PINCH_CLOSED_LIMIT (PINCH_CLOSED_STEP+PINCH_CLOSED_MARGIN)
+#     PINCH_MAX_DRIVE 1150
+#        From fully closed drive limit to fully open drive limit
+#     PINCH_FULL_OPEN 300
+#        From fully closed drive limit to maximum flow. This is PINCH_HIGH_LIMIT
+#     PINCH_CLOSED_STEP 100
+#        From fully closed until first flow [80-120 even]
+#     PINCH_CLOSED_INIT 350
+#        How far to drive to ensure hard stop
+#     PINCH_LOW_LIMIT 40
+#        Under normal operation, do not drive below here
+#        If we get here and are still above pressure, reinit
+#     Speed: 107 Hz
 #----------------------------------------------
 Partition
 State Pinch_Idle {}
 
 State Pinch_Init {
-  # This should drive fully closed. The step count should
-  # be PINCH_CLOSED_LIMIT, which should be enough to guarantee
-  # that we are fully closed. That is unless we can drive in
-  # well past fully open. In that case, it should be greater
-  > Drive Pinch Valve Out 210
+  > Preset Pinch Valve to 400
+  > Drive Pinch Valve In 350
+  Hold Until (PVStat & 0x8) or 1;
+  Hold Until ((PVStat & 0x8) == 0) or 4;
+  > Preset Pinch Valve to 0
+  Validate Pinch_Valve_Close;
+}
+
+State Pinch_Valve_Close {
+  > Drive Pinch Valve to 50
+  Hold Until (PVStep == 50 && (PVStat & 0x8) == 0) or 4;
+  Validate Pinch_Valve_Closed;
+}
+
+State Pinch_Valve_Closed {
+  { if (Pset > 0) { Validate Pinch_Valve_Reg_Init; }}
+}
+
+%{
+  double Iterm = 0;
+%}
+
+State Pinch_Valve_Reg_Init {
+  { Iterm = 0; }
+  Validate Pinch_Valve_Reg;
+}
+
+State Pinch_Valve_Reg {
+  { if (Pset <= 0) { Validate Pinch_Valve_Close; } }
+  { double err, Pterm, PVst;
+    int PVsti;
+    err = (convert(Cell_P) - Pset)/convert(Amb_P);
+    Pterm = Pgain * err;
+    Iterm += Igain * err;
+    PVst = Pterm + Iterm + 80;
+    if (PVst > 300) PVst = 300;
+    if (PVst < 40) PVst = 40;
+    PVsti = floor(PVst+0.5);
+    if (PVsti != PVStep) {
+      ci_sendfcmd(2, "Drive Pinch Valve to %d\n", PVsti);
+    }
+  }
 }
