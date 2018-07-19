@@ -140,11 +140,11 @@ Partition
 State Pinch_Idle {}
 
 State Pinch_Init {
-  > Preset Pinch Valve to 400
+  > Preset Pinch Valve Position to 400
   > Drive Pinch Valve In 350
   Hold Until (PVStat & 0x8) or 1;
   Hold Until ((PVStat & 0x8) == 0) or 4;
-  > Preset Pinch Valve to 0
+  > Preset Pinch Valve Position to 0
   Validate Pinch_Valve_Close;
 }
 
