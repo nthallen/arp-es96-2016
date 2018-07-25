@@ -1,98 +1,160 @@
+# -----------------------------------------------------------------------------
+# Partition 1: Main Line
+# -----------------------------------------------------------------------------
 State Init {
   > Telemetry Start
-  Validate Idle;
+  depending on (FLOAT) { Validate Startup; }
+  depending on (TERMINATE) { Validate Shutdown; }
 }
 
-State Idle {
+State Startup {
+  depending on (TERMINATE) { Validate Shutdown; }
+      > Set Pumps Set Point 1.0
+      Validate QCL_SelectRingandRun;
+  +30 Validate QCL_SelectICOSandRun;
+      Validate Record;
 }
 
-State Calibrate {
-#   +3  > Select QCLI Waveform I_342_347
-#   +2  > SSP Start
-#   +2  > QCLI Run
-#+2:00  > SSP Stop
-#   +1  > QCLI Stop
-#   +3  > Select QCLI Waveform I_344_346
-#   +2  > SSP Start
-#   +2  > QCLI Run
-#+2:00  > SSP Stop
-#   +1  > QCLI Stop
-
-#   +3  > Select QCLI Waveform I_340_350
-#   +2  > SSP Start
-#   +2  > QCLI Run
-#+2:00  > SSP Stop
-#   +1  > QCLI Stop
-#   +3  > Select QCLI Waveform I_342_347
-#   +2  > SSP Start
-#   +2  > QCLI Run
-#+2:00  > SSP Stop
-#   +1  > QCLI Stop
-#   +3  > Select QCLI Waveform I_344_346
-#   +2  > SSP Start
-#   +2  > QCLI Run
-#+2:00  > SSP Stop
-#   +1  > QCLI Stop
-
-        Validate RingDown_Survey;
+State Record {
+  depending on (TERMINATE) { Validate Record_End; }
+  +60 Validate Calibrate;
+      Hold until valid (VALVEDOWN);
+      Hold until valid (VALVEDOWNPAUSE);
+      Validate Record;
 }
 
-State RingDown_Survey {
-    +3  > Select QCLI Waveform RD_350_10MHz
-    +2  > SSP Start
-    +2  > QCLI Run
- +1:00  > SSP Stop
-    +1  > QCLI Stop
-
-    +3  > Select QCLI Waveform RD_320_50MHz
-    +2  > SSP Start
-    +2  > QCLI Run
- +1:00  > SSP Stop
-    +1  > QCLI Stop
-
-    +3  > Select QCLI Waveform RD_250_50MHz
-    +2  > SSP Start
-    +2  > QCLI Run
- +1:00  > SSP Stop
-    +1  > QCLI Stop
-
-        Validate Idle;
+State Record_End {
+      Validate QCL_SelectRingandRun;
+  +30 Validate Shutdown;
 }
 
-#----------------------------------------------
-# States for testing pump temperatures
-#----------------------------------------------
-State PumpCycle {
-  > Set Pumps Set Point 1.0
-      +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
-      +1 > SWStat Set 30
-      +1 Hold until (SWStat == SWS_TIME_WARP) or 59;
-      +1 > SWStat Set 0
-   Validate PumpCycleLoop;
+State Shutdown {
+    Hold Until Valid (Laser_is_Shutdown) or 10;
+    > Command Gas Deck Valve Off
+ +2 > Command Cal Gas Valve Off
+ +2 > Command Exhaust Valve Off
+    Validate Pump_Off;
+    # Open pinch valve or not?
+ +4 > Quit
 }
 
-State PumpCycleLoop {
-  { if (Pump1_V_St == 0) Validate Idle; }
-     +1 { ci_sendfcmd(0, "Set Pumps Set Point %.2lf\n",
-            convert(Pump1_V_St)+0.25); }
-     +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
-     +1 > SWStat Set 30
-  +1:00 > SWStat Set 0
-        Validate PumpCycleLoop;
-}
-
+# -----------------------------------------------------------------------------
+# Partition 2: Altitude
+# -----------------------------------------------------------------------------
 Partition
+
+# This partition converts pressure (altitude) into states 
+# (ON_GROUND, OFF_GROUND).
+# The threshold pressures each have two values - one for 
+# the flight up and the other for the flight down.
+# This provides hysteresis and prevents bouncing.  
+# We are effectively using two switches: 
+# 	ON_GROUND and IN_AIR (BELOW CLOUDS = ABOVE CLOUDS)
+# REF: 650 torr ~5000 ft
+
+%{ /* Altitude definitions in Torr */
+    double P_ground_up = 650.;
+    double P_ground_dn = 700.;
+    double P_strat_up = 200.;
+    double P_trop_dn = 300;
+    // double P_clouds_up = 280.;
+    // double P_clouds_dn = 370.;
+    int using_swp = 0;
+    double climb_rate = 0;
+%}
+
+State ON_GROUND {
+  { using_swp = 0; }
+  { if (using_swp || (Amb_P > 0 && Amb_P < P_ground_up))
+      Validate OFF_GROUND;
+  }
+}
+
+State OFF_GROUND {
+  { if ((using_swp == SWS_LAND) ||
+        (!using_swp &&
+          (convert(Amb_P) > P_ground_dn ||
+           climb_rate < -30.0))) {
+      Validate TERMINATE;
+    }
+  }
+  { if ((using_swp == SWS_HIGH) ||
+        (!using_swp && convert(Amb_P) < P_strat_up)) {
+      Validate STRATOSPHERE;
+    }
+  }
+}
+
+State STRATOSPHERE {
+  { if ((using_swp == SWS_LAND) ||
+        (!using_swp && convert(Amb_P) > P_trop_dn)) {
+      Validate TERMINATE;
+    }
+  }
+  { if ((using_swp == SWS_FLOAT) ||
+        (!using_swp && climb_rate < 1.0)) {
+      Validate FLOAT;
+    }
+  }
+}
+
+State AT_FLOAT {
+  { if ((using_swp == SWS_LAND) ||
+        (!using_swp &&
+          (convert(Amb_P) > P_trop_dn)) {
+      Validate TERMINATE;
+    }
+  }
+  { if ((using_swp == SWS_DESCENT) ||
+        (!using_swp && climb_rate < -2.0)) {
+      Validate VALVEDOWN;
+    }
+  }
+}
+
+State VALVEDOWN {
+  { if ((using_swp == SWS_LAND) ||
+        (!using_swp &&
+          (convert(Amb_P) > P_trop_dn))) {
+      Validate TERMINATE;
+    }
+  }
+  { if ((using_swp == SWS_DESCENTPAUSE) ||
+        (!using_swp && climb_rate > -1.0)) {
+      Validate VALVEDOWNPAUSE;
+    }
+  }
+}
+
+State VALVEDOWNPAUSE {
+  { if ((using_swp == SWS_LAND) ||
+        (!using_swp && convert(Amb_P) > P_trop_dn)) {
+      Validate TERMINATE;
+    }
+  }
+  { if ((using_swp == SWS_DESCENT) ||
+        (!using_swp && climb_rate < -2.0)) {
+      Validate VALVEDOWN;
+    }
+  }
+}
+
+State TERMINATE {
+}
+
 #----------------------------------------------
-# Pump Temperature Watchdog
+# Partition 3: Pump Temperature Watchdog
 #   Will shut off pumps if they exceed  max
 #   temp limits
 #----------------------------------------------
+Partition
 %{
   #define HEAD_MAX_T 80.0
   #define ELEC_MAX_T 58.0
 %}
 
 State Pump_Off {
+      > _Algo P3 1
       > Set Pumps Set Point 0
    +2 { if (Pump1_V_St > 0 || Pump2_V_St > 0)
           Validate Pump_On;
@@ -100,6 +162,7 @@ State Pump_Off {
 }
 
 State Pump_On NoLog {
+    > _Algo P3 2
     Hold until (convert(Pump1_Head_T) > HEAD_MAX_T ||
           convert(Pump2_Head_T) > HEAD_MAX_T ||
           convert(Pump1_mot_T) > ELEC_MAX_T ||
@@ -114,11 +177,21 @@ State Pump_On NoLog {
 }
 
 State Pump_Over_Temp {
+  { nl_error(2, "Pumps over temp: P1H:%.1lf P1M:%.1lf P2H:%.1lf P2M:%.1lf C",
+                convert(Pump1_Head_T), convert(Pump1_mot_T),
+                convert(Pump2_Head_T), convert(Pump2_mot_T));
+  }
+  > Set Pumps Set Point 0
+  > _Algo P3 3
+  Hold until (convert(Pump1_Head_T) <= HEAD_MAX_T &&
+        convert(Pump2_Head_T) <= HEAD_MAX_T &&
+        convert(Pump1_mot_T) <= ELEC_MAX_T &&
+        convert(Pump2_mot_T) <= ELEC_MAX_T);
   Validate Pump_Off;
 }
 
 #----------------------------------------------
-# Cell Pressure Control
+# Partition 4: Cell Pressure Control
 #   Need:
 #     Pressure setpoint: Torr 16-bit 0-278
 #     Proportional gain: 
@@ -183,4 +256,320 @@ State Pinch_Valve_Reg {
       ci_sendfcmd(2, "Drive Pinch Valve to %d\n", PVsti);
     }
   }
+}
+
+#----------------------------------------------------------------
+# Partition 5: Laser Control 3.3um QCL ICOS
+#----------------------------------------------------------------
+Partition
+
+%{
+  int num_QCL_recovers = 0;
+  #define LOW_CURRENT 0.02
+  #define QCL_TEMP_LIMIT 0.75 /* 25C */
+  /* We don't have a commandable LTE setpoint, so we'll use the
+     one-variable version. */
+  /* #define QCL_TEMP_OK(x,y) (x > QCL_TEMP_LIMIT && x > y) */
+  #define QCL_TEMP_OK(x) (x > QCL_TEMP_LIMIT)
+  #define LPV_TEMP_OK(x,y) (x > (y-0.1))
+%}
+# Laser Starting and Stopping
+
+State QCL_Init {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+  +1  > SSP Stop
+# The following statement was to allow for a lab mode that does not start automatically
+# We have no I/O Switches, so we'll probably need to just key off of Amb_P
+#     Hold until ((IOSwS&3) == 3);
+      Hold until (convert(Amb_P) < 500);
+  +1  Validate QCLI_Stop;
+      Hold until valid (QCLI_Idle);
+      Validate QCL_Idle;
+}
+
+State QCL_Idle {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    Validate QCLI_Idle;
+}
+
+State QCL_Start {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    Hold until ( SSP_Status == SSP_STATUS_READY )
+    or 2 else {
+      nl_error( 2, "SSP Not Ready in QCL_Start" );
+      Validate QCL_SSP_Recover;
+    }
+    Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) ) or 20
+    else Validate QCL_Out_TSpec;
+    Hold until valid (QCLI_Idle) or 2
+    else Validate QCLI_Stop;
+    Hold until valid (QCLI_Idle);
+ +1 > SSP Start
+    Hold until ( SSP_Status == SSP_STATUS_ARMED )
+    or 20 else {
+      nl_error( 2, "Not Armed in QCL_Start" );
+      Validate QCL_SSP_Recover;
+    }
+    Validate QCLI_Run;
+    Hold until (SSP_Status == SSP_STATUS_TRIG &&
+                convert(Laser_I) > LOW_CURRENT) or 20
+    else Validate QCL_SSP_Recover;
+    { num_QCL_recovers = 0; }
+    Validate QCL_Watch;
+}
+
+State QCL_Watch NoLog {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    { if ( SSP_Status == SSP_STATUS_READY ) {
+        nl_error( 2, "SSP Went Ready Spontaneously" );
+        Validate QCL_SSP_Recover;
+      }
+    }
+    hold until ( SSP_Status != SSP_STATUS_TRIG ||
+         !QCL_TEMP_OK(convert(ILTE3R3T)) ||
+         convert(Laser_I) <= LOW_CURRENT );
+    hold until ( SSP_Status == SSP_STATUS_TRIG &&
+         QCL_TEMP_OK(convert(ILTE3R3T)) &&
+         convert(Laser_I) >= LOW_CURRENT) or 2
+    else Validate QCL_Watch_Recover;
+    Validate QCL_Watch;
+}
+
+State QCL_Watch_Recover NoLog {
+  { if (!QCL_TEMP_OK(convert(ILTE3R3T)))
+      Validate QCL_Out_TSpec;
+    else if (convert(Laser_I) <= LOW_CURRENT)
+      Validate QCL_Out_Spec;
+    else if (SSP_Status != SSP_STATUS_TRIG)
+      Validate QCL_SSP_Recover;
+    else Validate QCL_Watch;
+  }
+}
+
+State QCL_SSP_Recover NoLog {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    { if ( ++num_QCL_recovers > 20 ) {
+        nl_error( 2, "Exceeded num_QCL_recovers. Trying reset" );
+        num_QCL_recovers = 0;
+        Validate QCL_SSP_QCLI_Reset;
+      }
+    }
+    > SSP Stop
+ +2 Validate QCLI_Stop;
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
+    else Validate QCL_SSP_Not_Talking;
+    Hold until valid (QCLI_Idle);
+    Validate QCL_Start;
+}
+
+State QCL_SSP_QCLI_Reset {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    Validate QCLI_Stop_Reset;
+    depending on (QCLI_Fail) { Validate QCL_Fail; }
+    depending on (QCLI_Idle) { Validate QCL_Start; }
+}
+
+State QCL_SSP_Not_Talking {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    > SSP Stop
+    { if ( ++num_QCL_recovers > 20 ) Validate QCL_SSP_Fail; }
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 10
+    else Validate QCL_SSP_Not_Talking;
+    Validate QCL_SSP_Recover;
+}
+
+State QCLI_SSP_Fail {
+    { nl_error( 2, "SSP Has Failed" ); }
+    depending on (Shutdown) { Validate QCL_Is_Shutdown; }
+}
+
+State QCL_Fail {
+    { nl_error( 2, "QCLI Has Failed" ); }
+    > SSP Stop
+    depending on (Shutdown) { Validate QCL_Is_Shutdown; }
+}
+
+State QCL_Shutdown {
+    > SSP Stop
+ +1 Validate QCLI_Stop;
+    Hold until valid (QCLI_Idle) or 20;
+    > Log Laser QCL Has Shutdown
+    Validate QCL_Is_Shutdown;
+}
+
+State QCL_Is_Shutdown {}
+
+State QCL_Out_Spec {
+    > SSP Stop
+    Validate QCLI_Stop;
+    Hold until Valid (QCLI_Idle);
+    Validate QCL_Start;
+}
+
+State QCL_Out_TSpec {
+    > SSP Stop
+    Validate QCLI_Stop;
+    Hold until valid (QCLI_Idle);
+    Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)));
+    # Do we need to check the environment temp here?
+    # && LPV_TEMP_OK(convert(LPVCT),convert(LPVTSt)) );
+ +10 Validate QCL_Start;
+}
+
+State QCL_Stop {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    > SSP Stop
+ +1 Validate QCLI_Stop;
+    Hold until valid (QCLI_Idle);
+    Validate QCL_Idle;
+}
+
+#Running Waveforms
+
+State QCL_SelectICOSandRun {
+      Depending on (Shutdown) { Validate QCL_Shutdown; }
+      > SSP Stop
+      Hold until ( SSP_Status == SSP_STATUS_READY ) or 5
+      else { nl_error( 2, "Not Ready in QCL_SelectICOSandRun" ); }
+      Hold until valid (QCLI_Idle) or 2
+      else Validate QCLI_Stop;
+      Hold until valid (QCLI_Idle);
+#  +1 > Set Laser TEC Temp Setpoint 1.1
+#  +1 > Laser TEC On
+      Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
+ +10 > Select Waveform I_290_320
+  +3 Validate QCL_Start;
+}
+
+State QCL_SelectRingandRun {
+    Depending on (Shutdown) { Validate QCL_Shutdown; }
+    > SSP Stop
+    Hold until ( SSP_Status == SSP_STATUS_READY ) or 5
+    else { nl_error( 2, "SSP Not Ready in QCL_SelectRingandRun" ); }
+    Hold until valid (QCLI_Idle) or 2
+    else Validate QCLI_Stop;
+    Hold until valid (QCLI_Idle);
+#+1 > Set Laser TEC Temp Setpoint 1.1
+#+1 > Laser TEC On
+    Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
+ +10 > Select Waveform RD_320_50MHz
+#+1 > SSP Set NSample 3500
+ +2 Validate QCL_Start;
+}
+
+#----------------------------------------------------------------
+# Partition 6: QCLI Control
+#----------------------------------------------------------------
+Partition
+
+%{
+  int num_QCLI_recovers = 0;
+%}
+
+State QCLI_Idle {}
+
+State QCLI_Run {
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    else > QCLI clear errors
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    else Validate QCLI_Start_Reset;
+    > QCLI Run
+    { num_QCLI_recovers = 0;
+      Validate QCLI_Running;
+    }
+}
+
+State QCLI_Running {
+}
+
+State QCLI_Start_Reset {
+    { if ( ++num_QCLI_recovers > 20 ) {
+        nl_error( 2,"Exceeded num_QCLI_recovers in QCLI_Start_Reset" );
+        Validate QCLI_Fail;
+      }
+    }
+    > QCLI Reset On
+ +1 > QCLI Reset Off
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    else Validate QCLI_Start_Reset;
+    { num_QCLI_recovers = 0;
+      ci_sendfcmd( 0, "Select Waveform Number %d\n", QCLI_Wave );
+      Validate QCLI_Run;
+    }
+}
+
+State QCLI_Stop {
+      > QCLI Stop
+      Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+      else > QCLI clear errors
+      Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+      else Validate QCLI_Stop_Reset;
+      Validate QCLI_Idle;
+}
+
+State QCLI_Stop_Reset {
+    { if ( ++num_QCLI_recovers > 20 ) {
+        nl_error( 2,"Exceeded num_QCLI_recovers in QCLI_Stop_Reset" );
+        Validate QCLI_Fail;
+      }
+    }
+    > QCLI Reset On
+ +1 > QCLI Reset Off
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    else > QCLI clear errors
+    Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
+    else Validate QCLI_Stop_Reset;
+    { num_QCLI_recovers = 0;
+      ci_sendfcmd( 0, "Select Waveform Number %d\n", QCLI_Wave );
+      Validate QCLI_Idle;
+    }
+}
+
+State QCLI_Fail {
+    { nl_error( 2, "QCLI Not Responding" );
+      num_QCLI_recovers = 0;
+    }
+#+2:00 Validate QCLI_Stop_Reset;
+}
+
+State QCLI_Shutdown {}
+
+#----------------------------------------------
+# Partition 7: Calibration
+#----------------------------------------------
+State Calibrate_Idle {
+    > Command Gas Deck Valve Off
+ +2 > Command Cal Gas Valve Off
+}
+
+State Calibrate {
+      > Command Cal Gas Valve On
+      > Command Gas Deck Valve On
+  +30 Validate Calibrate_Idle;
+}
+
+#----------------------------------------------
+# Partition 7: Testing pump temperatures
+#----------------------------------------------
+Partition
+
+State PumpIdle {}
+
+State PumpCycle {
+  > Set Pumps Set Point 1.0
+      +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
+      +1 > SWStat Set 30
+      +1 Hold until (SWStat == SWS_TIME_WARP) or 59;
+      +1 > SWStat Set 0
+   Validate PumpCycleLoop;
+}
+
+State PumpCycleLoop {
+  { if (Pump1_V_St == 0) Validate PumpIdle; }
+     +1 { ci_sendfcmd(0, "Set Pumps Set Point %.2lf\n",
+            convert(Pump1_V_St)+0.25); }
+     +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
+     +1 > SWStat Set 30
+  +1:00 > SWStat Set 0
+        Validate PumpCycleLoop;
 }

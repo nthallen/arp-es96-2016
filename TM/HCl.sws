@@ -8,7 +8,17 @@ SWS_PUMP_CYCLE 11 Pump Cycle: Validate PumpCycle; break;
 
 SWS_PCTRL_ENA 20  Cell Pressure Regulate: Validate Pinch_Init; break;
 SWS_PCTRL_DIS 21  Cell Pressure Deregulate: Validate Pinch_Idle; break;
+
+SWS_QCL_SELICOS 30	Laser Select ICOS and Run:
+                          Validate QCL_SelectICOSandRun; break;
+SWS_QCL_SELRING 31  Laser Select Ring and Run:
+                          Validate QCL_SelectRingandRun; break;
+SWS_QCL_START 	32  Laser Start: Validate QCL_Start; break;
+SWS_QCL_STOP	  33  Laser Stop: Validate QCL_Stop; break;
+SWS_QCL_DISABLE 34  Laser Disable: Validate QCL_Idle; break;
+
 SWS_TIME_WARP 254 Time Warp: break;
+SWS_SHUTDOWN  255 Shutdown: Validate Shutdown; break;
 
 SW_Variable: <short int,PIgain> Pgain Cell Proportional Gain
   : Set %d { $0 = $2; }
@@ -16,3 +26,5 @@ SW_Variable: <short int,PIgain> Igain Cell Integral Gain
   : Set %d { $0 = $2; }
 SW_Variable: <short int,PIgain> Pset Cell Pressure
   : Set Point %d (Torr) { $0 = $3; }
+SW_Variable: <unsigned char,AlgoP3> Algo P3
+  : %d { $0 = 1; }
