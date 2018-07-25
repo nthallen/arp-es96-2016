@@ -1,5 +1,6 @@
 TM typedef unsigned short UINT { text "%5d"; }
 TM typedef unsigned char UCHAR { text "%3d"; }
+TM typedef unsigned char Algo_t { text "%3d"; }
 TM 1 Hz UINT MFCtr, Synch;
 
 TM typedef short int PIgain { text "%6d"; }

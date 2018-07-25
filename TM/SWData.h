@@ -7,16 +7,27 @@ typedef struct __attribute__((__packed__)) {
   short int Pgain;
   short int Igain;
   short int Pset;
+  unsigned char AlgoP3;
 } SWData_t;
 extern SWData_t SWData;
 
 #define SWS_PUMP_ON 7
 #define SWS_PUMP_OFF 8
 #define SWS_CAL_SEQ 9
-#define SWS_CAL_RD 10
 #define SWS_PUMP_CYCLE 11
 #define SWS_PCTRL_ENA 20
 #define SWS_PCTRL_DIS 21
+#define SWS_QCL_SELICOS 30
+#define SWS_QCL_SELRING 31
+#define SWS_QCL_START 32
+#define SWS_QCL_STOP 33
+#define SWS_QCL_DISABLE 34
+#define SWS_DROP 35
+#define SWS_STRATO 36
+#define SWS_FLOAT 37
+#define SWS_DESCENT 38
+#define SWS_DESCENTPAUSE 39
 #define SWS_TIME_WARP 254
+#define SWS_SHUTDOWN 255
 
 #endif

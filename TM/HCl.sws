@@ -3,7 +3,6 @@ SW_Variable: SWStat
 SWS_PUMP_ON   7   Pump On: Validate Pump_On; break;
 SWS_PUMP_OFF  8   Pump Off: Validate Pump_Off; break;
 SWS_CAL_SEQ   9   Calibrate: Validate Calibrate; break;
-SWS_CAL_RD   10   RingDown: Validate RingDown_Survey; break;
 SWS_PUMP_CYCLE 11 Pump Cycle: Validate PumpCycle; break;
 
 SWS_PCTRL_ENA 20  Cell Pressure Regulate: Validate Pinch_Init; break;
@@ -17,6 +16,12 @@ SWS_QCL_START 	32  Laser Start: Validate QCL_Start; break;
 SWS_QCL_STOP	  33  Laser Stop: Validate QCL_Stop; break;
 SWS_QCL_DISABLE 34  Laser Disable: Validate QCL_Idle; break;
 
+SWS_DROP 35 Altitude Drop: using_swp = SWS_DROP; break;
+SWS_STRATO 36 Altitude Stratosphere: using_swp = SWS_STRATO; break;
+SWS_FLOAT 37 Altitude Float: using_swp = SWS_FLOAT; break;
+SWS_DESCENT 38 Altitude Descent: using_swp = SWS_DESCENT; break;
+SWS_DESCENTPAUSE 39 Altitude Pause: using_swp = SWS_DESCENTPAUSE; break;
+
 SWS_TIME_WARP 254 Time Warp: break;
 SWS_SHUTDOWN  255 Shutdown: Validate Shutdown; break;
 
@@ -26,5 +31,5 @@ SW_Variable: <short int,PIgain> Igain Cell Integral Gain
   : Set %d { $0 = $2; }
 SW_Variable: <short int,PIgain> Pset Cell Pressure
   : Set Point %d (Torr) { $0 = $3; }
-SW_Variable: <unsigned char,AlgoP3> Algo P3
+SW_Variable: <unsigned char,Algo_t> AlgoP3 Algo P3
   : %d { $0 = 1; }

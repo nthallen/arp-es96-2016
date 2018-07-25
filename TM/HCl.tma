@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 State Init {
   > Telemetry Start
-  depending on (FLOAT) { Validate Startup; }
+  depending on (AT_FLOAT) { Validate Startup; }
   depending on (TERMINATE) { Validate Shutdown; }
 }
 
@@ -29,7 +29,7 @@ State Record_End {
 }
 
 State Shutdown {
-    Hold Until Valid (Laser_is_Shutdown) or 10;
+    Hold Until Valid (QCL_is_Shutdown) or 10;
     > Command Gas Deck Valve Off
  +2 > Command Cal Gas Valve Off
  +2 > Command Exhaust Valve Off
@@ -71,14 +71,14 @@ State ON_GROUND {
 }
 
 State OFF_GROUND {
-  { if ((using_swp == SWS_LAND) ||
+  { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
           (convert(Amb_P) > P_ground_dn ||
            climb_rate < -30.0))) {
       Validate TERMINATE;
     }
   }
-  { if ((using_swp == SWS_HIGH) ||
+  { if ((using_swp == SWS_STRATO) ||
         (!using_swp && convert(Amb_P) < P_strat_up)) {
       Validate STRATOSPHERE;
     }
@@ -86,22 +86,22 @@ State OFF_GROUND {
 }
 
 State STRATOSPHERE {
-  { if ((using_swp == SWS_LAND) ||
+  { if ((using_swp == SWS_DROP) ||
         (!using_swp && convert(Amb_P) > P_trop_dn)) {
       Validate TERMINATE;
     }
   }
   { if ((using_swp == SWS_FLOAT) ||
         (!using_swp && climb_rate < 1.0)) {
-      Validate FLOAT;
+      Validate AT_FLOAT;
     }
   }
 }
 
 State AT_FLOAT {
-  { if ((using_swp == SWS_LAND) ||
+  { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
-          (convert(Amb_P) > P_trop_dn)) {
+          (convert(Amb_P) > P_trop_dn))) {
       Validate TERMINATE;
     }
   }
@@ -113,7 +113,7 @@ State AT_FLOAT {
 }
 
 State VALVEDOWN {
-  { if ((using_swp == SWS_LAND) ||
+  { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
           (convert(Amb_P) > P_trop_dn))) {
       Validate TERMINATE;
@@ -127,7 +127,7 @@ State VALVEDOWN {
 }
 
 State VALVEDOWNPAUSE {
-  { if ((using_swp == SWS_LAND) ||
+  { if ((using_swp == SWS_DROP) ||
         (!using_swp && convert(Amb_P) > P_trop_dn)) {
       Validate TERMINATE;
     }
@@ -378,7 +378,7 @@ State QCL_SSP_Not_Talking {
     Validate QCL_SSP_Recover;
 }
 
-State QCLI_SSP_Fail {
+State QCL_SSP_Fail {
     { nl_error( 2, "SSP Has Failed" ); }
     depending on (Shutdown) { Validate QCL_Is_Shutdown; }
 }
@@ -437,7 +437,7 @@ State QCL_SelectICOSandRun {
 #  +1 > Set Laser TEC Temp Setpoint 1.1
 #  +1 > Laser TEC On
       Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
- +10 > Select Waveform I_290_320
+ +10 > Select QCLI Waveform I_290_320
   +3 Validate QCL_Start;
 }
 
@@ -452,7 +452,7 @@ State QCL_SelectRingandRun {
 #+1 > Set Laser TEC Temp Setpoint 1.1
 #+1 > Laser TEC On
     Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
- +10 > Select Waveform RD_320_50MHz
+ +10 > Select QCLI Waveform RD_320_50MHz
 #+1 > SSP Set NSample 3500
  +2 Validate QCL_Start;
 }
@@ -488,12 +488,12 @@ State QCLI_Start_Reset {
         Validate QCLI_Fail;
       }
     }
-    > QCLI Reset On
- +1 > QCLI Reset Off
+    > Command QCLI Reset On
+ +1 > Command QCLI Reset Off
     Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
     else Validate QCLI_Start_Reset;
     { num_QCLI_recovers = 0;
-      ci_sendfcmd( 0, "Select Waveform Number %d\n", QCLI_Wave );
+      ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave );
       Validate QCLI_Run;
     }
 }
@@ -513,14 +513,14 @@ State QCLI_Stop_Reset {
         Validate QCLI_Fail;
       }
     }
-    > QCLI Reset On
- +1 > QCLI Reset Off
+    > Command QCLI Reset On
+ +1 > Command QCLI Reset Off
     Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
     else > QCLI clear errors
     Hold until ( (QCLI_s & 0x3938) == 0 ) or 2
     else Validate QCLI_Stop_Reset;
     { num_QCLI_recovers = 0;
-      ci_sendfcmd( 0, "Select Waveform Number %d\n", QCLI_Wave );
+      ci_sendfcmd( 0, "Select QCLI Waveform Number %d\n", QCLI_Wave );
       Validate QCLI_Idle;
     }
 }
