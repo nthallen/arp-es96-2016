@@ -2,14 +2,15 @@
 <include> "uplink_rcvr.h"
 <include> msg
 <follow> msg
+<include> cic
 
-<opts> "p:a:"
+<opts> "P:a:"
 <sort>
-	-p <port> serial port for uplink
+	-P <port> serial port for uplink
 	-a XX 2-digit hex instrument address: only for test
 
 <switch>
-  case 'p':
+  case 'P':
     uplink_port = optarg;
     break;
   case 'a':
