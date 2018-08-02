@@ -7,34 +7,26 @@ QCLIConfig Standard;
 Digitizer SSP;
 Prefix QCLI;
 
-ICOS Waveform I_290_320 {
+ICOS Waveform I_290_340_2ms1Hz {
   SampleRate = 100 MHz/100;
-  Ncoadd = 190;
+  Ncoadd = 412;
   Tz = 10%;
-  Ramp from 290 mA to 320 mA in 1 msec;
+  Ramp from 290 mA to 340 mA in 2 msec;
 }
 
-ICOS Waveform I_300_310 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 190;
+ICOS Waveform I_290_340_4ms1Hz {
+  SampleRate = 100 MHz/200;
+  Ncoadd = 214;
   Tz = 10%;
-  Ramp from 300 mA to 310 mA in 1 msec;
+  Ramp from 290 mA to 340 mA in 4 msec;
 }
 
-ICOS Waveform I_285_330 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 95;
+ICOS Waveform I_290_340_6ms1Hz {
+  SampleRate = 100 MHz/200;
+  Ncoadd = 143;
   Tz = 10%;
-  Ramp from 285 mA to 330 mA in 2 msec;
+  Ramp from 290 mA to 340 mA in 6 msec;
 }
-
-ICOS Waveform I_250_370 {
-  SampleRate = 100 MHz/100;
-  Ncoadd = 70;
-  Tz = 10%;
-  Ramp from 250 mA to 370 mA in 3 msec;
-}
-
 
 # Ringdown Waveform RD_JPL58 {
 #   SampleRate = 100 MHz/10;

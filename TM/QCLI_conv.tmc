@@ -8,7 +8,7 @@ ok_fail_t QCLI_cmderr; invalidate QCLI_cmderr;
   { QCLI_cmderr = (QCLI_s & 0x2000) ? 1 : 0;
     validate QCLI_cmderr; }
 qcli_off_on_t QCLI_laser; invalidate QCLI_laser;
-  { QCLI_laser = (QCLI_s & 0x1000) ? 0 : 1;
+  { QCLI_laser = (QCLI_s & 0x1000) ? 1 : 0;
     validate QCLI_laser; }
 ok_fail_t QCLI_cordte; invalidate QCLI_cordte;
   { QCLI_cordte = (QCLI_s & 0x0800) ? 1 : 0;

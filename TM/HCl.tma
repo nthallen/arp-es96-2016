@@ -437,7 +437,7 @@ State QCL_SelectICOSandRun {
 #  +1 > Set Laser TEC Temp Setpoint 1.1
 #  +1 > Laser TEC On
       Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
- +10 > Select QCLI Waveform I_290_320
+ +10 > Select QCLI Waveform I_290_340_4ms1Hz
   +3 Validate QCL_Start;
 }
 
