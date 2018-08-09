@@ -34,9 +34,9 @@ State Shutdown {
     Hold Until Valid (QCL_is_Shutdown) or 10;
     > Command Gas Deck Valve Off
  +2 > Command Cal Gas Valve Off
- +2 > Command Exhaust Valve Off
-    Validate Pump_Off;
-    # Open pinch valve or not?
+ +2 > Pumps Set Point 0
+    Hold until valid (Pumps_Off) or 10;
+    Hold until valid (Pinch_Valve_Opened) or 40;
  +4 > Quit
 }
 
@@ -157,6 +157,7 @@ State TERMINATE {
 Partition
 
 %{
+  #include <stdint.h>
   uint8_t Pump_Status = 0;
   uint8_t Pump1_Temp = 1;
   uint8_t Pump2_Temp = 1;
@@ -173,7 +174,7 @@ Partition
   #define PUMPS_ON 0x1
   #define PUMP1_OK_TO_RUN 0x2
   #define PUMP2_OK_TO_RUN 0x4
-  #define PUMP_OK_TO_RUN (PUMP1_OK_TO_RUN|PUMP2_OK_TO_RUN)
+  #define PUMPS_OK_TO_RUN (PUMP1_OK_TO_RUN|PUMP2_OK_TO_RUN)
   
   #define PUMP_SP_STEP 0.25
 
@@ -217,7 +218,7 @@ State Pumps_Off {
       > _Algo P3 1
       > Set Pump 1 Set Point 0
       > Set Pump 2 Set Point 0
-      Hold until (Pumps_V_St > 0 && (Pump_Status & PUMPS_OK_TO_RUN) != 0);
+      Hold until (PumpsSP > 0 && (Pump_Status & PUMPS_OK_TO_RUN) != 0);
       Validate Pumps_Start;
 }
 
@@ -232,7 +233,7 @@ State Pumps_Start_Prep {
 State Pumps_Start {
       { Pump_Status |= PUMPS_ON; }
       depending on (1 Hz) {
-        if (Pumps_V_St == 0 || (Pump_Status & PUMPS_OK_TO_RUN) == 0) {
+        if (PumpsSP == 0 || (Pump_Status & PUMPS_OK_TO_RUN) == 0) {
           Validate Pumps_Stop_Prep;
         }
       }
@@ -246,11 +247,11 @@ State Pumps_Start {
 
 State Pumps_Running {
       > _Algo P3 4
-      { if (!(Pump_Status & PUMPS_OK_TO_RUN) {
+      { if (!(Pump_Status & PUMPS_OK_TO_RUN)) {
           Validate Pumps_Stop_Prep;
-        } else if (!(Pump_Status & PUMP1_OK_TO_RUN) {
+        } else if (!(Pump_Status & PUMP1_OK_TO_RUN)) {
           Validate Pumps_P1_Off;
-        } else if (!(Pump_Status & PUMP2_OK_TO_RUN) {
+        } else if (!(Pump_Status & PUMP2_OK_TO_RUN)) {
           Validate Pumps_P2_Off;
         }
       }
@@ -313,21 +314,21 @@ State Pump1_Temp_Falling NoLog {
 depending on (1 Hz) {
   if (Pump1_Temp == PUMP_T_COLD)
     Pump1_SP_target = 2.0;
-  else if (Pumps_Status & PUMPS_ON) {
+  else if (Pump_Status & PUMPS_ON) {
     switch (Pump1_Temp) {
       case PUMP_T_COLD:
         Pump1_SP_target = 2.0;
         break;
       case PUMP_T_OK:
-        Pump1_SP_target = Pumps_V_St;
+        Pump1_SP_target = convert(PumpsSP);
         break;
       case PUMP_T_WARM:
-        Pump1_SP_target = Pumps_V_St * 0.75;
+        Pump1_SP_target = convert(PumpsSP) * 0.75;
         break;
       case PUMP_T_HOT:
         Pump1_SP_target = 0.0;
         break;
-      default: Pump1_SP_target = 0; break; // Should never happen
+      default: Pump1_SP_target = 0; break; /* Should never happen */
     }
   } else Pump1_SP_target = 0;
 }
@@ -422,21 +423,21 @@ State Pump2_Temp_Falling NoLog {
 depending on (1 Hz) {
   if (Pump2_Temp == PUMP_T_COLD)
     Pump2_SP_target = 2.0;
-  else if (Pumps_Status & PUMPS_ON) {
+  else if (Pump_Status & PUMPS_ON) {
     switch (Pump2_Temp) {
       case PUMP_T_COLD:
         Pump2_SP_target = 2.0;
         break;
       case PUMP_T_OK:
-        Pump2_SP_target = Pumps_V_St;
+        Pump2_SP_target = convert(PumpsSP);
         break;
       case PUMP_T_WARM:
-        Pump2_SP_target = Pumps_V_St * 0.75;
+        Pump2_SP_target = convert(PumpsSP) * 0.75;
         break;
       case PUMP_T_HOT:
         Pump2_SP_target = 0.0;
         break;
-      default: Pump2_SP_target = 0; break; // Should never happen
+      default: Pump2_SP_target = 0; break; /* Should never happen */
     }
   } else Pump2_SP_target = 0;
 }
@@ -514,9 +515,8 @@ State Pump2_Turn_Off {
 #     Speed: 107 Hz
 #----------------------------------------------
 Partition
-State Pinch_Idle {}
-
 State Pinch_Init {
+  +20
   > Preset Pinch Valve Position to 400
   > Drive Pinch Valve In 350
   Hold Until (PVStat & 0x8) or 1;
@@ -526,6 +526,7 @@ State Pinch_Init {
 }
 
 State Pinch_Valve_Close {
+  > Stop Pinch Valve
   > Drive Pinch Valve to 50
   Hold Until (PVStep == 50 && (PVStat & 0x8) == 0) or 4;
   Validate Pinch_Valve_Closed;
@@ -533,6 +534,9 @@ State Pinch_Valve_Close {
 
 State Pinch_Valve_Closed {
   { if (Pset > 0) { Validate Pinch_Valve_Reg_Init; }}
+  depending on (Pumps_Off) {
+    Validate Pinch_Valve_Open;
+  }
 }
 
 %{
@@ -546,6 +550,7 @@ State Pinch_Valve_Reg_Init {
 
 State Pinch_Valve_Reg {
   { if (Pset <= 0) { Validate Pinch_Valve_Close; } }
+  depending on (Pumps_Off) { Validate Pinch_Valve_Open; }
   { double err, Pterm, PVst;
     int PVsti;
     err = (convert(Cell_P) - Pset)/convert(Amb_P);
@@ -563,12 +568,18 @@ State Pinch_Valve_Reg {
 }
 
 State Pinch_Valve_Open {
-  > Scan Pinch Valve to 300 by 1
+  depending on (Pumps_Start_Prep) { Validate Pinch_Valve_Close; }
+  > Scan Pinch Valve to 150 by 1
+  > Scan Pinch Valve to 300 by 2
   Hold Until (PVStep == 300 && (PVStat & 0x8) == 0) or 1:20;
   Validate Pinch_Valve_Opened;
 }
 
-State Pinch_Valve_Opened {}
+State Pinch_Valve_Opened {
+  depending on (Pumps_Start_Prep) { Validate Pinch_Valve_Close; }
+}
+
+State Pinch_Idle {}
 
 #----------------------------------------------------------------
 # Partition 5: Laser Control 3.3um QCL ICOS

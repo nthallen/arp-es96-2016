@@ -7,14 +7,15 @@ typedef struct __attribute__((__packed__)) {
   short int Pgain;
   short int Igain;
   short int Pset;
+  unsigned char AlgoP2;
   unsigned char AlgoP3;
+  unsigned char AlgoP5;
+  unsigned char AlgoP7;
+  unsigned char PumpsSP;
 } SWData_t;
 extern SWData_t SWData;
 
-#define SWS_PUMP_ON 7
-#define SWS_PUMP_OFF 8
 #define SWS_CAL_SEQ 9
-#define SWS_PUMP_CYCLE 11
 #define SWS_PCTRL_ENA 20
 #define SWS_PCTRL_DIS 21
 #define SWS_QCL_SELICOS 30

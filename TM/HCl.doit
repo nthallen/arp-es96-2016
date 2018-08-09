@@ -1,18 +1,21 @@
 display HCldisp
-serin hcl_serin -a -d /dev/serusb2
+serin hcl_serin -a -d /dev/serusb1
 
 client HClclt
 client [SI] hclsiclt
 
 server [SI] cmd/server hclsisrvr
 server [!SI&!screen] cmd/server playbacksrvr
+server [SI] - uplink -d /dev/serusb2
 server [!screen] - phrtg -P $ddir
 
 extraction [!screen] HClrtgext
 extraction [!SI&!screen] ssprtgext
-extraction [PB] scantmext -d /dev/serusb1 -p $ddir/SSP
+# Uncomment the following line for testing via playback
+# extraction [PB] scantmext -d /dev/serusb1 -p $ddir/SSP
 extraction [SI] lgr -N `mlf_find LOG`
 
 memo
 batchfile interact
+# This is not sophisticated enough at the moment:
 # phrtg

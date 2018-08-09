@@ -1,9 +1,8 @@
 SW_Variable: SWStat
 
-SWS_PUMP_ON   7   Pump On: Validate Pump_On; break;
-SWS_PUMP_OFF  8   Pump Off: Validate Pump_Off; break;
+#SWS_PUMP_ON   7   Pump On: Validate Pump_On; break;
+#SWS_PUMP_OFF  8   Pump Off: Validate Pump_Off; break;
 SWS_CAL_SEQ   9   Calibrate: Validate Calibrate; break;
-SWS_PUMP_CYCLE 11 Pump Cycle: Validate PumpCycle; break;
 
 SWS_PCTRL_ENA 20  Cell Pressure Regulate: Validate Pinch_Init; break;
 SWS_PCTRL_DIS 21  Cell Pressure Deregulate: Validate Pinch_Idle; break;
@@ -32,16 +31,12 @@ SW_Variable: <short int,PIgain> Igain Cell Integral Gain
 SW_Variable: <short int,PIgain> Pset Cell Pressure
   : Set Point %d (Torr) { $0 = $3; }
 SW_Variable: <unsigned char,Algo_t> AlgoP2 Algo P2
-  : %d { $0 = 1; }
+  : %d { $0 = $1; }
 SW_Variable: <unsigned char,Algo_t> AlgoP3 Algo P3
-  : %d { $0 = 1; }
+  : %d { $0 = $1; }
 SW_Variable: <unsigned char,Algo_t> AlgoP5 Algo P5
-  : %d { $0 = 1; }
+  : %d { $0 = $1; }
 SW_Variable: <unsigned char,Algo_t> AlgoP7 Algo P7
-  : %d { $0 = 1; }
+  : %d { $0 = $1; }
 SW_Variable: <unsigned char,PumpSet_t> PumpsSP Pumps
-  : Set Point %lf (V) {
-        if ($3 > 5) $0 = 250;
-        else if ($3 < 0) $0 = 0;
-        else $0 = $3 * 50;
-      }
+  : Set Point %lf (V) { $0 = ($3 > 5) ? 250 : ($3 < 0) ? 0 : $3*50; }

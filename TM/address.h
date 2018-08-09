@@ -15,8 +15,8 @@
 #define DStat0_Address 0x80A
 #define Pump2_V_St_Address 0x412
 #define Pump1_V_St_Address 0x410
-#define Cell_T_St_Address 0x408
-#define SpHtTSt_Address 0x406
+#define Cell_T_St_Address 0x406
+#define SpHtTSt_Address 0x408
 #define InletTSt_Address 0x404
 #define Laser_TEC_St_Address 0x400
 #define Pump2_mot_T_Address 0xC9C
@@ -24,9 +24,9 @@
 #define Pump1_mot_T_Address 0xC5C
 #define Pump1_Head_T_Address 0xC1C
 #define SpHt2CT_Address 0xCAA
-#define SpHt1CT_Address 0xC8A
+#define SpHt1CT_Address 0xC0A
 #define InletCT_Address 0xC4A
-#define ICelCT_Address 0xC0A
+#define ICelCT_Address 0xC8A
 #define Rov6T_Address 0xC46
 #define Rov5T_Address 0xC08
 #define Rov4T_Address 0xC86
