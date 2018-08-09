@@ -76,9 +76,9 @@ TM 1 Hz AI_T30K Rov4T; Address Rov4T 0xC86;
 TM 1 Hz AI_T30K Rov5T; Address Rov5T 0xC08;
 TM 1 Hz AI_T30K Rov6T; Address Rov6T 0xC46;
 
-TM 1 Hz AI16 ICelCT ; Address ICelCT 0xC0A;
+TM 1 Hz AI16 ICelCT ; Address ICelCT 0xC8A; /* was 0xC0A; swapped with SpHt1CT */
 TM 1 Hz AI16 InletCT ; Address InletCT 0xC4A;
-TM 1 Hz AI16 SpHt1CT ; Address SpHt1CT 0xC8A;
+TM 1 Hz AI16 SpHt1CT ; Address SpHt1CT 0xC0A; /* was 0xC8A; swapped with ICelCT */
 TM 1 Hz AI16 SpHt2CT ; Address SpHt2CT 0xCAA;
 
 /* TM 1 Hz AI16 Sp6AI; Address Sp6AI 0xC6E; */
@@ -98,8 +98,8 @@ TM typedef unsigned short AO
 
 TM 1 Hz AO Laser_TEC_St; Address Laser_TEC_St 0x400; /* AO0 */
 TM 1 Hz AO InletTSt; Address InletTSt 0x404; /* AO2 */
-TM 1 Hz AO SpHtTSt; Address SpHtTSt 0x406; /* AO3 */
-TM 1 Hz AO Cell_T_St; Address Cell_T_St 0x408; /* AO4 */
+TM 1 Hz AO SpHtTSt; Address SpHtTSt 0x408; /* AO4: was AO3 */
+TM 1 Hz AO Cell_T_St; Address Cell_T_St 0x406; /* AO3: was AO4 */
 TM 1 Hz AO Pump1_V_St; Address Pump1_V_St 0x410; /* AO8 */
 TM 1 Hz AO Pump2_V_St; Address Pump2_V_St 0x412; /* AO9 */
 /* TM 1 Hz AI16 IHeatBlkTSt; Address IHeatBlkTSt 0x40A; */
