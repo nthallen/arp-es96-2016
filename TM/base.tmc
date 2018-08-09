@@ -110,3 +110,6 @@ TM typedef unsigned char DStat {
   collect x = sbrba(x.address);
 }
 TM 1 Hz DStat DStat0; Address DStat0 0x80A;
+
+TM typedef unsigned char PumpSet_t { convert VOLTS; text "%.2lf"; }
+Calibration (PumpSet_t, VOLTS) { 0, 0, 250, 5 }

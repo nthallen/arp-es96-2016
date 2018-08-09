@@ -2,14 +2,16 @@
 # Partition 1: Main Line
 # -----------------------------------------------------------------------------
 State Init {
-  > Telemetry Start
-  depending on (AT_FLOAT) { Validate Startup; }
-  depending on (TERMINATE) { Validate Shutdown; }
+      > Telemetry Start
+  +3  > Cell Proportional Gain Set -300
+      > Cell Integral Gain Set -300
+      depending on (AT_FLOAT) { Validate Startup; }
+      depending on (TERMINATE) { Validate Shutdown; }
 }
 
 State Startup {
   depending on (TERMINATE) { Validate Shutdown; }
-      > Set Pumps Set Point 1.0
+      > Pumps Set Point 2.0
       Validate QCL_SelectRingandRun;
   +30 Validate QCL_SelectICOSandRun;
       Validate Record;
@@ -64,6 +66,7 @@ Partition
 %}
 
 State ON_GROUND {
+  > _Algo P2 1
   { using_swp = 0; }
   { if (using_swp || (Amb_P > 0 && Amb_P < P_ground_up))
       Validate OFF_GROUND;
@@ -71,6 +74,7 @@ State ON_GROUND {
 }
 
 State OFF_GROUND {
+  > _Algo P2 2
   { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
           (convert(Amb_P) > P_ground_dn ||
@@ -86,6 +90,7 @@ State OFF_GROUND {
 }
 
 State STRATOSPHERE {
+  > _Algo P2 3
   { if ((using_swp == SWS_DROP) ||
         (!using_swp && convert(Amb_P) > P_trop_dn)) {
       Validate TERMINATE;
@@ -99,6 +104,7 @@ State STRATOSPHERE {
 }
 
 State AT_FLOAT {
+  > _Algo P2 4
   { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
           (convert(Amb_P) > P_trop_dn))) {
@@ -113,6 +119,7 @@ State AT_FLOAT {
 }
 
 State VALVEDOWN {
+  > _Algo P2 5
   { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
           (convert(Amb_P) > P_trop_dn))) {
@@ -127,6 +134,7 @@ State VALVEDOWN {
 }
 
 State VALVEDOWNPAUSE {
+  > _Algo P2 6
   { if ((using_swp == SWS_DROP) ||
         (!using_swp && convert(Amb_P) > P_trop_dn)) {
       Validate TERMINATE;
@@ -140,58 +148,354 @@ State VALVEDOWNPAUSE {
 }
 
 State TERMINATE {
+  > _Algo P2 7
 }
 
 #----------------------------------------------
-# Partition 3: Pump Temperature Watchdog
-#   Will shut off pumps if they exceed  max
-#   temp limits
+# Partition 3: Pumpkin Troll supervisor
 #----------------------------------------------
 Partition
+
 %{
-  #define HEAD_MAX_T 80.0
-  #define ELEC_MAX_T 58.0
+  uint8_t Pump_Status = 0;
+  uint8_t Pump1_Temp = 1;
+  uint8_t Pump2_Temp = 1;
+  double Pump1_SP_target = 0;
+  double Pump2_SP_target = 0;
+  
+  #define PUMP_T_COLD 0
+  #define PUMP_T_OK 1
+  #define PUMP_T_WARM 2
+  #define PUMP_T_HOT 3
+  #define T_RISING 0
+  #define T_FALLING 1
+  
+  #define PUMPS_ON 0x1
+  #define PUMP1_OK_TO_RUN 0x2
+  #define PUMP2_OK_TO_RUN 0x4
+  #define PUMP_OK_TO_RUN (PUMP1_OK_TO_RUN|PUMP2_OK_TO_RUN)
+  
+  #define PUMP_SP_STEP 0.25
+
+  /* HeadTtransRising identifies temperatures that indicate a transition
+     up to the next warmer Pump*_Temp region or down into the next lower
+     region.
+     HeadTtrans[PUMP_T_COLD][0] is the limit when temps are rising to
+     transition from PUMP_T_COLD to PUMP_T_OK.
+     HeadTtrans[PUMP_T_COLD][1] is the limit when temps are falling to
+     transition from PUMP_T_OK down into PUMP_T_COLD
+  */
+  static double HeadTtrans[3][2] = {
+    -15.0, -20.0, // Transitions between PUMP_T_COLD and PUMP_T_OK
+     70.0,  65.0, // Transitions between PUMP_T_OK and PUMP_T_WARM
+     80.0,  75.0  // Transitions between PUMP_T_WARM and PUMP_T_HOT
+  };
+  
+  /* ElecTtrans identifies temperatures for the electronics temp */
+  static double ElecTtrans[3][2] = {
+    -15.0, -20.0, // Transitions between PUMP_T_COLD and PUMP_T_OK
+     60.0,  55.0, // Transitions between PUMP_T_OK and PUMP_T_WARM
+     70.0,  65.0  // Transitions between PUMP_T_WARM and PUMP_T_HOT
+  };
+
+  static double is_rising(double HeadT, double ElecT, int region) {
+    return region < PUMP_T_HOT &&
+      (HeadT > HeadTtrans[region][T_RISING] ||
+       ElecT > ElecTtrans[region][T_RISING]);
+  }
+
+  static double is_falling(double HeadT, double ElecT, int region) {
+    return region > PUMP_T_COLD &&
+      (HeadT < HeadTtrans[region-1][T_FALLING] ||
+       ElecT < ElecTtrans[region-1][T_FALLING]);
+  }
+  
 %}
 
-State Pump_Off {
+State Pumps_Off {
+      { Pump_Status &= ~PUMPS_ON; }
       > _Algo P3 1
-      > Set Pumps Set Point 0
-   +2 { if (Pump1_V_St > 0 || Pump2_V_St > 0)
-          Validate Pump_On;
+      > Set Pump 1 Set Point 0
+      > Set Pump 2 Set Point 0
+      Hold until (Pumps_V_St > 0 && (Pump_Status & PUMPS_OK_TO_RUN) != 0);
+      Validate Pumps_Start;
+}
+
+State Pumps_Start_Prep {
+      > _Algo P3 2
+      > Command Exhaust Valve Off
+      # Pinch valve algo must key off this state to initialize control
+      Hold until valid (Pinch_Valve_Closed) or 5;
+      Validate Pumps_Start;
+}
+
+State Pumps_Start {
+      { Pump_Status |= PUMPS_ON; }
+      depending on (1 Hz) {
+        if (Pumps_V_St == 0 || (Pump_Status & PUMPS_OK_TO_RUN) == 0) {
+          Validate Pumps_Stop_Prep;
+        }
+      }
+      > _Algo P3 3
+      Hold until (RPM1 > 0 || RPM2 > 0);
+      Hold until (RPM1 > 0 && RPM2 > 0) or 20;
+      Hold until (convert(Cell_P) < 3.0) or 10;
+      > Command Exhaust Valve On
+      Validate Pumps_Running;
+}
+
+State Pumps_Running {
+      > _Algo P3 4
+      { if (!(Pump_Status & PUMPS_OK_TO_RUN) {
+          Validate Pumps_Stop_Prep;
+        } else if (!(Pump_Status & PUMP1_OK_TO_RUN) {
+          Validate Pumps_P1_Off;
+        } else if (!(Pump_Status & PUMP2_OK_TO_RUN) {
+          Validate Pumps_P2_Off;
+        }
       }
 }
 
-State Pump_On NoLog {
-    > _Algo P3 2
-    Hold until (convert(Pump1_Head_T) > HEAD_MAX_T ||
-          convert(Pump2_Head_T) > HEAD_MAX_T ||
-          convert(Pump1_mot_T) > ELEC_MAX_T ||
-          convert(Pump2_mot_T) > ELEC_MAX_T);
-    Hold until (convert(Pump1_Head_T) <= HEAD_MAX_T &&
-          convert(Pump2_Head_T) <= HEAD_MAX_T &&
-          convert(Pump1_mot_T) <= ELEC_MAX_T &&
-          convert(Pump2_mot_T) <= ELEC_MAX_T)
-          or 5
-    else Validate Pump_Over_Temp;
-    +1 Validate Pump_On;
+State Pumps_P1_Off {
+  > _Algo P3 5
+  > Set Pump 1 Set Point 0
+  Validate Pumps_Running;
 }
 
-State Pump_Over_Temp {
-  { nl_error(2, "Pumps over temp: P1H:%.1lf P1M:%.1lf P2H:%.1lf P2M:%.1lf C",
-                convert(Pump1_Head_T), convert(Pump1_mot_T),
-                convert(Pump2_Head_T), convert(Pump2_mot_T));
-  }
-  > Set Pumps Set Point 0
-  > _Algo P3 3
-  Hold until (convert(Pump1_Head_T) <= HEAD_MAX_T &&
-        convert(Pump2_Head_T) <= HEAD_MAX_T &&
-        convert(Pump1_mot_T) <= ELEC_MAX_T &&
-        convert(Pump2_mot_T) <= ELEC_MAX_T);
-  Validate Pump_Off;
+State Pumps_P2_Off {
+  > _Algo P3 6
+  > Set Pump 2 Set Point 0
+  Validate Pumps_Running;
+}
+
+State Pumps_Stop_Prep {
+      > _Algo P3 7
+      > Command Exhaust Valve Off
+   +3 Validate Pumps_Off;
 }
 
 #----------------------------------------------
-# Partition 4: Cell Pressure Control
+# Partition 4: Pump 1 Temperature Monitor
+#----------------------------------------------
+Partition
+
+State Pump1_Temp_Monitor NoLog {
+      { if (is_rising(convert(Pump1_Head_t), convert(Pump1_mot_T),
+                Pump1_Temp)) {
+          Validate Pump1_Temp_Rising;
+        } else if (is_falling(convert(Pump1_Head_t), convert(Pump1_mot_T),
+                Pump1_Temp)) {
+          Validate Pump1_Temp_Falling;
+        }
+      }
+}
+
+State Pump1_Temp_Rising NoLog {
+      Hold until (!is_rising(convert(Pump1_Head_t),
+        convert(Pump1_mot_T), Pump1_Temp))
+        or 5
+      else {
+        ++Pump1_Temp;
+      }
+   +1 Validate Pump1_Temp_Monitor;
+}
+
+State Pump1_Temp_Falling NoLog {
+      Hold until (!is_falling(convert(Pump1_Head_t),
+        convert(Pump1_mot_T), Pump1_Temp))
+        or 5
+      else {
+        --Pump1_Temp;
+      }
+   +1 Validate Pump1_Temp_Monitor;
+}
+
+depending on (1 Hz) {
+  if (Pump1_Temp == PUMP_T_COLD)
+    Pump1_SP_target = 2.0;
+  else if (Pumps_Status & PUMPS_ON) {
+    switch (Pump1_Temp) {
+      case PUMP_T_COLD:
+        Pump1_SP_target = 2.0;
+        break;
+      case PUMP_T_OK:
+        Pump1_SP_target = Pumps_V_St;
+        break;
+      case PUMP_T_WARM:
+        Pump1_SP_target = Pumps_V_St * 0.75;
+        break;
+      case PUMP_T_HOT:
+        Pump1_SP_target = 0.0;
+        break;
+      default: Pump1_SP_target = 0; break; // Should never happen
+    }
+  } else Pump1_SP_target = 0;
+}
+
+#----------------------------------------------
+# Partition 5: Pump 1 Operation
+#   Will turn on pump if below -20C
+#   Will shut off pump if max temps exceeded
+#----------------------------------------------
+Partition
+State Pump1_Off {
+      > _Algo P5 1
+      depending on (1 Hz) {
+        if (Pump1_SP_target > 0) {
+          Validate Pump1_On;
+        }
+        if (Pump1_Temp == PUMP_T_HOT) {
+          Pump_Status &= PUMP1_OK_TO_RUN;
+        } else {
+          Pump_Status |= PUMP1_OK_TO_RUN;
+        }
+      }
+}
+
+State Pump1_On NoLog {
+    depending on (1 Hz) {
+      if (Pump1_SP_target == 0) {
+        Validate Pump1_Turn_Off;
+      }
+    }
+    { double SP, newSP;
+      SP = convert(Pump1_V_St);
+      newSP = 0;
+      if (SP > Pump1_SP_target + .01) {
+        newSP = Pump1_SP_target;
+      } else if (SP < Pump1_SP_target - .01) {
+        newSP = SP + PUMP_SP_STEP;
+        if (newSP > Pump1_SP_target)
+          newSP = Pump1_SP_target;
+      }
+      if (newSP > 0)
+        ci_sendfcmd(0, "Set Pump 1 Set Point %.2lf\n", newSP);
+    }
+
+    > _Algo P5 2
+ +5 { if (RPM1 == 0) { Validate Pump1_Turn_Off; } }
+}
+
+State Pump1_Turn_Off {
+  { Pump_Status &= ~PUMP1_OK_TO_RUN; }
+  > _Algo P5 3
+  Hold until (Pump1_V_St == 0);
+  Validate Pump1_Off;
+}
+
+#----------------------------------------------
+# Partition 6: Pump 2 Temperature Monitor
+#----------------------------------------------
+Partition
+
+State Pump2_Temp_Monitor NoLog {
+      { if (is_rising(convert(Pump2_Head_t), convert(Pump2_mot_T),
+                Pump2_Temp)) {
+          Validate Pump2_Temp_Rising;
+        } else if (is_falling(convert(Pump2_Head_t), convert(Pump2_mot_T),
+                Pump2_Temp)) {
+          Validate Pump2_Temp_Falling;
+        }
+      }
+}
+
+State Pump2_Temp_Rising NoLog {
+      Hold until (!is_rising(convert(Pump2_Head_t),
+        convert(Pump2_mot_T), Pump2_Temp))
+        or 5
+      else {
+        ++Pump2_Temp;
+      }
+   +1 Validate Pump2_Temp_Monitor;
+}
+
+State Pump2_Temp_Falling NoLog {
+      Hold until (!is_falling(convert(Pump2_Head_t),
+        convert(Pump2_mot_T), Pump2_Temp))
+        or 5
+      else {
+        --Pump2_Temp;
+      }
+   +1 Validate Pump2_Temp_Monitor;
+}
+
+depending on (1 Hz) {
+  if (Pump2_Temp == PUMP_T_COLD)
+    Pump2_SP_target = 2.0;
+  else if (Pumps_Status & PUMPS_ON) {
+    switch (Pump2_Temp) {
+      case PUMP_T_COLD:
+        Pump2_SP_target = 2.0;
+        break;
+      case PUMP_T_OK:
+        Pump2_SP_target = Pumps_V_St;
+        break;
+      case PUMP_T_WARM:
+        Pump2_SP_target = Pumps_V_St * 0.75;
+        break;
+      case PUMP_T_HOT:
+        Pump2_SP_target = 0.0;
+        break;
+      default: Pump2_SP_target = 0; break; // Should never happen
+    }
+  } else Pump2_SP_target = 0;
+}
+
+#----------------------------------------------
+# Partition 7: Pump 2 Operation
+#   Will turn on pump if below -20C
+#   Will shut off pump if max temps exceeded
+#----------------------------------------------
+Partition
+State Pump2_Off {
+      > _Algo P7 1
+      depending on (1 Hz) {
+        if (Pump2_SP_target > 0) {
+          Validate Pump2_On;
+        }
+        if (Pump2_Temp == PUMP_T_HOT) {
+          Pump_Status &= PUMP2_OK_TO_RUN;
+        } else {
+          Pump_Status |= PUMP2_OK_TO_RUN;
+        }
+      }
+}
+
+State Pump2_On NoLog {
+    depending on (1 Hz) {
+      if (Pump2_SP_target == 0) {
+        Validate Pump2_Turn_Off;
+      }
+    }
+    { double SP, newSP;
+      SP = convert(Pump2_V_St);
+      newSP = 0;
+      if (SP > Pump2_SP_target + .01) {
+        newSP = Pump2_SP_target;
+      } else if (SP < Pump2_SP_target - .01) {
+        newSP = SP + PUMP_SP_STEP;
+        if (newSP > Pump2_SP_target)
+          newSP = Pump2_SP_target;
+      }
+      if (newSP > 0)
+        ci_sendfcmd(0, "Set Pump 2 Set Point %.2lf\n", newSP);
+    }
+
+    > _Algo P7 2
+ +5 { if (RPM1 == 0) { Validate Pump2_Turn_Off; } }
+}
+
+State Pump2_Turn_Off {
+  { Pump_Status &= ~PUMP2_OK_TO_RUN; }
+  > _Algo P7 3
+  Hold until (Pump2_V_St == 0);
+  Validate Pump2_Off;
+}
+
+#----------------------------------------------
+# Partition 8: Cell Pressure Control
+#   Note: After change tube types, need to recalibrate 'closed' position,
+#         and possibly the full open position.
 #   Need:
 #     Pressure setpoint: Torr 16-bit 0-278
 #     Proportional gain: 
@@ -257,6 +561,14 @@ State Pinch_Valve_Reg {
     }
   }
 }
+
+State Pinch_Valve_Open {
+  > Scan Pinch Valve to 300 by 1
+  Hold Until (PVStep == 300 && (PVStat & 0x8) == 0) or 1:20;
+  Validate Pinch_Valve_Opened;
+}
+
+State Pinch_Valve_Opened {}
 
 #----------------------------------------------------------------
 # Partition 5: Laser Control 3.3um QCL ICOS
@@ -546,30 +858,4 @@ State Calibrate {
       > Command Cal Gas Valve On
       > Command Gas Deck Valve On
   +30 Validate Calibrate_Idle;
-}
-
-#----------------------------------------------
-# Partition 7: Testing pump temperatures
-#----------------------------------------------
-Partition
-
-State PumpIdle {}
-
-State PumpCycle {
-  > Set Pumps Set Point 1.0
-      +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
-      +1 > SWStat Set 30
-      +1 Hold until (SWStat == SWS_TIME_WARP) or 59;
-      +1 > SWStat Set 0
-   Validate PumpCycleLoop;
-}
-
-State PumpCycleLoop {
-  { if (Pump1_V_St == 0) Validate PumpIdle; }
-     +1 { ci_sendfcmd(0, "Set Pumps Set Point %.2lf\n",
-            convert(Pump1_V_St)+0.25); }
-     +1 Hold until (SWStat == SWS_TIME_WARP) or 9:59;
-     +1 > SWStat Set 30
-  +1:00 > SWStat Set 0
-        Validate PumpCycleLoop;
 }
