@@ -219,7 +219,7 @@ State Pumps_Off {
       > Set Pump 1 Set Point 0
       > Set Pump 2 Set Point 0
       Hold until (PumpsSP > 0 && (Pump_Status & PUMPS_OK_TO_RUN) != 0);
-      Validate Pumps_Start;
+      Validate Pumps_Start_Prep;
 }
 
 State Pumps_Start_Prep {

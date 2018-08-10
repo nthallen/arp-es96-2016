@@ -44,6 +44,7 @@ Module QCLI mode=noise RESET= SSPRATE=4
 Module Telemetry
 
 DISTRIB = SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc
+DISTRIB = ../Uplink/uplink
 SCRIPT = interact
 SCRIPT = digio.dccc
 SCRIPT = idx.idx64
