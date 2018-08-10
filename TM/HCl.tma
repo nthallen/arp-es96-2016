@@ -247,7 +247,8 @@ State Pumps_Start {
 
 State Pumps_Running {
       > _Algo P3 4
-      { if (!(Pump_Status & PUMPS_OK_TO_RUN)) {
+      depending on (1 Hz) {
+        if (!(Pump_Status & PUMPS_OK_TO_RUN)) {
           Validate Pumps_Stop_Prep;
         } else if (!(Pump_Status & PUMP1_OK_TO_RUN)) {
           Validate Pumps_P1_Off;
@@ -582,7 +583,7 @@ State Pinch_Valve_Opened {
 State Pinch_Idle {}
 
 #----------------------------------------------------------------
-# Partition 5: Laser Control 3.3um QCL ICOS
+# Partition 9: Laser Control 3.3um QCL ICOS
 #----------------------------------------------------------------
 Partition
 
@@ -781,7 +782,7 @@ State QCL_SelectRingandRun {
 }
 
 #----------------------------------------------------------------
-# Partition 6: QCLI Control
+# Partition 10: QCLI Control
 #----------------------------------------------------------------
 Partition
 
@@ -858,7 +859,7 @@ State QCLI_Fail {
 State QCLI_Shutdown {}
 
 #----------------------------------------------
-# Partition 7: Calibration
+# Partition 11: Calibration
 #----------------------------------------------
 State Calibrate_Idle {
     > Command Gas Deck Valve Off

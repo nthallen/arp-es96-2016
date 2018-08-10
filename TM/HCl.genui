@@ -18,6 +18,7 @@ HOMEDIR HCl16_DATA_DIR
 1 Rov6T Temps Rovers
 
 ### Pump
+1 PumpsSP Pumps V
 1 Pump1_V_St Pumps V
 1 Pump2_V_St Pumps V
 1 Pump1_Head_T Pumps T
@@ -59,3 +60,8 @@ HOMEDIR HCl16_DATA_DIR
 
 1 QCLI_Reset:DStat0:0 QCLI_stat status
 1 SWStat TMbase SWStat
+
+1 AlgoP2 Algo Altitude
+1 AlgoP3 Algo Pumps
+1 AlgoP5 Algo Pump_1
+1 AlgoP7 Algo Pump_2

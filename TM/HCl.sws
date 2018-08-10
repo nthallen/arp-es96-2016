@@ -30,9 +30,9 @@ SW_Variable: <short int,PIgain> Igain Cell Integral Gain
   : Set %d { $0 = $2; }
 SW_Variable: <short int,PIgain> Pset Cell Pressure
   : Set Point %d (Torr) { $0 = $3; }
-SW_Variable: <unsigned char,Algo_t> AlgoP2 Algo P2
+SW_Variable: <unsigned char,AlgoP2_t> AlgoP2 Algo P2
   : %d { $0 = $1; }
-SW_Variable: <unsigned char,Algo_t> AlgoP3 Algo P3
+SW_Variable: <unsigned char,AlgoP3_t> AlgoP3 Algo P3
   : %d { $0 = $1; }
 SW_Variable: <unsigned char,Algo_t> AlgoP5 Algo P5
   : %d { $0 = $1; }

@@ -1,0 +1,17 @@
+Algo {
+  HBox { +-; Title: "Algo Status"; -+ };
+  P2: (AlgoP2,14);
+  P3: (AlgoP3,16);
+}
+
+Status {
+  HBox { +-; Title: "Status"; -+ };
+  SWStat: (SWStat,3);
+  { (flttime,9) };
+  MFCtr: (MFCtr,5);
+}
+
+{ [Algo];
+  -;
+  [Status];
+}

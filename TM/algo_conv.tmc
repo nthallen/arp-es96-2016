@@ -1,0 +1,31 @@
+%{
+  const char *AlgoP2_text(AlgoP2_t AlgoP2) {
+    switch (AlgoP2) {
+      case 1: return "ON_GROUND     ";
+      case 2: return "OFF_GROUND    ";
+      case 3: return "STRATOSPHERE  ";
+      case 4: return "AT_FLOAT      ";
+      case 5: return "VALVEDOWN     ";
+      case 6: return "VALVEDOWNPAUSE";
+      case 7: return "TERMINATE     ";
+      default: return "--------------";
+    }
+  }
+%}
+TM typedef Algo_t AlgoP2_t { text "%14d" AlgoP2_text(); }
+
+%{
+  const char *AlgoP3_text(AlgoP3_t AlgoP3) {
+    switch (AlgoP3) {
+      case 1: return "Pumps_Off       ";
+      case 2: return "Pumps_Start_Prep";
+      case 3: return "Pumps_Start     ";
+      case 4: return "Pumps_Running   ";
+      case 5: return "Pumps_P1_Off    ";
+      case 6: return "Pumps_P2_Off    ";
+      case 7: return "Pumps_Stop_Prep ";
+      default: return "----------------";
+    }
+  }
+%}
+TM typedef Algo_t AlgoP3_t { text "%16d" AlgoP3_text(); }

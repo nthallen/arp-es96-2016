@@ -44,7 +44,7 @@ Module QCLI mode=noise RESET= SSPRATE=4
 Module Telemetry
 
 DISTRIB = SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc
-DISTRIB = ../Uplink/uplink
+DISTRIB = ../Uplink/uplink ../Uplink/uplink_rcvr
 SCRIPT = interact
 SCRIPT = digio.dccc
 SCRIPT = idx.idx64
@@ -55,6 +55,7 @@ HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
   dstat_conv.tmc pwrmon_conv.tmc VigoT.tmc HCl.tbl HCl2.tbl \
+  algo_conv.tmc algo.tbl \
   /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma HCl.sws
 HClrtgext : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc \
@@ -72,3 +73,10 @@ clean-dist : clean-SerIn
 .PHONY : clean-SerIn
 clean-SerIn :
 	cd SerIn && make clean
+
+../Uplink/uplink ../Uplink/uplink_rcvr :
+	cd ../Uplink && make
+clean-dist : clean-Uplink
+.PHONY : clean-Uplink
+clean-Uplink :
+	cd ../Uplink && make clean
