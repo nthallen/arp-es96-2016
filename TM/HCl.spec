@@ -38,6 +38,7 @@ genuibase = PTRH.genui
 genuibase = RPM.genui
 genuibase = pwrmon.genui
 extbase = VigoT.tmc temps_conv.tmc PTRH_conv.tmc
+extbase = model_atmos.cc TM_lowpass.cc climb_rate.tmc
 swsbase = HCl.sws
 
 Module TMbase
@@ -56,7 +57,7 @@ HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
   dstat_conv.tmc pwrmon_conv.tmc VigoT.tmc HCl.tbl HCl2.tbl \
-  model_atmos.cc model_atmos.h climb_rate.tmc \
+  model_atmos.cc TM_lowpass.cc climb_rate.tmc \
   algo.tbl /usr/local/share/oui/cic.oui
 HClalgo : HCl.tma HCl.sws
 HClrtgext : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc \
@@ -81,3 +82,6 @@ clean-dist : clean-Uplink
 .PHONY : clean-Uplink
 clean-Uplink :
 	cd ../Uplink && make clean
+
+model_atmos.o : model_atmos.h
+TM_lowpass.o : TM_lowpass.h

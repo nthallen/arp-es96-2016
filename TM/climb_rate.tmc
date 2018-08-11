@@ -1,7 +1,26 @@
 %{
+  #include "TM_lowpass.h"
   #include "model_atmos.h"
-  #define get_alt_km(x) model_atmos::get_km(x, units_Torr)
+  #define get_alt_km(x) Atm.get_km(x, Atm.units_Torr)
+  TM_lowpass climb_filter(30);
 %}
 TM typedef double km_t { text "%6.3lf"; }
+TM typedef double mps_t { text "%6.1lf"; }
+
+%{
+  km_t prev_km = 0;
+%}
+
 km_t alt_km; invalidate alt_km;
-{ alt_km = get_alt_km(convert(Amb_P)); Validate alt_km; }
+mps_t raw_climb; invalidate raw_climb;
+mps_t climb_rate; invalidate climb_rate;
+
+{
+  alt_km = get_alt_km(convert(Amb_P));
+  raw_climb = 1000 * (alt_km-prev_km);
+  climb_rate = climb_filter(raw_climb);
+  prev_km = alt_km;
+  Validate alt_km;
+  Validate raw_climb;
+  Validate climb_rate;
+}

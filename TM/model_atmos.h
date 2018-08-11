@@ -4,18 +4,24 @@
 
 class model_atmos {
   public:
-    static bool get_PT(double kmt, double &hPa, double &K);
-    static double get_km(double P, double Punits = units_hPa);
+    model_atmos();
+    bool get_PT(double kmt, double &hPa, double &K);
+    double get_km(double P, double Punits = units_hPa);
+    void tblrow(double km, double K, double hPa, double lnhPa);
     struct model_row {
-      double km;
-      double K;
-      double hPa;
-      double lnhPa;
+      public:
+        model_row(double km, double K, double hPa, double lnhPa);
+        double km;
+        double K;
+        double hPa;
+        double lnhPa;
     };
-    static std::vector<model_row> table;
+    std::vector<model_row> table;
     static const double units_hPa = 1013.25;
     static const double units_Torr = 760;
     static const double units_atm = 1;
 };
+
+extern model_atmos Atm;
 
 #endif

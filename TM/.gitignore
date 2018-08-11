@@ -22,6 +22,8 @@ HCldisp.cc
 HCldispoui.c
 HCldispoui.o
 HCldisp.o
+model_atmos.o
+TM_lowpass.o
 HCltblnc.tmc
 HCl2tblnc.tmc
 algotblnc.tmc

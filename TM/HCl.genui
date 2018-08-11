@@ -65,3 +65,6 @@ HOMEDIR HCl16_DATA_DIR
 1 AlgoP3 Algo Pumps
 1 AlgoP5 Algo Pump_1
 1 AlgoP7 Algo Pump_2
+1 alt_km Algo km
+1 raw_climb Algo mps
+1 climb_rate Algo mps
