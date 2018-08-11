@@ -1,3 +1,4 @@
+TM typedef Algo_t AlgoP2_t { text "%14d" AlgoP2_text(); }
 %{
   const char *AlgoP2_text(AlgoP2_t AlgoP2) {
     switch (AlgoP2) {
@@ -12,8 +13,8 @@
     }
   }
 %}
-TM typedef Algo_t AlgoP2_t { text "%14d" AlgoP2_text(); }
 
+TM typedef Algo_t AlgoP3_t { text "%16d" AlgoP3_text(); }
 %{
   const char *AlgoP3_text(AlgoP3_t AlgoP3) {
     switch (AlgoP3) {
@@ -28,4 +29,3 @@ TM typedef Algo_t AlgoP2_t { text "%14d" AlgoP2_text(); }
     }
   }
 %}
-TM typedef Algo_t AlgoP3_t { text "%16d" AlgoP3_text(); }

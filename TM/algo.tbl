@@ -1,7 +1,7 @@
 Algo {
   HBox { +-; Title: "Algo Status"; -+ };
-  P2: (AlgoP2,14);
-  P3: (AlgoP3,16);
+  {P2: (AlgoP2,14)};
+  {P3: (AlgoP3,16)};
 }
 
 Status {
@@ -12,6 +12,5 @@ Status {
 }
 
 { [Algo];
-  -;
   [Status];
 }
