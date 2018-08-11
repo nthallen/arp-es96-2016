@@ -4,6 +4,11 @@ Algo {
   {P3: (AlgoP3,16)};
 }
 
+Climb {
+  Alt: (alt_km,6) km;
+  Climb: ""       m/s;
+}
+
 Status {
   HBox { +-; Title: "Status"; -+ };
   SWStat: (SWStat,3);
