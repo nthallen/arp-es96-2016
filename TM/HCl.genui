@@ -61,10 +61,10 @@ HOMEDIR HCl16_DATA_DIR
 1 QCLI_Reset:DStat0:0 QCLI_stat status
 1 SWStat TMbase SWStat
 
-1 AlgoP2 Algo Altitude
-1 AlgoP3 Algo Pumps
-1 AlgoP5 Algo Pump_1
-1 AlgoP7 Algo Pump_2
+1 AlgoP2 Algo Altitude %.0lf
+1 AlgoP3 Algo Pumps %.0lf
+1 AlgoP5 Algo Pump_1 %.0lf
+1 AlgoP7 Algo Pump_2 %.0lf
 1 alt_km Algo km
-1 raw_climb Algo mps
+1 Amb_P_f Ambient P
 1 climb_rate Algo mps

@@ -7,7 +7,6 @@ Algo {
 Climb {
   HBox { +-; Title: "Altitude"; -+ };
   Alt:   (alt_km,6)      km;
-  Raw:   (raw_climb,6)  "m/s";
   Climb: (climb_rate,6) "m/s";
 }
 

@@ -8,7 +8,7 @@ TM typedef short int PIgain { text "%6d"; }
 TM typedef double VOLTS;
 TM typedef double CELCIUS;
 TM typedef double KELVIN;
-TM typedef double TORR;
+TM typedef double TORR { text "%6.1lf"; }
 TM typedef double PSIG { text "%6.1lf"; }
 TM typedef double PSIA { text "%6.1lf"; }
 TM typedef signed short AI16 {
