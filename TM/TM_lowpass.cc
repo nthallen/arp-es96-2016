@@ -13,7 +13,7 @@ TM_lowpass::TM_lowpass(double rolloff_period, double sample_rate) {
 double TM_lowpass::operator()(double sample) {
   if (!filled) {
     xi = sample;
-    yi = xi * (b2-a2);
+    yi = xi * (b1+b2-1) / a2;
     filled = true;
   }
   yi = b1*sample + b2*xi - a2*yi;
