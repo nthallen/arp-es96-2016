@@ -26,9 +26,8 @@ PMOK PmpsIS; invalidate PmpsIS;
   { PmpsIS = (PM1Stat>>0)&1; Validate PmpsIS; }
 PMOK PmpsVS; invalidate PmpsVS;
   { PmpsVS = (PM1Stat>>1)&1; Validate PmpsVS; }
-/*
-PMOK PmpsIS; invalidate PmpsIS;
-  { PmpsIS = (PM1Stat>>2)&1; Validate PmpsIS; }
-PMOK PmpsVS; invalidate PmpsVS;
-  { PmpsVS = (PM1Stat>>3)&1; Validate PmpsVS; }
-*/
+
+PMOK Pmps2IS; invalidate Pmps2IS;
+  { Pmps2IS = (PM1Stat>>2)&1; Validate Pmps2IS; }
+PMOK Pmps2VS; invalidate Pmps2VS;
+  { Pmps2VS = (PM1Stat>>3)&1; Validate Pmps2VS; }

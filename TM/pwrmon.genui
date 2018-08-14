@@ -1,16 +1,18 @@
  1 PM0V1  Power Voltage
  1 PM0V2  Power Voltage
  1 PmpsV  Power Voltage
+ 1 Pmps2V Power Voltage
  1 PM0I1  Power Current
  1 PM0I2  Power Current
  1 PmpsI  Power Current
+ 1 Pmps2I Power Current
  1 PM0I1S:PM0Stat:0  Power Status
  1 PM0I2S:PM0Stat:2  Power Status
  1 PM0TOS:PM0Stat:4  Power Status
  1 PM0V1S:PM0Stat:1  Power Status
  1 PM0V2S:PM0Stat:3  Power Status
  1 PM1TOS:PM1Stat:4  Power Status
- 1 PmpsIS:PM1Stat:0   Power Status
- 1 PmpsVS:PM1Stat:1   Power Status
-#1 PmpsIS:PM1Stat:2   Power Status
-#1 PmpsVS:PM1Stat:3   Power Status
+ 1 PmpsIS:PM1Stat:0  Power Status
+ 1 PmpsVS:PM1Stat:1  Power Status
+ 1 Pmps2IS:PM1Stat:2 Power Status
+ 1 Pmps2VS:PM1Stat:3 Power Status

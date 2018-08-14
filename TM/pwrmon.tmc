@@ -36,5 +36,5 @@ TM 1 Hz PwrMon_S PM1Stat; Address PM1Stat 0x370;
 TM 1 Hz PwrMon_I PmpsI; Address PmpsI 0x372;
 TM 1 Hz PwrMon_V PmpsV; Address PmpsV 0x374;
 
-/* TM 1 Hz PwrMon_I PmpsI; Address PmpsI 0x376; */
-/* TM 1 Hz PwrMon_V PmpsV; Address PmpsV 0x378; */
+TM 1 Hz PwrMon_I Pmps2I; Address Pmps2I 0x376;
+TM 1 Hz PwrMon_V Pmps2V; Address Pmps2V 0x378;

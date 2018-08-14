@@ -1,4 +1,6 @@
 #define QCLI_CS_Address 0x1000
+#define Pmps2V_Address 0x378
+#define Pmps2I_Address 0x376
 #define PmpsV_Address 0x374
 #define PmpsI_Address 0x372
 #define PM1Stat_Address 0x370
