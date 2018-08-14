@@ -88,3 +88,10 @@ clean-Uplink :
 
 model_atmos.o : model_atmos.h
 TM_lowpass.o : TM_lowpass.h
+
+distribution : distribution-serin
+distribution-serin :
+	@[ -d $(TGTDIR)/SerIn ] || mkdir $(TGTDIR)/SerIn
+	@for i in VERSION bin doit src; do ln -fs ../$$i $(TGTDIR)/SerIn/$$i; done
+	@distribute $(FORCE) $(TGTDIR)/SerIn SerIn/Experiment.config
+
