@@ -6,7 +6,7 @@ client [SI] hclsiclt
 
 server [SI] cmd/server hclsisrvr
 server [!SI&!screen] cmd/server playbacksrvr
-server [SI] - uplink -d /dev/serusb2
+server [SI] - uplink -p /dev/serusb2 -a 21 -v
 server [!screen] - phrtg -P $ddir
 
 extraction [!screen] HClrtgext

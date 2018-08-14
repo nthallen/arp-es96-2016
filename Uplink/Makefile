@@ -17,6 +17,9 @@ all : $(TGT) $(RCVRTGT)
 $(TGT) : $(OBJ)
 	$(LINK.cc) -o $(TGT) $(OBJ) $(LIBS)
 	usemsg $(TGT) uplinkoui.c
+
+uplink.o : uplink.cc uplink.h
+
 uplinkoui.c : uplink.oui
 	oui -o uplinkoui.c uplink.oui
 
