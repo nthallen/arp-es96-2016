@@ -19,9 +19,10 @@ Laser {
 GasDeck {
   HBox { +-; Title: "Gas Deck"; -+ };
   HBox {
-    { GD__T: (GD__T,7) C;
-      GasHP: (GasHP,6) PSIG;
-      GasLP: (GasLP,6) PSIA;
+    { { GD__T: (GD__T,7) C };
+      GasHP      GasLP;
+      (GasHP,6)  (GasLP,6)  PSIG;
+      (GasHPA,6) (GasLPA,6) PSIA;
     }; |; {
       GD:  (GDVlvS,6);
       Cal: (CalGasVlvS,6);

@@ -41,11 +41,13 @@ Calibration (AI_15PSI, TORR) { 0, -24.3899, 32768, 811.73 }
 TM typedef AI16_5V AI_2500psig { text "%6.1lf"; convert PSIG; }
   Calibration (AI_2500psig, PSIG) { 6155, 0, 30720, 2500 }
 
-TM typedef AI16_5V AI_100psig { text "%6.1lf"; convert PSIG; }
-  Calibration (AI_100psig, PSIG) { 6155, 0, 30720, 100 }
 TM typedef AI16_5V AI_100psia { text "%6.1lf"; convert PSIA; }
 /* Calibrated 7/15/18 JBS & NTA */
   Calibration (AI_100psia, PSIA) { 6155, 14.5262, 30720, 113.8162 }
+
+TM typedef AI16_5V AI_100psig { text "%6.1lf"; convert PSIG; }
+/* Calibrated 7/15/18 JBS & NTA */
+  Calibration (AI_100psig, PSIG) { 6155, -0.1697, 30720, 99.1203 }
 
 TM typedef AI16 AI_VigoT
   { text "%6.2lf"; convert KELVIN; }
@@ -61,7 +63,7 @@ TM 1 Hz AI_VigoT IDetT; Address IDetT 0xC5A;
 
 TM 1 Hz AI_T30K ILH_T; Address ILH_T 0xC00;
 TM 1 Hz AI_2500psig GasHP; Address GasHP 0xC80; /* Gas Deck High Pressure (5000 psig) */
-TM 1 Hz AI_100psia GasLP; Address GasLP 0xCC0; /* Gas Deck Low Pressure (100 psig) */
+TM 1 Hz AI_100psig GasLP; Address GasLP 0xCC0; /* Gas Deck Low Pressure (100 psig) */
 TM 1 Hz AI_T30K GD__T; Address GD__T 0xC02;
 TM 1 Hz AI_T30K Inlt1T; Address Inlt1T 0xC42;
 TM 1 Hz AI_T30K Inlt2T; Address Inlt2T 0xC82;

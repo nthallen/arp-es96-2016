@@ -1,0 +1,9 @@
+PSIA GasHPA; Invalidate GasHPA;
+{ GasHPA = convert(GasHP) + convert(Amb_P)*14.6959/760;
+  Validate GasHPA;
+}
+
+PSIA GasLPA; Invalidate GasLPA;
+{ GasLPA = convert(GasLP) + convert(Amb_P)*14.6959/760;
+  Validate GasLPA;
+}
