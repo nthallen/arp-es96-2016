@@ -8,8 +8,11 @@ ci_sendfcmd(2, "PhRTG Datum alt_km %lu %s\n", itime(),
         text(alt_km));
 ci_sendfcmd(2, "PhRTG Datum climb_rate %lu %s\n", itime(),
         text(climb_rate));
-ci_sendfcmd(2, "PhRTG Datum PV_P %lu %.1lf %.1lf\n", itime(),
-        convert(DACS_P), convert(ILPV_P));
+
+depending on (DACS_P once, ILPV_P once) {
+  ci_sendfcmd(2, "PhRTG Datum PV_P %lu %.1lf %.1lf\n", itime(),
+          convert(DACS_P), convert(ILPV_P));
+}
 ci_sendfcmd(2, "PhRTG Datum Pump_Ts %lu %.3lf %.3lf %.3lf %.3lf\n",
   itime(), convert(Pump1_Head_T), convert(Pump2_Head_T),
   convert(Pump1_mot_T), convert(Pump2_mot_T));
