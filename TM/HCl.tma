@@ -62,7 +62,7 @@ Partition
     // double P_clouds_up = 280.;
     // double P_clouds_dn = 370.;
     int using_swp = 0;
-    double climb_rate = 0;
+    /* double climb_rate = 0; */
 %}
 
 State ON_GROUND {
@@ -78,7 +78,7 @@ State OFF_GROUND {
   { if ((using_swp == SWS_DROP) ||
         (!using_swp &&
           (convert(Amb_P) > P_ground_dn ||
-           climb_rate < -30.0))) {
+           climb_rate < -100.0))) {
       Validate TERMINATE;
     }
   }

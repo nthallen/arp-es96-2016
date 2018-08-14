@@ -59,7 +59,7 @@ HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
   dstat_conv.tmc pwrmon_conv.tmc VigoT.tmc HCl.tbl HCl2.tbl \
   model_atmos.cc TM_lowpass.cc climb_rate.tmc \
   algo.tbl /usr/local/share/oui/cic.oui
-HClalgo : HCl.tma HCl.sws
+HClalgo : model_atmos.cc TM_lowpass.cc climb_rate.tmc HCl.tma HCl.sws
 HClrtgext : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc \
   dstat_conv.tmc pwrmon_conv.tmc rtg.tmc \
   /usr/local/share/oui/cic.oui
