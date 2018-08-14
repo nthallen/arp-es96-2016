@@ -79,10 +79,13 @@ clean-dist : clean-SerIn
 clean-SerIn :
 	cd SerIn && make clean
 
+all-dist : all-Uplink
+all-Uplink :
+	cd ../Uplink && make
 ../Uplink/uplink ../Uplink/uplink_rcvr :
 	cd ../Uplink && make
 clean-dist : clean-Uplink
-.PHONY : clean-Uplink
+.PHONY : all-Uplink clean-Uplink
 clean-Uplink :
 	cd ../Uplink && make clean
 
