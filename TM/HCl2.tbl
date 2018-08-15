@@ -10,9 +10,9 @@ Ambient {
 
 Cell {
   HBox { +-; Title: "Cell"; -+ };
-  T_St: (Cell_T_St,6) V;
-  CT:   (ICelCT,7) V;
-  CTT:  (ICelCTT,7) C;
+# T_St: (Cell_T_St,6) V;
+# CT:   (ICelCT,7) V;
+# CTT:  (ICelCTT,7) C;
   InT:  (TS1_T,7) HBox{ "C "; (TS1_cnt,3) };
   C1T:  (TS2_T,7) HBox{ "C "; (TS2_cnt,3) };
   C2T:  (TS3_T,7) HBox{ "C "; (TS3_cnt,3) };
@@ -43,12 +43,18 @@ GasDeck {
   };
 }
 
-SpaceHeater {
-  HBox { +-; Title: "Space Heater"; -+ };
+HeaterCtrl {
+  HBox { +-; Title: "Heater Ctrl"; -+ };
 # SpHtTSt: (SpHtTSt,6) V;
-  ""      >"1"<       >"2"<;
-  CT:  (SpHt1CT,7)  (SpHt2CT,7)  V;
-  CTT: (SpHt1CTT,7) (SpHt2CTT,7) C;
+  ""          >"V"<       >"C"<;
+  SpHt1:  (SpHt1CT,7)   (SpHt1CTT,7);
+  SpHt2:  (SpHt2CT,7)   (SpHt2CTT,7);
+  HBox { "   "; -; "   " };
+  Cell:   (ICelCT,7)    (ICelCTT,7);
+  " set:" (Cell_T_St,6) (Cell_T_StT,7);
+  HBox { "   "; -; "   " };
+  Inlet:  (InletCT,7)   (InletCTT,7); 
+  " set:" (InletTSt,6)  (InletTSt,6);
 }
 
 Rover {
@@ -63,9 +69,9 @@ Rover {
 
 Inlet {
   HBox { +-; Title: Inlet; -+ };
-  TSt: (InletTSt,6) V;
-  CT:  (InletCT,7)  V;
-  CTT: (InletCTT,7) C;
+# TSt: (InletTSt,6) V;
+# CT:  (InletCT,7)  V;
+# CTT: (InletCTT,7) C;
   "1:" (Inlt1T,7)   C;
   "2:" (Inlt2T,7)   C;
   "3:" (Inlt3T,7)   C;
@@ -91,8 +97,13 @@ Gains {
 
 EBX11_Temps {
   HBox { +-; Title: "CPU"; -+ };
-  CPU_T: (vl_cpuT,3) C;
-  Bd_T:  (vl_bdT,3)  C;
+  HBox {
+    HGlue 0+1;
+    {
+      CPU_T: (vl_cpuT,3) C;
+      Bd_T:  (vl_bdT,3)  C;
+    }
+  }
 }
 
 MiniMFC {
@@ -105,10 +116,13 @@ MiniMFC {
     {
       HBox {
         {
-          [EBX11_Temps];
-          [SpaceHeater];
+#         [EBX11_Temps];
+          [HeaterCtrl];
         }; |+;
-        [PTRH]
+        {
+          [PTRH];
+          [EBX11_Temps];
+        }
       };
       HBox {
         [Cell]; |+;

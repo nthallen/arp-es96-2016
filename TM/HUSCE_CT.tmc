@@ -9,8 +9,8 @@ CT_t SpHt2CTT; Invalidate SpHt2CTT;
 
 CTSP_t InletTStT; Invalidate InletTStT;
 { InletTStT = InletTSt; Validate InletTStT; }
-CTSP_t Cell_T_StT; Invalidate InletTStT;
-{ Cell_T_TStT = Cell_T_TSt; Validate Cell_T_TStT; }
+CTSP_t Cell_T_StT; Invalidate Cell_T_StT;
+{ Cell_T_StT = Cell_T_St; Validate Cell_T_StT; }
 
 /* 30K Thermistor pulled down by 30K with 2.5V ref */
 Calibration ( CT_t, CELCIUS ) {
