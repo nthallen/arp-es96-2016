@@ -62,6 +62,7 @@ int UplinkRcvrSer::ProcessData(int flag) {
       // Implement S00yy xxKS00yy xxKS00yy xxK<cr><lf>
       // yy is val, xx is addr.
       if (not_found('S')) return 0;
+      SWStat = port_addr = 0; // Due to bug in not_hex
       frame_start = cp-1;
       if (not_str("00") ||
           not_hex(SWStat) ||
