@@ -99,6 +99,7 @@ TM typedef unsigned short AO
     0, 0,
     65536, 10
   }
+TM typedef AO CTSP_t { text "%7.2lf"; convert CELCIUS; }
 
 TM 1 Hz AO Laser_TEC_St; Address Laser_TEC_St 0x400; /* AO0 */
 TM 1 Hz AO InletTSt; Address InletTSt 0x404; /* AO2 */

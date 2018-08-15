@@ -1,4 +1,3 @@
-
 CT_t ICelCTT; Invalidate ICelCTT;
 { ICelCTT = ICelCT; Validate ICelCTT; }
 CT_t InletCTT; Invalidate InletCTT;
@@ -8,6 +7,10 @@ CT_t SpHt1CTT; Invalidate SpHt1CTT;
 CT_t SpHt2CTT; Invalidate SpHt2CTT;
 { SpHt2CTT = SpHt2CT; Validate SpHt2CTT; }
 
+CTSP_t InletTStT; Invalidate InletTStT;
+{ InletTStT = InletTSt; Validate InletTStT; }
+CTSP_t Cell_T_StT; Invalidate InletTStT;
+{ Cell_T_TStT = Cell_T_TSt; Validate Cell_T_TStT; }
 
 /* 30K Thermistor pulled down by 30K with 2.5V ref */
 Calibration ( CT_t, CELCIUS ) {
@@ -65,3 +68,57 @@ Calibration ( CT_t, CELCIUS ) {
   19639, 149.91037
 }
 
+/* 30K Thermistor pulled down by 30K Setpoint */
+Calibration ( CTSP_t, CELCIUS ) {
+   538, -39.98429,
+   721, -35.06899,
+   736, -34.73917,
+   964, -29.96461,
+  1260, -25.02672,
+  1632, -19.99858,
+  2081, -14.99952,
+  2604, -10.09810,
+  2620, -9.95518,
+  3227, -5.03693,
+  3272, -4.71164,
+  3910, -0.16249,
+  3940, 0.04661,
+  4700, 4.95964,
+  5520, 9.89030,
+  5551, 10.07304,
+  6431, 15.11287,
+  7342, 20.21710,
+  8192, 25.00000,
+  9042, 29.91365,
+  9073, 30.09737,
+  9878, 34.97705,
+  10653, 40.01779,
+  11351, 44.95932,
+  11382, 45.19719,
+  11989, 49.93698,
+  12004, 50.06069,
+  12566, 54.98291,
+  13068, 59.95356,
+  13083, 60.11642,
+  13516, 65.00584,
+  13902, 70.01727,
+  14237, 75.03481,
+  14526, 80.04953,
+  14769, 84.93292,
+  14784, 85.27314,
+  14981, 89.88705,
+  14989, 90.08652,
+  15171, 95.04971,
+  15330, 100.11251,
+  15452, 104.61477,
+  15467, 105.19553,
+  15581, 110.09559,
+  15680, 115.03068,
+  15764, 119.88591,
+  15839, 124.88853,
+  15907, 130.15611,
+  15960, 134.88927,
+  16013, 140.37854,
+  16051, 144.87043,
+  16088, 149.87388
+}
