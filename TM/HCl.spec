@@ -40,6 +40,7 @@ genuibase = pwrmon.genui
 extbase = VigoT.tmc temps_conv.tmc PTRH_conv.tmc
 extbase = model_atmos.cc TM_lowpass.cc climb_rate.tmc
 extbase = GasP_conv.tmc
+extbase = HUSCE_CT.tmc
 swsbase = HCl.sws
 
 Module TMbase
@@ -57,8 +58,8 @@ IGNORE = Makefile
 HClcol : -lsubbus
 HClsrvr : -lsubbus
 HCldisp : QCLI_conv.tmc PTRH_conv.tmc temps_conv.tmc idxflag.tmc \
-  GasP_conv.tmc \
-  dstat_conv.tmc pwrmon_conv.tmc VigoT.tmc HCl.tbl HCl2.tbl \
+  GasP_conv.tmc HUSCE_CT.tmc \
+  dstat_conv.tmc pwrmon_conv.tmc VigoT.tmc HCl.tbl HCl2.tbl HCl3.tbl \
   model_atmos.cc TM_lowpass.cc climb_rate.tmc \
   algo.tbl /usr/local/share/oui/cic.oui
 HClalgo : model_atmos.cc TM_lowpass.cc climb_rate.tmc HCl.tma HCl.sws

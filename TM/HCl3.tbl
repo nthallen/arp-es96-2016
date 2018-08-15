@@ -57,8 +57,8 @@ Rover {
   "2:" (Rov2T,7) C;
   "3:" (Rov3T,7) C;
   "4:" (Rov4T,7) C;
-# "5:" (Rov5T,7) C;
-# "6:" (Rov6T,7) C;
+  "5:" (Rov5T,7) C;
+  "6:" (Rov6T,7) C;
 }
 
 Inlet {
@@ -95,47 +95,43 @@ EBX11_Temps {
   Bd_T:  (vl_bdT,3)  C;
 }
 
-MiniMFC {
-  -;
-  (flttime,9);
-  MFCtr: (MFCtr,5);
+Blank {
+  HBox { +-; ""; -+ };
+  HBox { HGlue 0+30; "       " }
 }
 
-{ HBox { |+;
-    {
-      HBox {
-        {
-          [EBX11_Temps];
-          [SpaceHeater];
-        }; |+;
-        [PTRH]
-      };
-      HBox {
-        [Cell]; |+;
-        [Inlet];
-        |+;
-        { [Rover];
-          VGlue 0+1;
-          [MiniMFC];
-        }
-      };
-      -;
-    }; |+;
-  }
-# {
-#   HBox {
-#     [GasDeck];
-#   };
+{ HBox { |+; {
 #   HBox {
 #     {
-#       [Pump];
-#       [pwrmon];
-#     }; |; {
-#       {
-#         HBox{ +-; Title: "System"; -+ };
-#         [TMbase];
-#       }
+#       [EBX11_Temps];
+#       [SpaceHeater];
+#     }; |+;
+#     [PTRH]
+#   };
+#   HBox {
+#     [Cell]; |+;
+#     [Inlet];
+#     |+;
+#     { [Rover];
+#       [Gains];
 #     }
-#   }
-# }; |+ };
+#   };
+# }; |+; {
+    HBox {
+      [GasDeck]; |+; [Gains]
+    };
+    { HBox {
+        [Pump]; |; [Blank]
+      };
+      HBox {
+        [pwrmon]; |;
+        {
+#         VGlue 0+1;
+#         HBox{ +-; Title: "System"; -+ };
+          [TMbaseB];
+        }
+      }
+    }
+  }; |+ };
+  -
 }

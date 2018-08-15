@@ -17,6 +17,7 @@ HClsrvroui.c
 HClsrvroui.o
 HCltbl.tmc
 HCl2tbl.tmc
+HCl3tbl.tmc
 algotbl.tmc
 HCldisp.cc
 HCldispoui.c
@@ -26,6 +27,7 @@ model_atmos.o
 TM_lowpass.o
 HCltblnc.tmc
 HCl2tblnc.tmc
+HCl3tblnc.tmc
 algotblnc.tmc
 HCldispnc.cc
 HCldispncoui.c
@@ -66,9 +68,11 @@ HClengextoui.o
 HClengext.o
 HCltbl.tmc.dep
 HCl2tbl.tmc.dep
+HCl3tbl.tmc.dep
 algotbl.tmc.dep
 HCltblnc.tmc.dep
 HCl2tblnc.tmc.dep
+HCl3tblnc.tmc.dep
 algotblnc.tmc.dep
 *.err
 Makefile

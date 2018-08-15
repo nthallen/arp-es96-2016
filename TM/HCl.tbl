@@ -2,10 +2,19 @@
 Input "QCLI.tbl";
 #Input "PTRH.tbl";
 
+Pressure {
+  HBox { +-; Title: "Pressure"; -+ };
+  Cell_P:   (Cell_P,6) Torr;
+  " Pset:"  (Pset,6)   Torr;
+  DACS_P:   (DACS_P,7) Torr;
+  ILPV_P:   (ILPV_P,7) Torr;
+  Amb_P:    (Amb_P,7)  Torr;
+  -;
+  Amb_T:    (TS0_T,7)  HBox { "C "; (TS0_cnt,3) };
+}
+
 Cell {
   HBox { +-; Title: "Cell"; -+ };
-  P:    (Cell_P,6) Torr;
-  Pset: (Pset,6)   Torr;
   T_St: (Cell_T_St,6) V;
   CT:   (ICelCT,7) V;
   InT:  (TS1_T,7) HBox{ "C "; (TS1_cnt,3) };
@@ -31,17 +40,23 @@ Pinch {
 
 Status {
   HBox { +-; Title: "Status"; -+ };
-  SWStat: (SWStat,3);
-  { (flttime,9) };
-  MFCtr: (MFCtr,5);
+  HBox {
+    HGlue 0+1;
+    {
+      SWStat: (SWStat,3);
+      (flttime,9);
+      MFCtr: (MFCtr,5);
+    }
+  }
 }
 
 { HBox { |+; {
       [QCLISSP];
       [Pinch];
     }; |+; {
-      [Cell];
+      [Pressure];
       [Laser];
+      VGlue 0+1;
       [Status];
     }; |+;
   };
