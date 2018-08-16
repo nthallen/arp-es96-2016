@@ -13,8 +13,36 @@ depending on (DACS_P once, ILPV_P once) {
   ci_sendfcmd(2, "PhRTG Datum PV_P %lu %.1lf %.1lf\n", itime(),
           convert(DACS_P), convert(ILPV_P));
 }
+
 ci_sendfcmd(2, "PhRTG Datum Pump_Ts %lu %.3lf %.3lf %.3lf %.3lf\n",
   itime(), convert(Pump1_Head_T), convert(Pump2_Head_T),
   convert(Pump1_mot_T), convert(Pump2_mot_T));
 ci_sendfcmd(2, "PhRTG Datum Pump_RPMs %lu %u %u\n",
   itime(), RPM1, RPM2);
+
+depending on (ICelCTT once, Cell_T_StT once) {
+  ci_sendfcmd(2, "PhRTG Datum Cell_Heat %lu %.2lf %.2lf %2lf %2lf %2lf\n",
+    itime(), convert(ICelCTT), convert(Cell_T_StT),
+    convert(Inlt3T), convert(Inlt4T), convert(Inlt5T));
+}
+
+depending on (TS2_T once, TS3_T once, TS4_T once) {
+  ci_sendfcmd(2, "PhRTG Datum Cell_T %lu %.2lf %.2lf %.2lf\n",
+    itime(), TS2_T, TS3_T, TS4_T);
+}
+
+ci_sendfcmd(2, "PhRTG Datum Rover_T %lu %.2lf %.2lf %.2lf %.2lf\n",
+    itime(), convert(Rov1T), convert(Rov2T), convert(Rov3T),
+    convert(Rov4T));
+
+ci_sendfcmd(2, "PhRTG Datum GD__T %lu %.2lf\n", itime(), convert(GD__T));
+ci_sendfcmd(2, "PhRTG Datum GasHPA %lu %.1lf\n", itime, convert(GasHPA));
+ci_sendfcmd(2, "PhRTG Datum GasLPA %lu %.1lf\n", itime, convert(GasLPA));
+ci_sendfcmd(2, "PhRTG Datum PM_V %lu %.3lf %.3lf\n", itime(),
+  convert(PM0V1), convert(PM0V2));
+ci_sendfcmd(2, "PhRTG Datum PM_I %lu %.3lf %.3lf\n", itime(),
+  convert(PM0I1), convert(PM0I2));
+ci_sendfcmd(2, "PhRTG Datum Pumps_V %lu %.3lf %.3lf\n", itime(),
+  convert(PmpsV), convert(Pmps2V));
+ci_sendfcmd(2, "PhRTG Datum Pumps_I %lu %.3lf %.3lf\n", itime(),
+  convert(PmpsI), convert(Pmps2I));
