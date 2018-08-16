@@ -176,7 +176,7 @@ Partition
   #define PUMP2_OK_TO_RUN 0x4
   #define PUMPS_OK_TO_RUN (PUMP1_OK_TO_RUN|PUMP2_OK_TO_RUN)
   
-  #define PUMP_SP_STEP 0.25
+  #define PUMP_SP_STEP 1.00
 
   /* HeadTtransRising identifies temperatures that indicate a transition
      up to the next warmer Pump*_Temp region or down into the next lower
