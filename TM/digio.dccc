@@ -14,8 +14,8 @@
   STRB,  0, 0x0020 ;  5: Cmd 2 Off Gas Deck Valve
   STRB,  0, 0x0040 ;  6: Cmd 3 On  Cal Gas Valve
   STRB,  0, 0x0080 ;  7: Cmd 3 Off Cal Gas Valve
-  STRB,  1, 0x0100 ;  8: Cmd 4 On
-  STRB,  1, 0x0200 ;  9: Cmd 4 Off
+  STRB,  1, 0x0100 ;  8: Cmd 4 On  DRV-1 En
+  STRB,  1, 0x0200 ;  9: Cmd 4 Off DRV-1 En
   STRB,  1, 0x0400 ; 10: Cmd 5 On
   STRB,  1, 0x0800 ; 11: Cmd 5 Off
   STRB,  1, 0x1000 ; 12: Cmd 6 On

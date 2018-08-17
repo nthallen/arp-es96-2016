@@ -15,7 +15,7 @@
   : Exhaust Valve { $0 = 1; }
   : Gas Deck Valve { $0 = 2; }
   : Cal Gas Valve { $0 = 3; }
-# : 4 { $0 = 4; }
+  : Pinch Valve Disable { $0 = 4; }
 # : 5 { $0 = 5; }
 # : 6 { $0 = 6; }
 # : 7 { $0 = 7; }

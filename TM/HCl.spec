@@ -73,20 +73,24 @@ doit : HCl.doit
 %%
 COLFLAGS = -Haddress.h
 address.h : HClcol.cc
+
+.PHONY : all-SerIn clean-SerIn
+all-dist : all-SerIn
+all-SerIn :
+	cd SerIn && make
 SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc :
 	cd SerIn && make
 clean-dist : clean-SerIn
-.PHONY : clean-SerIn
 clean-SerIn :
 	cd SerIn && make clean
 
+.PHONY : all-Uplink clean-Uplink
 all-dist : all-Uplink
 all-Uplink :
 	cd ../Uplink && make
 ../Uplink/uplink ../Uplink/uplink_rcvr :
 	cd ../Uplink && make
 clean-dist : clean-Uplink
-.PHONY : all-Uplink clean-Uplink
 clean-Uplink :
 	cd ../Uplink && make clean
 
