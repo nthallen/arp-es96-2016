@@ -7,7 +7,7 @@
 #include "nl_assert.h"
 
 const char *uplink_port;
-const char *uplink_addr;
+const char *uplink_addr0, *uplink_addr1;
 
 UplinkCmd::~UplinkCmd() {}
 
@@ -22,17 +22,20 @@ int UplinkCmd::ProcessData(int flag) {
   if (not_str("W:") || not_hex(cmd) || not_str("\n")) {
     report_err("Syntax error at column %d", cp);
   } else {
-    if (cmd >= 0x100) {
-      report_err("Command %u exceeds byte width", cmd);
+    if (cmd >= 0x200) {
+      report_err("Command %u exceeds address range", cmd);
+    } else if (cmd >= 0x100) {
+      US->transmit(addr1, cmd & 0xFF);
+      report_ok();
     } else {
-      US->transmit(cmd);
+      US->transmit(addr0, cmd);
       report_ok();
     }
   }
   return 0;
 }
 
-UplinkSer::UplinkSer(const char *port, const char *addr) :
+UplinkSer::UplinkSer(const char *port, const char *addr0, const char *addr1) :
           Ser_Sel(port, O_RDWR|O_NONBLOCK, 80), addr(addr) {
   // Ser_Sel's init will abort if open fails
   // Verify that addr is non-zero and consists of
@@ -40,10 +43,16 @@ UplinkSer::UplinkSer(const char *port, const char *addr) :
 
   if (addr == 0)
     nl_error(3, "Must specify instrument address");
-  if ((!isxdigit(addr[0])) ||
-      (!isxdigit(addr[1])) ||
+  if ((!isxdigit(addr0[0])) ||
+      (!isxdigit(addr0[1])) ||
       (addr[2] != '\0'))
-    nl_error(3, "Invalid instrument address");
+    nl_error(3, "Invalid instrument address -a");
+  this->addr0 = strtoul(addr0, 0, 16);
+  if ((!isxdigit(addr1[0])) ||
+      (!isxdigit(addr1[1])) ||
+      (addr[2] != '\0'))
+    nl_error(3, "Invalid instrument address -b");
+  this->addr1 = strtoul(addr1, 0, 16);
 
   setup(1200, 8, 'n', 1, 1, 1);
   flush_input();
@@ -75,7 +84,7 @@ int UplinkSer::ProcessData(int flag) {
   return 0;
 }
 
-void UplinkSer::transmit(unsigned short val) {
+void UplinkSer::transmit(unsigned short addr, unsigned short val) {
   char obuf[35];
   // Implement S00yy xxKS00yy xxKS00yy xxK<cr><lf>
   // yy is val, xx is addr.

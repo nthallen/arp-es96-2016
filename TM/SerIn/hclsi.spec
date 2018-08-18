@@ -7,5 +7,5 @@ cmdbase = cmdout.cmd SWcmds.cmd
 
 %%
 SWcmds.cmd : ../SWData.cmd
-	sed -ne '/^&SWStat/,$$ p' ../SWData.cmd >SWcmds.cmd
+	sed -ne '/^&SWStat/,/^ *;/ p' ../SWData.cmd >SWcmds.cmd
 

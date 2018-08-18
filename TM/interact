@@ -12,7 +12,7 @@
   Launch DG/cmd HClcol
   Launch cmd/server HClsrvr
   Launch - scantmext -d /dev/ser1 -p SSP
-  Launch - uplink_rcvr -a 21 -P /dev/ser2
+  Launch - uplink_rcvr -P /dev/ser2
   Launch - lgr -N `mlf_find LOG`
   Launch - idx64 `cat $TMBINDIR/idx.idx64`
   Launch - sspdrv -H 10.0.0.200 -hSSP -N `mlf_find SSP` -L 4
