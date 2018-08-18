@@ -9,21 +9,20 @@ extern const char *uplink_addr0, *uplink_addr1;
 
 class UplinkSer : public Ser_Sel {
   public:
-    UplinkSer(const char *port, const char *addr0, const char *addr1);
+    UplinkSer(const char *port);
     ~UplinkSer();
     int ProcessData(int flag);
     void transmit(unsigned short addr, unsigned short val);
-  private:
-    unsigned short addr0, addr1;
 };
 
 class UplinkCmd : public Cmd_Selectee {
   public:
-    inline UplinkCmd(UplinkSer *US) : Cmd_Selectee("cmd/uplink", 80), US(US) {};
+    UplinkCmd(UplinkSer *US, const char *addr0, const char *addr1);
     ~UplinkCmd();
     int ProcessData(int flag);
   private:
     UplinkSer *US;
+    unsigned short addr0, addr1;
 };
 
 #endif

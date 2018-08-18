@@ -9,6 +9,20 @@
 const char *uplink_port;
 const char *uplink_addr0, *uplink_addr1;
 
+UplinkCmd::UplinkCmd(UplinkSer *US, const char *addr0, const char *addr1)
+            : Cmd_Selectee("cmd/uplink", 80), US(US) {
+  if ((!isxdigit(addr0[0])) ||
+      (!isxdigit(addr0[1])) ||
+      (addr[2] != '\0'))
+    nl_error(3, "Invalid instrument address -a");
+  this->addr0 = strtoul(addr0, 0, 16);
+  if ((!isxdigit(addr1[0])) ||
+      (!isxdigit(addr1[1])) ||
+      (addr[2] != '\0'))
+    nl_error(3, "Invalid instrument address -b");
+  this->addr1 = strtoul(addr1, 0, 16);
+}
+
 UplinkCmd::~UplinkCmd() {}
 
 int UplinkCmd::ProcessData(int flag) {
@@ -35,24 +49,14 @@ int UplinkCmd::ProcessData(int flag) {
   return 0;
 }
 
-UplinkSer::UplinkSer(const char *port, const char *addr0, const char *addr1) :
-          Ser_Sel(port, O_RDWR|O_NONBLOCK, 80), addr(addr) {
+UplinkSer::UplinkSer(const char *port) :
+          Ser_Sel(port, O_RDWR|O_NONBLOCK, 80) {
   // Ser_Sel's init will abort if open fails
   // Verify that addr is non-zero and consists of
   // exactly 2 hex digits
 
   if (addr == 0)
     nl_error(3, "Must specify instrument address");
-  if ((!isxdigit(addr0[0])) ||
-      (!isxdigit(addr0[1])) ||
-      (addr[2] != '\0'))
-    nl_error(3, "Invalid instrument address -a");
-  this->addr0 = strtoul(addr0, 0, 16);
-  if ((!isxdigit(addr1[0])) ||
-      (!isxdigit(addr1[1])) ||
-      (addr[2] != '\0'))
-    nl_error(3, "Invalid instrument address -b");
-  this->addr1 = strtoul(addr1, 0, 16);
 
   setup(1200, 8, 'n', 1, 1, 1);
   flush_input();
@@ -107,8 +111,8 @@ int main(int argc, char **argv) {
   oui_init_options(argc, argv);
   nl_error(0, "Starting V1.0");
   { Selector S;
-    UplinkSer US(uplink_port, uplink_addr);
-    UplinkCmd UC(&US);
+    UplinkSer US(uplink_port);
+    UplinkCmd UC(&US, uplink_addr0, uplink_addr1);
     S.add_child(&UC);
     S.add_child(&US);
     S.event_loop();
