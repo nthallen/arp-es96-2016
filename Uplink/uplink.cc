@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 #include "oui.h"
 #include "uplink.h"
 #include "nl_assert.h"
@@ -11,16 +12,23 @@ const char *uplink_addr0, *uplink_addr1;
 
 UplinkCmd::UplinkCmd(UplinkSer *US, const char *addr0, const char *addr1)
             : Cmd_Selectee("cmd/uplink", 80), US(US) {
+  addr0 = addr1 = 0;
+
   if ((!isxdigit(addr0[0])) ||
       (!isxdigit(addr0[1])) ||
-      (addr[2] != '\0'))
+      (addr0[2] != '\0'))
     nl_error(3, "Invalid instrument address -a");
   this->addr0 = strtoul(addr0, 0, 16);
+
   if ((!isxdigit(addr1[0])) ||
       (!isxdigit(addr1[1])) ||
-      (addr[2] != '\0'))
+      (addr1[2] != '\0'))
     nl_error(3, "Invalid instrument address -b");
   this->addr1 = strtoul(addr1, 0, 16);
+
+  nl_error(MSG_DEBUG, "addr0:%02X addr1:%02X\n", addr0, addr1);
+  if (addr1 == 0 || addr0 == 0)
+    nl_error(3, "Must specify instrument addresses");
 }
 
 UplinkCmd::~UplinkCmd() {}
@@ -54,9 +62,6 @@ UplinkSer::UplinkSer(const char *port) :
   // Ser_Sel's init will abort if open fails
   // Verify that addr is non-zero and consists of
   // exactly 2 hex digits
-
-  if (addr == 0)
-    nl_error(3, "Must specify instrument address");
 
   setup(1200, 8, 'n', 1, 1, 1);
   flush_input();
@@ -93,7 +98,7 @@ void UplinkSer::transmit(unsigned short addr, unsigned short val) {
   // Implement S00yy xxKS00yy xxKS00yy xxK<cr><lf>
   // yy is val, xx is addr.
   int nchars = snprintf(obuf, 35,
-    "S00%02X %sKS00%02X %sKS00%02X %sK\r\n",
+    "S00%02X %02XKS00%02X %02XKS00%02X %02XK\r\n",
       val, addr, val, addr, val, addr);
   nl_assert(nchars == 29);
   nl_error(MSG_DBG(0), "Tx: %s", ascii_escape(obuf));
