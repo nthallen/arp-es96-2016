@@ -3,7 +3,7 @@
 <include> msg
 <follow> msg
 
-<opts> "p:a:"
+<opts> "p:a:b:"
 <sort>
 	-p <port> serial port for uplink
 	-a XX 2-digit hex instrument-specific address
