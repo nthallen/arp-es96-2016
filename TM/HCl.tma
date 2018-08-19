@@ -192,15 +192,15 @@ Partition
      HeadTtrans[PUMP_T_COLD][1] is the limit when temps are falling to
      transition from PUMP_T_OK down into PUMP_T_COLD
   */
-  static double HeadTtrans[3][2] = {
+  static double HeadTtrans[4][2] = {
     -15.0, -20.0, // Transitions between PUMP_T_COLD and PUMP_T_OK
      70.0,  65.0, // Transitions between PUMP_T_OK and PUMP_T_WARM
      77.0,  75.0, // Transitions between PUMP_T_WARM and PUMP_T_HOT
-     80.0,  78,0  // Transitions between PUMP_T_HOT and PUMP_T_WAY_HOT
+     80.0,  78.0  // Transitions between PUMP_T_HOT and PUMP_T_WAY_HOT
   };
   
   /* ElecTtrans identifies temperatures for the electronics temp */
-  static double ElecTtrans[3][2] = {
+  static double ElecTtrans[4][2] = {
     -15.0, -20.0, // Transitions between PUMP_T_COLD and PUMP_T_OK
      60.0,  55.0, // Transitions between PUMP_T_OK and PUMP_T_WARM
      67.0,  65.0, // Transitions between PUMP_T_WARM and PUMP_T_HOT

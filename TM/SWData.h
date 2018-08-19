@@ -7,10 +7,12 @@ typedef struct __attribute__((__packed__)) {
   short int Pgain;
   short int Igain;
   short int Pset;
+  unsigned char AlgoP1;
   unsigned char AlgoP2;
   unsigned char AlgoP3;
   unsigned char AlgoP5;
   unsigned char AlgoP7;
+  unsigned char AlgoP8;
   unsigned char PumpsSP;
 } SWData_t;
 extern SWData_t SWData;

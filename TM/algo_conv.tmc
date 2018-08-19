@@ -79,7 +79,7 @@ TM typedef Algo_t AlgoP8_t { text "%20d" AlgoP8_text(); }
       case 5:  return "Pinch_Valve_Reg     ";
       case 6:  return "Pinch_Valve_Open    ";
       case 7:  return "Pinch_Valve_Opened  ";
-      case 7:  return "Pinch_Idle          ";
+      case 8:  return "Pinch_Idle          ";
       default: return "--------------------";
     }
   }

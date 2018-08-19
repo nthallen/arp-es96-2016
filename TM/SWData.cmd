@@ -15,10 +15,12 @@
   : Cell Proportional Gain &Pgain { SWData.Pgain = $4; }
   : Cell Integral Gain &Igain { SWData.Igain = $4; }
   : Cell Pressure &Pset { SWData.Pset = $3; }
+  : Algo P1 &AlgoP1 { SWData.AlgoP1 = $3; }
   : Algo P2 &AlgoP2 { SWData.AlgoP2 = $3; }
   : Algo P3 &AlgoP3 { SWData.AlgoP3 = $3; }
   : Algo P5 &AlgoP5 { SWData.AlgoP5 = $3; }
   : Algo P7 &AlgoP7 { SWData.AlgoP7 = $3; }
+  : Algo P8 &AlgoP8 { SWData.AlgoP8 = $3; }
   : Pumps &PumpsSP { SWData.PumpsSP = $2; }
   ;
 &SWStat <unsigned char>
@@ -48,6 +50,9 @@
 &Pset <short int>
   : Set Point %d (Torr) { $0 = $3; }
   ;
+&AlgoP1 <unsigned char>
+  : %d { $0 = $1; }
+  ;
 &AlgoP2 <unsigned char>
   : %d { $0 = $1; }
   ;
@@ -58,6 +63,9 @@
   : %d { $0 = $1; }
   ;
 &AlgoP7 <unsigned char>
+  : %d { $0 = $1; }
+  ;
+&AlgoP8 <unsigned char>
   : %d { $0 = $1; }
   ;
 &PumpsSP <unsigned char>
