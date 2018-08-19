@@ -143,6 +143,7 @@ HCl_serin::HCl_serin(int nQrows, int low_water, const char *path) :
   uint16_t mfcspermajf = tmi(nrowmajf)/tm_info.nrowminf;
   uint16_t lcmMn = lcm(mfcspermajf,tmi(nsecsper));
   ROLLOVER_MFC = (USHRT_MAX+1L)%lcmMn;
+  nc = cp = 0;
 
   ser_fd = open( opt_serdev, O_RDONLY|O_NONBLOCK );
   if ( ser_fd < 0 ) {
