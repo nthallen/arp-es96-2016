@@ -4,10 +4,11 @@
 <follow> msg
 <include> cic
 
-<opts> "P:a:"
+<opts> "P:a:B:"
 <sort>
 	-P <port> serial port for uplink
 	-a XX 2-digit hex instrument address: only for test
+	-B <baud> baud rate for receiving (match downlink)
 
 <switch>
   case 'P':
@@ -15,6 +16,9 @@
     break;
   case 'a':
     uplink_addr = optarg;
+    break;
+  case 'B':
+    uplink_baud = atoi(optarg);
     break;
 
 <package> msghdr_default

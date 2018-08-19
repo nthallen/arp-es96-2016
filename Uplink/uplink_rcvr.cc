@@ -8,6 +8,7 @@
 
 const char *uplink_port;
 const char *uplink_addr;
+int uplink_baud = 1200;
 
 /**
  * @param port path to the serial port
@@ -27,7 +28,7 @@ UplinkRcvrSer::UplinkRcvrSer(const char *port, const char *addr) :
 
   if (addr == 0) {
     this->addr = 0;
-    setup(1200, 8, 'n', 1, 1, 1);
+    setup(uplink_baud, 8, 'n', 1, 1, 1);
   } else {
     if ((!isxdigit(addr[0])) ||
         (!isxdigit(addr[1])) ||
