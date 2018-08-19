@@ -12,7 +12,10 @@
   Launch DG/cmd HClcol
   Launch cmd/server HClsrvr
   Launch - scantmext -d /dev/ser1 -b 115200 -p SSP
-  Launch - uplink_rcvr -P /dev/ser2 -B 115200
+#-- For test with direct connection:
+  Launch - uplink_rcvr -P /dev/ser2 -a 26 -B 1200
+#-- For operation through CIP/MaCaPs:
+# Launch - uplink_rcvr -P /dev/ser2 -B 115200
   Launch - lgr -N `mlf_find LOG`
   Launch - idx64 `cat $TMBINDIR/idx.idx64`
   Launch - sspdrv -H 10.0.0.200 -hSSP -N `mlf_find SSP` -L 4
