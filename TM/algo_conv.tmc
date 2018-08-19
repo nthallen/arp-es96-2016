@@ -1,3 +1,17 @@
+TM typedef Algo_t AlgoP1_t { text "%10d" AlgoP1_text(); }
+%{
+  const char *AlgoP1_text(AlgoP1_t AlgoP1) {
+    switch (AlgoP1) {
+      case 1:  return "Init      ";
+      case 2:  return "Startup   ";
+      case 3:  return "Record    ";
+      case 4:  return "Record_End";
+      case 5:  return "Shutdown  ";
+      default: return "----------";
+    }
+  }
+%}
+
 TM typedef Algo_t AlgoP2_t { text "%14d" AlgoP2_text(); }
 %{
   const char *AlgoP2_text(AlgoP2_t AlgoP2) {
@@ -18,14 +32,55 @@ TM typedef Algo_t AlgoP3_t { text "%16d" AlgoP3_text(); }
 %{
   const char *AlgoP3_text(AlgoP3_t AlgoP3) {
     switch (AlgoP3) {
-      case 1: return "Pumps_Off       ";
-      case 2: return "Pumps_Start_Prep";
-      case 3: return "Pumps_Start     ";
-      case 4: return "Pumps_Running   ";
-      case 5: return "Pumps_P1_Off    ";
-      case 6: return "Pumps_P2_Off    ";
-      case 7: return "Pumps_Stop_Prep ";
+      case 1:  return "Pumps_Off       ";
+      case 2:  return "Pumps_Start_Prep";
+      case 3:  return "Pumps_Start     ";
+      case 4:  return "Pumps_Running   ";
+      case 5:  return "Pumps_P1_Off    ";
+      case 6:  return "Pumps_P2_Off    ";
+      case 7:  return "Pumps_Stop_Prep ";
       default: return "----------------";
+    }
+  }
+%}
+
+TM typedef Algo_t AlgoP5_t { text "%14d" AlgoP5_text(); }
+%{
+  const char *AlgoP5_text(AlgoP5_t AlgoP5) {
+    switch (AlgoP5) {
+      case 1:  return "Pump1_Off     ";
+      case 2:  return "Pump1_On      ";
+      case 3:  return "Pump1_Turn_Off";
+      default: return "--------------";
+    }
+  }
+%}
+
+TM typedef Algo_t AlgoP7_t { text "%14d" AlgoP7_text(); }
+%{
+  const char *AlgoP7_text(AlgoP7_t AlgoP7) {
+    switch (AlgoP7) {
+      case 1:  return "Pump2_Off     ";
+      case 2:  return "Pump2_On      ";
+      case 3:  return "Pump2_Turn_Off";
+      default: return "--------------";
+    }
+  }
+%}
+
+TM typedef Algo_t AlgoP8_t { text "%20d" AlgoP8_text(); }
+%{
+  const char *AlgoP8_text(AlgoP8_t AlgoP8) {
+    switch (AlgoP8) {
+      case 1:  return "Pinch_Init          ";
+      case 2:  return "Pinch_Valve_Close   ";
+      case 3:  return "Pinch_Valve_Closed  ";
+      case 4:  return "Pinch_Valve_Reg_Init";
+      case 5:  return "Pinch_Valve_Reg     ";
+      case 6:  return "Pinch_Valve_Open    ";
+      case 7:  return "Pinch_Valve_Opened  ";
+      case 7:  return "Pinch_Idle          ";
+      default: return "--------------------";
     }
   }
 %}

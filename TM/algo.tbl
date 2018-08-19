@@ -1,7 +1,11 @@
 Algo {
   HBox { +-; Title: "Algo Status"; -+ };
+  (P1: (AlgoP1,10));
   {P2: (AlgoP2,14)};
   {P3: (AlgoP3,16)};
+  (P5: (AlgoP5,14));
+  (P7: (AlgoP7,14));
+  (P8: (AlgoP8,20));
 }
 
 Climb {

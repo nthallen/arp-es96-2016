@@ -30,13 +30,17 @@ SW_Variable: <short int,PIgain> Igain Cell Integral Gain
   : Set %d { $0 = $2; }
 SW_Variable: <short int,PIgain> Pset Cell Pressure
   : Set Point %d (Torr) { $0 = $3; }
+SW_Variable: <unsigned char,AlgoP1_t> AlgoP1 Algo P1
+  : %d { $0 = $1; }
 SW_Variable: <unsigned char,AlgoP2_t> AlgoP2 Algo P2
   : %d { $0 = $1; }
 SW_Variable: <unsigned char,AlgoP3_t> AlgoP3 Algo P3
   : %d { $0 = $1; }
-SW_Variable: <unsigned char,Algo_t> AlgoP5 Algo P5
+SW_Variable: <unsigned char,AlgoP5_t> AlgoP5 Algo P5
   : %d { $0 = $1; }
-SW_Variable: <unsigned char,Algo_t> AlgoP7 Algo P7
+SW_Variable: <unsigned char,AlgoP7_t> AlgoP7 Algo P7
+  : %d { $0 = $1; }
+SW_Variable: <unsigned char,AlgoP8_t> AlgoP8 Algo P8
   : %d { $0 = $1; }
 SW_Variable: <unsigned char,PumpSet_t> PumpsSP Pumps
   : Set Point %lf (V) { $0 = ($3 > 5) ? 250 : ($3 < 0) ? 0 : $3*50; }
