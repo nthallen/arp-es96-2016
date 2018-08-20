@@ -11,7 +11,10 @@ Algo {
 Climb {
   HBox { +-; Title: "Altitude"; -+ };
   Alt:   (alt_km,6)      km;
-  Climb: (climb_rate,6) "m/s";
+  Climb: (climb_mps,6)  "m/s";
+  -;
+  Alt:   (alt_ft,7)      ft;
+  Climb: (climb_fps,6)   "ft/s";
 }
 
 Status {
