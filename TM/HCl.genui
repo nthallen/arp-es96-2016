@@ -67,6 +67,6 @@ HOMEDIR HCl16_DATA_DIR
 1 AlgoP3 Algo Pumps %.0lf
 1 AlgoP5 Algo Pump_1 %.0lf
 1 AlgoP7 Algo Pump_2 %.0lf
-1 alt_km Algo km
+1 alt_ft Algo ft
 1 Amb_P_f Ambient P
-1 climb_rate Algo mps
+1 climb_fps Algo fps

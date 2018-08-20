@@ -17,19 +17,25 @@ typedef struct __attribute__((__packed__)) {
 } SWData_t;
 extern SWData_t SWData;
 
+#define SWS_PUMP_SP_INC 7
+#define SWS_PUMP_SP_DEC 8
 #define SWS_CAL_SEQ 9
+#define SWS_INLET_SP_INC 10
+#define SWS_INLET_SP_DEC 11
 #define SWS_PCTRL_ENA 20
 #define SWS_PCTRL_DIS 21
+#define SWS_PINCH_REINIT 22
 #define SWS_QCL_SELICOS 30
 #define SWS_QCL_SELRING 31
 #define SWS_QCL_START 32
 #define SWS_QCL_STOP 33
 #define SWS_QCL_DISABLE 34
-#define SWS_DROP 35
-#define SWS_STRATO 36
+#define SWS_OFF_GROUND 35
+#define SWS_STRATOSPHERE 36
 #define SWS_FLOAT 37
-#define SWS_DESCENT 38
-#define SWS_DESCENTPAUSE 39
+#define SWS_VALVEDOWN 38
+#define SWS_VALVEDOWNPAUSE 39
+#define SWS_TERMINATE 40
 #define SWS_TIME_WARP 254
 #define SWS_SHUTDOWN 255
 

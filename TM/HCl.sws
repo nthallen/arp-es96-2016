@@ -23,7 +23,7 @@ SWS_STRATOSPHERE 36 Altitude Stratosphere: using_swp = SWS_STRATOSPHERE; break;
 SWS_FLOAT 37 Altitude Float: using_swp = SWS_FLOAT; break;
 SWS_VALVEDOWN 38 Altitude Descent: using_swp = SWS_VALVEDOWN; break;
 SWS_VALVEDOWNPAUSE 39 Altitude Pause: using_swp = SWS_VALVEDOWNPAUSE; break;
-SWS_TERMINATE 40 Altitude Drop: using_swp = SWS_DROP; break;
+SWS_TERMINATE 40 Altitude Drop: using_swp = SWS_TERMINATE; break;
 
 SWS_TIME_WARP 254 Time Warp: break;
 SWS_SHUTDOWN  255 Shutdown: Validate Shutdown; break;

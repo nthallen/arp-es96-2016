@@ -4,10 +4,10 @@ ci_sendfcmd(2, "PhRTG Datum Cell_P %lu %.2lf %d\n", itime(),
         convert(Cell_P), Pset);
 ci_sendfcmd(2, "PhRTG Datum Amb_P %lu %.2lf %.2lf\n", itime(),
         convert(Amb_P), convert(Amb_P_f));
-ci_sendfcmd(2, "PhRTG Datum alt_km %lu %s\n", itime(),
-        text(alt_km));
-ci_sendfcmd(2, "PhRTG Datum climb_rate %lu %s\n", itime(),
-        text(climb_rate));
+ci_sendfcmd(2, "PhRTG Datum alt_ft %lu %s\n", itime(),
+        text(alt_ft));
+ci_sendfcmd(2, "PhRTG Datum climb_fps %lu %s\n", itime(),
+        text(climb_fps));
 
 depending on (DACS_P once, ILPV_P once) {
   ci_sendfcmd(2, "PhRTG Datum PV_P %lu %.1lf %.1lf\n", itime(),

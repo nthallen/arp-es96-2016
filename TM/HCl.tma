@@ -121,7 +121,7 @@ State AT_FLOAT {
   > _Algo P2 4
   { if ((using_swp == SWS_TERMINATE) ||
         (!using_swp &&
-         alt_ft < A_trop_dn))) {
+         alt_ft < A_trop_dn)) {
       Validate TERMINATE;
     }
   }
@@ -137,7 +137,7 @@ State VALVEDOWN {
   > _Algo P2 5
   { if ((using_swp == SWS_TERMINATE) ||
         (!using_swp &&
-         alt_ft < A_trop_dn))) {
+         alt_ft < A_trop_dn)) {
       Validate TERMINATE;
     }
   }
@@ -153,7 +153,7 @@ State VALVEDOWNPAUSE {
   > _Algo P2 6
   { if ((using_swp == SWS_TERMINATE) ||
         (!using_swp &&
-         alt_ft < A_trop_dn))) {
+         alt_ft < A_trop_dn)) {
       Validate TERMINATE;
     }
   }
@@ -194,8 +194,8 @@ Partition
   #define PUMP1_OK_TO_RUN 0x02
   #define PUMP2_OK_TO_RUN 0x04
   #define PUMPS_OK_TO_RUN (PUMP1_OK_TO_RUN|PUMP2_OK_TO_RUN)
-  #define PUMP1_OFF 0x08
-  #define PUMP2_OFF 0x10
+  #define PUMP_1_OFF 0x08
+  #define PUMP_2_OFF 0x10
   
   #define PUMP_SP_STEP 1.00
 
@@ -237,7 +237,7 @@ Partition
 %}
 
 State Pumps_Off {
-      { Pump_Status &= ~(PUMPS_ON|; }
+      { Pump_Status &= ~(PUMPS_ON|PUMP_1_OFF|PUMP_2_OFF); }
       > _Algo P3 1
       > Set Pump 1 Set Point 0
       > Set Pump 2 Set Point 0
@@ -282,10 +282,10 @@ State Pumps_Running {
             !(Pump_Status & PUMPS_OK_TO_RUN)) {
           Validate Pumps_Stop_Prep;
         } else if (!(Pump_Status & PUMP1_OK_TO_RUN) &&
-                   !(Pump_Status & PUMP1_OFF)) {
+                   !(Pump_Status & PUMP_1_OFF)) {
           Validate Pumps_P1_Off;
         } else if (!(Pump_Status & PUMP2_OK_TO_RUN) &&
-                   !(Pump_Status & PUMP2_OFF)) {
+                   !(Pump_Status & PUMP_2_OFF)) {
           Validate Pumps_P2_Off;
         }
       }
@@ -295,7 +295,7 @@ State Pumps_P1_Off {
   > _Algo P3 5
   > Set Pump 1 Set Point 0.5
   {
-    Pump_Status |= PUMP1_OFF;
+    Pump_Status |= PUMP_1_OFF;
     Validate Pumps_Running;
   }
 }
@@ -304,7 +304,7 @@ State Pumps_P2_Off {
   > _Algo P3 6
   > Set Pump 2 Set Point 0.5
   {
-    Pump_Status |= PUMP2_OFF;
+    Pump_Status |= PUMP_2_OFF;
     Validate Pumps_Running;
   }
 }
@@ -814,7 +814,7 @@ State QCL_SelectICOSandRun {
 #  +1 > Set Laser TEC Temp Setpoint 1.1
 #  +1 > Laser TEC On
       Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
- +10 > Select QCLI Waveform I_310_355_5ms1Hz
+#+10 > Select QCLI Waveform I_310_355_5ms1Hz
   +3 Validate QCL_Start;
 }
 
@@ -829,7 +829,7 @@ State QCL_SelectRingandRun {
 #  +1 > Set Laser TEC Temp Setpoint 1.1
 #  +1 > Laser TEC On
       Hold until ( QCL_TEMP_OK(convert(ILTE3R3T)) );
-   +1 > Select QCLI Waveform RD_310_355_50MHz
+#  +1 > Select QCLI Waveform RD_310_355_50MHz
 #  +1 > SSP Set NSample 3500
    +2 Validate QCL_Start;
 }
@@ -917,8 +917,8 @@ State QCLI_Shutdown {}
 State Calibrate_Idle {
     > Command Gas Deck Valve Off
     > Command Cal Gas Valve Off
-    depending on (OFF_GROUND) Validate Calibrate_Heat;
-    depending on (STRATOSPHERE) Validate Calibrate_Heat;
+    depending on (OFF_GROUND) { Validate Calibrate_Heat; }
+    depending on (STRATOSPHERE) { Validate Calibrate_Heat; }
 }
 
 State Calibrate_Heat {
@@ -968,7 +968,7 @@ State Pinch_ReInit_Idle {
 State Pinch_ReInit {
       > Pumps Set Point 0
       Hold until valid (Pinch_Valve_Opened) or 10;
-      Validate Pinch_Valve_Init;
+      Validate Pinch_Init;
       Hold until valid (Pinch_Valve_Opened);
    +3 { ci_sendfcmd(0, "Pumps Set Point %d\n", old_SP);
         Validate Pinch_ReInit_Idle;
@@ -1018,7 +1018,7 @@ State Inlet_Adj_Inc {
 
 State Inlet_Adj_Dec {
   { double SP;
-    SP = convert(InletSP) - 0.1;
+    SP = convert(InletTSt) - 0.1;
     if (SP < 0) SP = 0;
     ci_sendfcmd(0, "Inlet Set Point %.2lf\n", SP);
     Validate Inlet_Adj_Idle;
