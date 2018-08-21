@@ -4,7 +4,7 @@
 State Init {
       > Telemetry Start
       > _Algo P1 1
-  +3  > Cell Proportional Gain Set -300
+  +3  > Cell Proportional Gain Set -200
       > Cell Integral Gain Set -300
       # 5 C
       > Set Cell Temperature Set Point 1
@@ -382,6 +382,7 @@ depending on (1 Hz) {
 #   Will shut off pump if max temps exceeded
 #----------------------------------------------
 Partition
+
 State Pump1_Off {
       > _Algo P5 1
       depending on (1 Hz) {
@@ -492,6 +493,7 @@ depending on (1 Hz) {
 #   Will shut off pump if max temps exceeded
 #----------------------------------------------
 Partition
+
 State Pump2_Off {
       > _Algo P7 1
       depending on (1 Hz) {
@@ -914,6 +916,8 @@ State QCLI_Shutdown {}
 #----------------------------------------------
 # Partition 11: Calibration
 #----------------------------------------------
+Partition
+
 State Calibrate_Idle {
     > Command Gas Deck Valve Off
     > Command Cal Gas Valve Off
@@ -934,7 +938,7 @@ State Calibrate_Heat {
 }
 
 %{
-  PSIA GasHP_Start;
+  PSIG GasHP_Start;
 %}
 State Calibrate {
     depending on (TERMINATE) { Validate Calibrate_Idle; }
@@ -945,7 +949,7 @@ State Calibrate {
           Validate Calibrate_Idle;
         }
       }
-   +1 > Command Cal Gas Valve Off
+   +2 > Command Cal Gas Valve Off
       > Command Gas Deck Valve Off
    +1 Validate Calibrate;
 }
@@ -953,6 +957,8 @@ State Calibrate {
 #----------------------------------------------
 # Partition 12: Pinch Valve ReInit
 #----------------------------------------------
+Partition
+
 %{
   PumpSet_t old_SP;
 %}
@@ -978,6 +984,7 @@ State Pinch_ReInit {
 #----------------------------------------------
 # Partition 13: Pump SetPoint Adjustment
 #----------------------------------------------
+Partition
 
 State Pump_Adj_Idle {
 }
@@ -1003,6 +1010,7 @@ State Pump_Adj_Dec {
 #----------------------------------------------
 # Partition 14: Inlet SetPoint Adjustment
 #----------------------------------------------
+Partition
 
 State Inlet_Adj_Idle {
 }
@@ -1024,3 +1032,4 @@ State Inlet_Adj_Dec {
     Validate Inlet_Adj_Idle;
   }
 }
+
