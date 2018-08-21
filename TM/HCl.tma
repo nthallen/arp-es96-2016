@@ -31,7 +31,7 @@ State Startup {
 State Record {
   depending on (TERMINATE) { Validate Record_End; }
       > _Algo P1 3
-  +60 Validate Calibrate;
+      Validate Calibrate;
       Hold until valid (VALVEDOWN);
       Hold until valid (VALVEDOWNPAUSE);
       Validate Record;
@@ -69,7 +69,8 @@ Partition
 # REF: 650 torr ~5000 ft
 
 %{ /* Altitude definitions in ft */
-    double A_ground_up = 6000.;
+    double A_ground_up = 10000.;
+    double A_ground_dn = 8000.;
     double A_strat_up = 42000.;
     double A_trop_dn = 40000.;
     int using_swp = 0;
@@ -88,7 +89,7 @@ State OFF_GROUND {
   > _Algo P2 2
   { if ((using_swp == SWS_TERMINATE) ||
         (!using_swp &&
-          (climb_fps < -100.0))) {
+          (alt_ft < A_ground_dn))) {
       Validate TERMINATE;
     }
   }
@@ -104,8 +105,7 @@ State STRATOSPHERE {
   > _Algo P2 3
   { if ((using_swp == SWS_TERMINATE) ||
         (!using_swp &&
-          (alt_ft < A_trop_dn ||
-           climb_fps < -100.0))) {
+          (alt_ft < A_trop_dn))) {
       Validate TERMINATE;
     }
   }
@@ -118,19 +118,23 @@ State STRATOSPHERE {
 }
 
 State AT_FLOAT {
-  > _Algo P2 4
-  { if ((using_swp == SWS_TERMINATE) ||
-        (!using_swp &&
-         alt_ft < A_trop_dn)) {
-      Validate TERMINATE;
-    }
-  }
-  { if ((using_swp == SWS_VALVEDOWN) ||
-        (!using_swp &&
-         climb_fps < -2.0)) {
-      Validate VALVEDOWN;
-    }
-  }
+      { if ((using_swp == SWS_TERMINATE) ||
+            (!using_swp &&
+             alt_ft < A_trop_dn)) {
+          Validate TERMINATE;
+        }
+      }
+
+      > _Algo P2 4
+      Hold until (using_swp == SWS_VALVEDOWN ||
+                  SWStat == SWS_TIME_WARP) or 30:00;
+
+   +1 { if ((using_swp == SWS_VALVEDOWN) ||
+            (!using_swp &&
+             climb_fps < -5.0)) {
+          Validate VALVEDOWN;
+        }
+      }
 }
 
 State VALVEDOWN {
@@ -150,19 +154,22 @@ State VALVEDOWN {
 }
 
 State VALVEDOWNPAUSE {
-  > _Algo P2 6
-  { if ((using_swp == SWS_TERMINATE) ||
-        (!using_swp &&
-         alt_ft < A_trop_dn)) {
-      Validate TERMINATE;
-    }
-  }
-  { if ((using_swp == SWS_VALVEDOWN) ||
-        (!using_swp &&
-         climb_fps < -2.0)) {
-      Validate VALVEDOWN;
-    }
-  }
+      { if ((using_swp == SWS_TERMINATE) ||
+            (!using_swp &&
+             alt_ft < A_trop_dn)) {
+          Validate TERMINATE;
+        }
+      }
+      > _Algo P2 6
+      Hold until (using_swp == SWS_VALVEDOWN ||
+                  SWStat == SWS_TIME_WARP) or 30:00;
+
+   +1 { if ((using_swp == SWS_VALVEDOWN) ||
+            (!using_swp &&
+             climb_fps < -5.0)) {
+          Validate VALVEDOWN;
+        }
+      }
 }
 
 State TERMINATE {
@@ -1019,7 +1026,7 @@ State Inlet_Adj_Inc {
   { double SP;
     SP = convert(InletTSt) + 0.1;
     if (SP > 3) SP = 3;
-    ci_sendfcmd(0, "Inlet Set Point %.2lf\n", SP);
+    ci_sendfcmd(0, "Set Inlet Temperature Set Point %.2lf\n", SP);
     Validate Inlet_Adj_Idle;
   }
 }
@@ -1028,8 +1035,34 @@ State Inlet_Adj_Dec {
   { double SP;
     SP = convert(InletTSt) - 0.1;
     if (SP < 0) SP = 0;
-    ci_sendfcmd(0, "Inlet Set Point %.2lf\n", SP);
+    ci_sendfcmd(0, "Set Inlet Temperature Set Point %.2lf\n", SP);
     Validate Inlet_Adj_Idle;
   }
 }
 
+
+#----------------------------------------------
+# Partition 15: Cell SetPoint Adjustment
+#----------------------------------------------
+Partition
+
+State Cell_Adj_Idle {
+}
+
+State Cell_Adj_Inc {
+  { double SP;
+    SP = convert(Cell_T_St) + 0.1;
+    if (SP > 3) SP = 3;
+    ci_sendfcmd(0, "Set Cell Temperature Set Point %.2lf\n", SP);
+    Validate Cell_Adj_Idle;
+  }
+}
+
+State Cell_Adj_Dec {
+  { double SP;
+    SP = convert(Cell_T_St) - 0.1;
+    if (SP < 0) SP = 0;
+    ci_sendfcmd(0, "Set Cell Temperature Set Point %.2lf\n", SP);
+    Validate Cell_Adj_Idle;
+  }
+}

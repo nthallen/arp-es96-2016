@@ -76,6 +76,7 @@ Inlet {
 
 Pump {
   HBox { +-; Title: "Scroll Pumps"; -+ };
+  SP:    (PumpsSP) "" V;
   #""       "1"            "2";
   V_St:  (Pump1_V_St,6)    (Pump2_V_St,6)  V;
   Tach:  (RPM1,5)          (RPM2,5) RPM;

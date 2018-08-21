@@ -46,9 +46,9 @@ HOMEDIR HCl16_DATA_DIR
 1 GasHPA GasDeck PSIA
 1 GasLPA GasDeck PSIA
 1 GD__T  GasDeck T
-1 CellExVlvS:DStat0:1 GasDeck Status
-1 GDVlvS:DStat0:2 GasDeck Status
-1 CalGasVlvS:DStat0:3 GasDeck Status
+1 CellExVlvS:DStat0:1 GasDeck Status %.0lf
+1 GDVlvS:DStat0:2 GasDeck Status     %.0lf
+1 CalGasVlvS:DStat0:3 GasDeck Status %.0lf
 
 #1 IPampT Temps Det
 #1 ISSPT Temps Det

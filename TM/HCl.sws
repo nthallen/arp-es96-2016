@@ -1,22 +1,24 @@
 SW_Variable: SWStat
 
-SWS_PUMP_SP_INC 7   Pump SetPoint Increment: Validate Pump_Adj_Inc; break;
-SWS_PUMP_SP_DEC 8   Pump SetPoint Decrement: Validate Pump_Adj_Dec; break;
-SWS_CAL_SEQ   9   Calibrate: Validate Calibrate; break;
+SWS_PUMP_SP_INC   7   Pump SetPoint Increment: Validate Pump_Adj_Inc; break;
+SWS_PUMP_SP_DEC   8   Pump SetPoint Decrement: Validate Pump_Adj_Dec; break;
+SWS_CAL_SEQ       9   Calibrate: Validate Calibrate; break;
 SWS_INLET_SP_INC 10   Inlet SetPoint Increment: Validate Inlet_Adj_Inc; break;
 SWS_INLET_SP_DEC 11   Inlet SetPoint Decrement: Validate Inlet_Adj_Dec; break;
+SWS_CELL_SP_INC  12   Cell SetPoint Increment: Validate Cell_Adj_Inc; break;
+SWS_CELL_SP_DEC  13   Cell SetPoint Decrement: Validate Cell_Adj_Dec; break;
 
-SWS_PCTRL_ENA 20  Cell Pressure Regulate: Validate Pinch_Init; break;
-SWS_PCTRL_DIS 21  Cell Pressure Deregulate: Validate Pinch_Idle; break;
-SWS_PINCH_REINIT 22 Pinch Valve Reinit: break;
+SWS_PCTRL_ENA    20   Cell Pressure Regulate: Validate Pinch_Init; break;
+SWS_PCTRL_DIS    21   Cell Pressure Deregulate: Validate Pinch_Idle; break;
+SWS_PINCH_REINIT 22   Pinch Valve Reinit: break;
 
-SWS_QCL_SELICOS 30	Laser Select ICOS and Run:
+SWS_QCL_SELICOS  30	  Laser Select ICOS and Run:
                           Validate QCL_SelectICOSandRun; break;
-SWS_QCL_SELRING 31  Laser Select Ring and Run:
+SWS_QCL_SELRING  31   Laser Select Ring and Run:
                           Validate QCL_SelectRingandRun; break;
-SWS_QCL_START 	32  Laser Start: Validate QCL_Start; break;
-SWS_QCL_STOP	  33  Laser Stop: Validate QCL_Stop; break;
-SWS_QCL_DISABLE 34  Laser Disable: Validate QCL_Idle; break;
+SWS_QCL_START 	 32   Laser Start: Validate QCL_Start; break;
+SWS_QCL_STOP	   33   Laser Stop: Validate QCL_Stop; break;
+SWS_QCL_DISABLE  34   Laser Disable: Validate QCL_Idle; break;
 
 SWS_OFF_GROUND 35 Altitude Off Ground: using_swp = SWS_OFF_GROUND; break;
 SWS_STRATOSPHERE 36 Altitude Stratosphere: using_swp = SWS_STRATOSPHERE; break;
