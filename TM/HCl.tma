@@ -48,6 +48,8 @@ State Shutdown {
     Hold Until Valid (QCL_is_Shutdown) or 10;
     > Command Gas Deck Valve Off
  +2 > Command Cal Gas Valve Off
+ +2 > Set Cell Temperature Set Point 1
+ +2 > Set Inlet Temperature Set Point 1
  +2 > Pumps Set Point 0
     Hold until valid (Pumps_Off) or 10;
     Hold until valid (Pinch_Valve_Opened) or 40;
@@ -948,10 +950,15 @@ State Calibrate_Heat {
   PSIG GasHP_Start;
 %}
 State Calibrate {
-    depending on (TERMINATE) { Validate Calibrate_Idle; }
-      > Command Cal Gas Valve On
+      depending on (TERMINATE) { Validate Calibrate_Idle; }
+      { if (convert(GasHP) < 15.) {
+          Validate Calibrate_Idle;
+        }
+      }
+
+   +1 > Command Cal Gas Valve On
       > Command Gas Deck Valve On
-      { GasHP_Start == convert(GasHP); }
+      { GasHP_Start = convert(GasHP); }
   +60 { if (convert(GasHP) < GasHP_Start - 15.0) {
           Validate Calibrate_Idle;
         }

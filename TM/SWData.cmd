@@ -30,6 +30,9 @@
   : Calibrate { $0 = SWS_CAL_SEQ; }
   : Inlet SetPoint Increment { $0 = SWS_INLET_SP_INC; }
   : Inlet SetPoint Decrement { $0 = SWS_INLET_SP_DEC; }
+  : Cell SetPoint Increment { $0 = SWS_CELL_SP_INC; }
+  : Cell SetPoint Decrement { $0 = SWS_CELL_SP_DEC; }
+  : Calibrate_Idle { $0 = SWS_CAL_IDLE; }
   : Cell Pressure Regulate { $0 = SWS_PCTRL_ENA; }
   : Cell Pressure Deregulate { $0 = SWS_PCTRL_DIS; }
   : Pinch Valve Reinit { $0 = SWS_PINCH_REINIT; }

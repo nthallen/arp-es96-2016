@@ -22,6 +22,9 @@ extern SWData_t SWData;
 #define SWS_CAL_SEQ 9
 #define SWS_INLET_SP_INC 10
 #define SWS_INLET_SP_DEC 11
+#define SWS_CELL_SP_INC 12
+#define SWS_CELL_SP_DEC 13
+#define SWS_CAL_IDLE 14
 #define SWS_PCTRL_ENA 20
 #define SWS_PCTRL_DIS 21
 #define SWS_PINCH_REINIT 22
