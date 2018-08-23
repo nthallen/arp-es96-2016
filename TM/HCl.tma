@@ -65,7 +65,8 @@ State Shutdown {
  +2 > Pumps Set Point 0
     Hold until valid (Pumps_Off) or 10;
     Hold until valid (Pinch_Valve_Opened) or 40;
- +4 > Quit
+    Hold until (SWStat == SWS_TIME_WARP) or 2:00;
+ +1 > Quit
 }
 
 # -----------------------------------------------------------------------------
