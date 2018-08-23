@@ -3,10 +3,11 @@ TM typedef Algo_t AlgoP1_t { text "%10d" AlgoP1_text(); }
   const char *AlgoP1_text(AlgoP1_t AlgoP1) {
     switch (AlgoP1) {
       case 1:  return "Init      ";
-      case 2:  return "Startup   ";
-      case 3:  return "Record    ";
-      case 4:  return "Record_End";
-      case 5:  return "Shutdown  ";
+      case 2:  return "Warmup    ";
+      case 3:  return "Startup   ";
+      case 4:  return "Record    ";
+      case 5:  return "Record_End";
+      case 6:  return "Shutdown  ";
       default: return "----------";
     }
   }

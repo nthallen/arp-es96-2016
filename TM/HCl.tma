@@ -10,13 +10,25 @@ State Init {
       > Set Cell Temperature Set Point 1
       > Set Inlet Temperature Set Point 1
       > Cell Pressure Set Point 40
+      depending on (STRATOSPHERE) { Validate Warmup; }
       depending on (AT_FLOAT) { Validate Startup; }
+      depending on (VALVEDOWN) { Validate Startup; }
+      depending on (VALVEDOWNPAUSE) { Validate Startup; }
+      depending on (TERMINATE) { Validate Shutdown; }
+}
+
+State Warmup {
+      > _Algo P1 2
+      > Set Cell Temperature Set Point 2
+      depending on (AT_FLOAT) { Validate Startup; }
+      depending on (VALVEDOWN) { Validate Startup; }
+      depending on (VALVEDOWNPAUSE) { Validate Startup; }
       depending on (TERMINATE) { Validate Shutdown; }
 }
 
 State Startup {
   depending on (TERMINATE) { Validate Shutdown; }
-      > _Algo P1 2
+      > _Algo P1 3
       # 50 C
       > Set Cell Temperature Set Point 2
       > Set Inlet Temperature Set Point 2
@@ -30,7 +42,7 @@ State Startup {
 
 State Record {
   depending on (TERMINATE) { Validate Record_End; }
-      > _Algo P1 3
+      > _Algo P1 4
       Validate Calibrate;
       Hold until valid (VALVEDOWN);
       Hold until valid (VALVEDOWNPAUSE);
@@ -38,13 +50,13 @@ State Record {
 }
 
 State Record_End {
-      > _Algo P1 4
+      > _Algo P1 5
       Validate QCL_SelectRingandRun;
   +30 Validate Shutdown;
 }
 
 State Shutdown {
-    > _Algo P1 5
+    > _Algo P1 6
     Hold Until Valid (QCL_is_Shutdown) or 10;
     > Command Gas Deck Valve Off
  +2 > Command Cal Gas Valve Off
