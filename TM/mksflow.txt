@@ -1,0 +1,6 @@
+# mksflow.txt
+Name MKS
+Rate 1 Hz
+Port /dev/ser3
+Digital HClFl 1 MFC 5 sccm "HCl"
+Analog  AirFl 50 sccm 5V SP:402 RB:C40 "Air"
