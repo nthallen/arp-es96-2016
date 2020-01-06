@@ -1,0 +1,30 @@
+HClFl_v {
+  HBox { +-; Title: HClFl; -+ };
+  Flow:   (HClFl_Flow,7) sccm;
+  Set_T:  (HClFl_Set,7)  sccm;
+  T:      (HClFl_T,7)    C;
+  Status: (HClFl_Status,4);
+  ACK:    (HClFl_ACK,2);
+  ACK2:   (HClFl_ACK2,2);
+  Stale:  (HClFl_Stale,3);
+}
+
+AirFl_v {
+  HBox { +-; Title: AirFl; -+ };
+  Flow:   (AirFl_Flow,7) sccm;
+  Set_T:  (AirFl_Set,7)  sccm;
+}
+
+MKS_flows {
+  HBox { +-; Title: MKS; -+ };
+  ""    >Set<        >Flow<;
+  HClFl: (HClFl_Set,7) (HClFl_Flow,7) sccm;
+  AirFl: (AirFl_Set,7) (AirFl_Flow,7) sccm;
+  { HGlue 0+1 Stale: (MKS_Stale,3) }
+}
+
+MKS_hk {
+  HBox { +-; Title: "MKS HK"; -+ };
+  ""    >Temp<    "" >Status<        >ACK<   ""     >Stale<;
+  HClFl: (HClFl_T,7) C (HClFl_Status,4) (HClFl_ACK,2) (HClFl_ACK2,2) (HClFl_Stale,3);
+}

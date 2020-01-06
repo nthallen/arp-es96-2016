@@ -1,0 +1,10 @@
+  1 HClFl_Status MKS_HK Status
+  1 HClFl_Stale  MKS_HK Stale
+  1 HClFl_ACK    MKS_HK ACK
+  1 HClFl_ACK2   MKS_HK ACK2
+  1 HClFl_T      MKS_HK Temp
+  1 HClFl_Set    MKS HClFl_Flow
+  1 HClFl_Flow   MKS HClFl_Flow
+  1 AirFl_Set    MKS AirFl_Flow
+  1 AirFl_Flow   MKS AirFl_Flow
+  1 MKS_Stale MKS_HK Stale

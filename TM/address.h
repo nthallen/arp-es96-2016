@@ -1,3 +1,5 @@
+#define AirFl_Flow_Address 0xC40
+#define AirFl_Set_Address 0x402
 #define QCLI_CS_Address 0x1000
 #define Pmps2V_Address 0x378
 #define Pmps2I_Address 0x376

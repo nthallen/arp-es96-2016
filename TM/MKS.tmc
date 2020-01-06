@@ -1,0 +1,57 @@
+%{
+  /* mksflow driver interface */
+  #define MKS_MAX_DRIVES 2
+  #include "mksflow.h"
+  #define MKS_drive(x,y) MKS.drive[x].y
+%}
+TM typedef float MKS_Flow0_t { text "%7.0f"; }
+TM typedef float MKS_Flow1_t { text "%7.1f"; }
+TM typedef float MKS_Flow2_t { text "%7.2f"; }
+TM typedef float MKS_Flow3_t { text "%7.3f"; }
+TM typedef float MKS_Flow4_t { text "%7.4f"; }
+TM typedef uint16_t MKS_Status_t { text "%04X"; }
+TM typedef uint8_t MKS_ACK_t { text "%02X"; }
+TM typedef uint8_t MKS_Stale_t { text "%3u"; }
+TM typedef float MKS_Temp_t { text "%7.2f"; }
+%{
+  #include "subbus.h"
+%}
+
+
+TM 1 Hz MKS_Stale_t MKS_Stale;
+TM 1 Hz MKS_Flow4_t HClFl_Set;
+TM 1 Hz MKS_Flow4_t HClFl_Flow;
+TM 1 Hz MKS_Temp_t HClFl_T;
+TM 1 Hz MKS_Status_t HClFl_Status;
+TM 1 Hz MKS_ACK_t HClFl_ACK;
+TM 1 Hz MKS_ACK_t HClFl_ACK2;
+TM 1 Hz MKS_Stale_t HClFl_Stale;
+TM typedef double MKS_sccm_t;
+TM typedef uint16_t AirFl_Set_t {
+  text "%7.3lf";
+  convert MKS_sccm_t;
+  collect x = sbrwa(x.address);
+}
+Calibration (AirFl_Set_t,MKS_sccm_t) {  0.0, 0, 65536.0 , 50 }
+TM 1 Hz AirFl_Set_t AirFl_Set; Address AirFl_Set 0x402;
+TM typedef uint16_t AirFl_Flow_t {
+  text "%7.3lf";
+  convert MKS_sccm_t;
+  collect x = sbrwa(x.address);
+}
+Calibration (AirFl_Flow_t,MKS_sccm_t) {  0.0, 0, 61440.0 , 50 }
+TM 1 Hz AirFl_Flow_t AirFl_Flow; Address AirFl_Flow 0xC40;
+TM "Receive" MKS 1;
+
+Group MKS (MKS_Stale, HClFl_Set, HClFl_Flow, HClFl_T, HClFl_Status,
+    HClFl_ACK, HClFl_ACK2, HClFl_Stale) {
+  MKS_Stale = MKS_obj->stale(255);
+  HClFl_Set = MKS_drive(0,FlowSetPoint);
+  HClFl_Flow = MKS_drive(0,Flow);
+  HClFl_T = MKS_drive(0,DeviceTemp);
+  HClFl_Status = MKS_drive(0,DeviceStatus);
+  HClFl_ACK = MKS_drive(0,ACK);
+  HClFl_ACK2 = MKS_drive(0,ACK2);
+  HClFl_Stale = MKS_drive(0,Stale);
+  MKS_obj->synch();
+}

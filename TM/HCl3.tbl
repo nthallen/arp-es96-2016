@@ -1,6 +1,7 @@
 Input "TMbase.tbl";
 Input "PTRH.tbl";
 Input "pwrmon.tbl";
+Input "MKS.tbl";
 
 Ambient {
   HBox { +-; Title: "Ambient"; -+ };
@@ -27,6 +28,13 @@ Laser {
   Laser_I:   (Laser_I,7) V;
   LHT:      (ILH_T,6) C;
 }
+
+Gains {
+  HBox { +-; Title: "Gains"; -+ };
+  P: (Pgain,6);
+  I: (Igain,6);
+}
+
 
 GasDeck {
   HBox { +-; Title: "Gas Deck"; -+ };
@@ -84,12 +92,6 @@ Pump {
   MotT:  (Pump1_mot_T,7)   (Pump2_mot_T,7) C;
 }
 
-Gains {
-  HBox { +-; Title: "Gains"; -+ };
-  P: (Pgain,6);
-  I: (Igain,6);
-}
-
 EBX11_Temps {
   HBox { +-; Title: "CPU"; -+ };
   CPU_T: (vl_cpuT,3) C;
@@ -119,10 +121,11 @@ Blank {
 #   };
 # }; |+; {
     HBox {
-      [GasDeck]; |+; [Gains]
+      [GasDeck]; |+; [MKS_flows]
     };
+    [MKS_hk];
     { HBox {
-        [Pump]; |; [Blank]
+        [Pump]; |; [Gains]; |; [Blank]
       };
       HBox {
         [pwrmon]; |;

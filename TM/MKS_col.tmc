@@ -1,0 +1,6 @@
+%{
+  #include "ai_cfg.h"
+  #include "mksflow.h"
+  mksflow_t MKS;
+%}
+TM INITFUNC sbwr(AirFl_Flow.address, AI_CFG_XP768);
