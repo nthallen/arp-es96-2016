@@ -32,14 +32,14 @@ TM typedef uint16_t AirFl_Set_t {
   convert MKS_sccm_t;
   collect x = sbrwa(x.address);
 }
-Calibration (AirFl_Set_t,MKS_sccm_t) {  0.0, 0, 65536.0 , 50000 }
+Calibration (AirFl_Set_t,MKS_sccm_t) {  0.0, 0, 32768.0 , 20000 }
 TM 1 Hz AirFl_Set_t AirFl_Set; Address AirFl_Set 0x402;
 TM typedef uint16_t AirFl_Flow_t {
   text "%7.0lf";
   convert MKS_sccm_t;
   collect x = sbrwa(x.address);
 }
-Calibration (AirFl_Flow_t,MKS_sccm_t) {  0.0, 0, 61440.0 , 50000 }
+Calibration (AirFl_Flow_t,MKS_sccm_t) {  0.0, 0, 61440.0 , 20000 }
 TM 1 Hz AirFl_Flow_t AirFl_Flow; Address AirFl_Flow 0xC40;
 TM "Receive" MKS 1;
 
