@@ -18,5 +18,5 @@
 
 &command
   : HCl Flow SetPoint %f (sccm) sccm * { if_MKS.Turf("W1:1:%.4f\n", $4); }
-  : Air Flow SetPoint %f (sccm) sccm * { mks_analog_set_point(0x402, $4, 50, 5, 0, 2); }
+  : Air Flow SetPoint %f (sccm) sccm * { mks_analog_set_point(0x402, $4, 50000, 5, 0, 2); }
   ;

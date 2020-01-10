@@ -45,7 +45,7 @@ swsbase = HCl.sws
 
 Module TMbase
 Module QCLI mode=noise RESET= SSPRATE=4
-# Module Telemetry
+Module Telemetry
 Module mksflow src=mksflow.txt name=MKS
 
 DISTRIB = SerIn/hclsisrvr SerIn/hclsiclt SerIn/hclsicltnc
