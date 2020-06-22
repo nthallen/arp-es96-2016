@@ -5,13 +5,11 @@ function nl_error {
 }
 
 flt=''
-gse=hcigse.arp.harvard.edu
-# gse=10.0.5.19
-relay=fugue.arp.harvard.edu
+gse=hclgse.arp.harvard.edu
 RAW_Dir=RAW
-HCL_Dir=.
+HCL_Dir=Analysis
 use_relay=no
-HomeDir=/net/hclgse/home/hcl16
+HomeDir=/home/hcl16
 Exp=HCl16
 RunType=''
 Copy_CSV=yes
@@ -127,4 +125,23 @@ for run in $*; do
   esac
 done
 
-[ -f runs.dat ] && [ "$Matlab" = "yes" ] && matlab
+if [ -f runs.dat -a "$Matlab" = "yes" ]; then
+  # Now locate matlab and run it, specifying this directory and the
+  # name of the newly created set script
+  S=`which matlab 2>/dev/null`
+  if [ -n "$S" ]; then
+    matlab=matlab
+  else
+    for path in /Applications/MATLAB*; do
+      [ -e $path/bin/matlab ] && matlab=$path/bin/matlab
+    done
+  fi
+
+  if [ -n "$matlab" ]; then
+    echo "Starting $matlab to finish run processing"
+    eval $matlab -r hcl16_startup
+  else
+    nl_error "Unable to locate Matlab executable"
+  fi
+fi
+
